@@ -1,0 +1,11 @@
+Model Information:
+* title:	Raspberry
+* source:	https://sketchfab.com/3d-models/raspberry-d045eaf534384d9eb926245a5a09ead4
+* author:	objets3D (https://sketchfab.com/objets3D)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Raspberry" (https://sketchfab.com/3d-models/raspberry-d045eaf534384d9eb926245a5a09ead4) by objets3D (https://sketchfab.com/objets3D) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
