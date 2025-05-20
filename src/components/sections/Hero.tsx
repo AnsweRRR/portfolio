@@ -1,6 +1,6 @@
-import { styles } from "../utils/styles";
-import ComputersCanvas from "./canvas/Computer";
 import { motion } from "framer-motion";
+import { styles } from "../../styles";
+import { ComputerCanvas } from "../canvas";
 
 const Hero = () => {
   return (
@@ -24,7 +24,7 @@ const Hero = () => {
         </div>
       </div>
 
-      <ComputersCanvas />
+      <ComputerCanvas />
 
       <div className='absolute xs:bottom-10 bottom-32 w-full flex justify-center items-center'>
         <a href='#about'>

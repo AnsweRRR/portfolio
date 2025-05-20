@@ -32,7 +32,7 @@ const Computers: React.FC<ComputersProps> = ({ isMobile }) => {
   );
 };
 
-const ComputersCanvas = () => {
+const ComputerCanvas = () => {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -73,4 +73,4 @@ const ComputersCanvas = () => {
   );
 };
 
-export default ComputersCanvas;
+export default ComputerCanvas;

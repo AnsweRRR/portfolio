@@ -1,8 +1,9 @@
 import { motion } from 'framer-motion';
+import SectionWrapper from '../../hoc/SectionWrapper';
 
 const About = () => {
   return (
-    <section id="about" className="w-full bg-gray-100 dark:bg-gray-900 py-16 px-4">
+    <div className="w-full bg-gray-100 dark:bg-gray-900 py-16 px-4">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
         
         <motion.div 
@@ -32,8 +33,9 @@ const About = () => {
         </motion.div>
 
       </div>
-    </section>
+    </div>
   );
 }
 
-export default About;
+const WrappedAbout = SectionWrapper(About, "about");
+export default WrappedAbout;

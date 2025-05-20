@@ -1,7 +1,8 @@
 import { useRef } from 'react';
 import emailjs from 'emailjs-com';
 import { motion } from 'framer-motion';
-import Raspberry from './canvas/Raspberry';
+import Raspberry from '../canvas/Raspberry';
+import SectionWrapper from '../../hoc/SectionWrapper';
 
 const Contact = () => {
   const formRef = useRef<HTMLFormElement>(null);
@@ -28,7 +29,7 @@ const Contact = () => {
   };
 
   return (
-    <section id="contact" className="w-full py-20 px-4">
+    <div className="w-full py-20 px-4">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
         <div className="w-full md:w-1/2 aspect-square relative">
           <Raspberry />
@@ -78,8 +79,9 @@ const Contact = () => {
           </form>
         </motion.div>
       </div>
-    </section>
+    </div>
   );
 };
 
-export default Contact;
+const WrappedContact = SectionWrapper(Contact, "contact");
+export default WrappedContact;

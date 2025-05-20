@@ -1,3 +1,4 @@
+import SectionWrapper from "../../hoc/SectionWrapper";
 interface ExperienceItem {
   company: string;
   logo: string;
@@ -37,9 +38,9 @@ const experiences: ExperienceItem[] = [
   },
 ];
 
-export default function Experience() {
+const Experience = () => {
   return (
-    <section className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto p-6">
       <h2 className="text-3xl font-bold text-center mb-12">Tapasztalat</h2>
 
       <div className="relative">
@@ -89,6 +90,9 @@ export default function Experience() {
           })}
         </div>
       </div>
-    </section>
+    </div>
   );
 }
+
+const WrappedExperience = SectionWrapper(Experience, "experience");
+export default WrappedExperience;

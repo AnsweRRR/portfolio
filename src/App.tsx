@@ -1,12 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
-import Hero from "./components/Hero";
-import Tech from "./components/Tech";
-import Work from "./components/Work";
-import About from "./components/About";
-import Experience from "./components/Experience";
-import Contact from "./components/Contact";
-import Footer from "./components/Footer";
 import StarsCanvas from "./components/canvas/Stars";
+import { About, Contact, Experience, Footer, Hero, Tech, Work } from "./components/sections";
 
 function App() {
   return (

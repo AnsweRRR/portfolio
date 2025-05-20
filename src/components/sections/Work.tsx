@@ -1,5 +1,6 @@
 import { FaGithub } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
+import SectionWrapper from "../../hoc/SectionWrapper";
 
 const projects = [
   {
@@ -22,7 +23,7 @@ const projects = [
 
 const Work = () => {
   return (
-    <section className="py-12 px-4 max-w-6xl mx-auto">
+    <div className="py-12 px-4 max-w-6xl mx-auto">
       <h2 className="text-3xl font-bold text-center mb-8">Projects</h2>
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, index) => (
@@ -78,8 +79,9 @@ const Work = () => {
           </div>
         ))}
       </div>
-    </section>
+    </div>
   );
 };
 
-export default Work;
+const WrappedWork = SectionWrapper(Work, "work");
+export default WrappedWork;
