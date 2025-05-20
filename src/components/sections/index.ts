@@ -3,6 +3,7 @@ import Contact from "./Contact";
 import Experience from "./Experience";
 import Footer from "./Footer";
 import Hero from "./Hero";
+import Navbar from "./Navbar";
 import Tech from "./Tech";
 import Work from "./Work";
 
@@ -12,6 +13,7 @@ export {
   Experience,
   Footer,
   Hero,
+  Navbar,
   Tech,
   Work
 };

@@ -1,13 +1,13 @@
 import { BrowserRouter } from "react-router-dom";
 import StarsCanvas from "./components/canvas/Stars";
-import { About, Contact, Experience, Footer, Hero, Tech, Work } from "./components/sections";
+import { Navbar, About, Contact, Experience, Footer, Hero, Tech, Work } from "./components/sections";
 
 function App() {
   return (
     <BrowserRouter>
       <div className='relative z-0 bg-primary'>
         <div className='bg-hero-pattern bg-cover bg-no-repeat bg-center'>
-          {/* <Navbar /> */}
+          <Navbar />
           <Hero />
         </div>
         <About />

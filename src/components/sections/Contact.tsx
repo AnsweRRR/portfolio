@@ -13,10 +13,10 @@ const Contact = () => {
     if (!formRef.current) return;
 
     emailjs.sendForm(
-      'YOUR_SERVICE_ID',
-      'YOUR_TEMPLATE_ID',
+      'service_bix9mwo',
+      'template_portfolio',
       formRef.current,
-      'YOUR_PUBLIC_KEY'
+      'W_OiVSIDic_iqQAGY'
     ).then(
       () => {
         alert('Üzenet elküldve!');
