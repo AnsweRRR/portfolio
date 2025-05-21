@@ -4,6 +4,7 @@ import {
   FaFacebook,
 } from "react-icons/fa";
 import { MdEmail, MdPhone } from "react-icons/md";
+import { useTranslation } from "react-i18next";
 
 const contactLinks = [
   {
@@ -34,6 +35,7 @@ const contactLinks = [
 ];
 
 export default function Footer() {
+  const { t } = useTranslation();
   const FULL_NAME = "Tamás Pogrányi";
 
   return (
@@ -59,7 +61,7 @@ export default function Footer() {
       </div>
 
       <div className="text-center text-sm text-gray-500 mt-4">
-        © {new Date().getFullYear()} {FULL_NAME}. All rights reserved.
+        © {new Date().getFullYear()} {FULL_NAME}. {t('footer.rights')}
       </div>
     </footer>
   );

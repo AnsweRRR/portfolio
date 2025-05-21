@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "home": "Főoldal",
+    "about": "Rólam",
+    "experience": "Tapasztalat",
+    "tech": "Technológiák",
+    "work": "Munkák",
+    "contact": "Kapcsolat"
+  },
+  "hero": {
+    "greeting": "Szia, én",
+    "name": "AnsweRRR",
+    "title": "Webfejlesztő",
+    "subtitle": "Webalkalmazásokat, felhasználói felületeket és webes élményeket fejlesztek"
+  },
+  "about": {
+    "title": "Rólam",
+    "description": "Képzett szoftverfejlesztő vagyok TypeScript és JavaScript tapasztalattal, valamint jártas vagyok olyan keretrendszerekben, mint a React, Node.js és Three.js. Gyors tanuló vagyok és szorosan együttműködök az ügyfelekkel, hogy hatékony, skálázható és felhasználóbarát megoldásokat hozzak létre, amelyek valós problémákat oldanak meg. Dolgozzunk együtt, hogy életre keltjük az ötleteidet!"
+  },
+  "experience": {
+    "title": "Munkatapasztalat",
+    "subtitle": "Amit eddig elvégeztem"
+  },
+  "tech": {
+    "title": "Technológiai Stack",
+    "subtitle": "Technológiák, amikkel dolgoztam"
+  },
+  "work": {
+    "title": "Munkák",
+    "subtitle": "Projektjeim",
+    "viewProject": "Projekt Megtekintése",
+    "viewCode": "Kód Megtekintése"
+  },
+  "contact": {
+    "title": "Kapcsolat",
+    "subtitle": "Vedd fel velem a kapcsolatot",
+    "name": "Neved",
+    "email": "Email címed",
+    "message": "Üzeneted",
+    "send": "Üzenet Küldése"
+  },
+  "footer": {
+    "rights": "Minden jog fenntartva"
+  }
+} 

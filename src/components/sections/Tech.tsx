@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import SectionWrapper from "../../hoc/SectionWrapper";
 import { fadeIn } from "../../utils/motion";
 
@@ -136,9 +137,12 @@ const TechCard = ({index, skill}: TechCardProps) => {
 };
 
 const Tech = () => {
+  const { t } = useTranslation();
+
   return (
     <>
-      <h2 className="text-3xl font-bold text-center mb-8">Skills</h2>
+      <h2 className="text-3xl font-bold text-center mb-8">{t('tech.title')}</h2>
+      <p className="text-center text-gray-600 mb-8">{t('tech.subtitle')}</p>
       <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6 max-w-6xl mx-auto px-4">
         {skills.map((skill, index) => (
           <TechCard key={`skill-${index}`} skill={skill} index={index} />

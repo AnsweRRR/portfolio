@@ -1,10 +1,12 @@
 import { useState, useRef, useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import emailjs from 'emailjs-com';
 import { motion } from 'framer-motion';
 import Raspberry from '../canvas/Raspberry';
 import SectionWrapper from '../../hoc/SectionWrapper';
 
 const Contact = () => {
+  const { t } = useTranslation();
   const formRef = useRef<HTMLFormElement>(null);
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string>('');
@@ -76,7 +78,8 @@ const Contact = () => {
             </div>
           ) : (
             <>
-              <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">Contact</h2>
+              <h2 className="text-3xl font-bold mb-6 text-gray-900 dark:text-white">{t('contact.title')}</h2>
+              <p className="text-gray-600 dark:text-gray-300 mb-6">{t('contact.subtitle')}</p>
               {formStatus === 'error' && (
                 <div className="mb-4 p-3 bg-red-100 dark:bg-red-800 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-100 rounded-lg">
                   <p className="font-bold">Hiba történt!</p>
@@ -85,7 +88,7 @@ const Contact = () => {
               )}
               <form ref={formRef} onSubmit={sendEmail} className="space-y-4">
                 <div>
-                  <label htmlFor="user_name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Full Name</label>
+                  <label htmlFor="user_name" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('contact.name')}</label>
                   <input
                     type="text"
                     name="user_name"
@@ -96,7 +99,7 @@ const Contact = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="user_email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Email</label>
+                  <label htmlFor="user_email" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('contact.email')}</label>
                   <input
                     type="email"
                     name="user_email"
@@ -107,7 +110,7 @@ const Contact = () => {
                   />
                 </div>
                 <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300">Message</label>
+                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 dark:text-gray-300">{t('contact.message')}</label>
                   <textarea
                     name="message"
                     id="message"
@@ -122,7 +125,7 @@ const Contact = () => {
                   disabled={formStatus === 'sending'}
                   className="w-full bg-[#915EFF] text-white py-3 rounded-lg hover:bg-purple-600 transition-colors duration-150 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed"
                 >
-                  {formStatus === 'sending' ? 'Küldés...' : 'Send Message'}
+                  {formStatus === 'sending' ? 'Küldés...' : t('contact.send')}
                 </button>
               </form>
             </>

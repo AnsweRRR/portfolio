@@ -1,6 +1,7 @@
 import { BrowserRouter } from "react-router-dom";
 import StarsCanvas from "./components/canvas/Stars";
 import { Navbar, About, Contact, Experience, Footer, Hero, Tech, Work } from "./components/sections";
+import './i18n/i18n';
 
 function App() {
   return (
@@ -20,7 +21,6 @@ function App() {
           <StarsCanvas />
           <Footer />
         </div>
-        
       </div>
     </BrowserRouter>
   )

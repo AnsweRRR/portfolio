@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { experiences } from "../../api/experience";
 import SectionWrapper from "../../hoc/SectionWrapper";
 import { fadeIn, textVariant } from "../../utils/motion";
@@ -60,10 +61,13 @@ const ExperienceItem = ({ index, experience }: ExperienceItemProps) => {
 };
 
 const Experience = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <motion.div variants={textVariant()}>
-        <h2 className="text-3xl font-bold text-center mb-12">Experience</h2>
+        <h2 className="text-3xl font-bold text-center mb-12">{t('experience.title')}</h2>
+        <p className="text-center text-gray-600 mb-8">{t('experience.subtitle')}</p>
       </motion.div>
       <div className="relative">
         <div className="hidden md:block absolute left-1/2 top-0 -translate-x-1/2 h-full border-l-2 border-gray-300"></div>

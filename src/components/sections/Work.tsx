@@ -1,5 +1,6 @@
 import { FaGithub } from "react-icons/fa";
 import { FiExternalLink } from "react-icons/fi";
+import { useTranslation } from "react-i18next";
 import SectionWrapper from "../../hoc/SectionWrapper";
 import { motion } from "framer-motion";
 import { fadeIn, textVariant } from "../../utils/motion";
@@ -36,6 +37,8 @@ interface ProjectCardProps {
 }
 
 const ProjectCard = ({ project, index }: ProjectCardProps) => {
+  const { t } = useTranslation();
+
   return (
     <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
     <div className="bg-white rounded-2xl shadow-lg overflow-hidden flex flex-col">
@@ -71,6 +74,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-black"
+            title={t('work.viewCode')}
           >
             <FaGithub />
           </a>
@@ -79,6 +83,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
             target="_blank"
             rel="noopener noreferrer"
             className="hover:text-black"
+            title={t('work.viewProject')}
           >
             <FiExternalLink />
           </a>
@@ -90,10 +95,13 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
 };
 
 const Work = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="py-12 px-4 max-w-6xl mx-auto">
       <motion.div variants={textVariant()}>
-        <h2 className="text-3xl font-bold text-center mb-8">Projects</h2>
+        <h2 className="text-3xl font-bold text-center mb-8">{t('work.title')}</h2>
+        <p className="text-center text-gray-600 mb-8">{t('work.subtitle')}</p>
       </motion.div>
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, index) => (

@@ -1,0 +1,45 @@
+{
+  "nav": {
+    "home": "Startseite",
+    "about": "Über Mich",
+    "experience": "Erfahrung",
+    "tech": "Technologien",
+    "work": "Projekte",
+    "contact": "Kontakt"
+  },
+  "hero": {
+    "greeting": "Hallo, ich bin",
+    "name": "AnsweRRR",
+    "title": "Webentwickler",
+    "subtitle": "Ich entwickle Webanwendungen, Benutzeroberflächen und Web-Erlebnisse"
+  },
+  "about": {
+    "title": "Über Mich",
+    "description": "Ich bin ein erfahrener Softwareentwickler mit Kenntnissen in TypeScript und JavaScript sowie Expertise in Frameworks wie React, Node.js und Three.js. Ich lerne schnell und arbeite eng mit Kunden zusammen, um effiziente, skalierbare und benutzerfreundliche Lösungen zu erstellen, die reale Probleme lösen. Lassen Sie uns zusammenarbeiten, um Ihre Ideen zum Leben zu erwecken!"
+  },
+  "experience": {
+    "title": "Berufserfahrung",
+    "subtitle": "Was ich bisher gemacht habe"
+  },
+  "tech": {
+    "title": "Technologie-Stack",
+    "subtitle": "Technologien, mit denen ich gearbeitet habe"
+  },
+  "work": {
+    "title": "Projekte",
+    "subtitle": "Meine Arbeiten",
+    "viewProject": "Projekt ansehen",
+    "viewCode": "Code ansehen"
+  },
+  "contact": {
+    "title": "Kontakt",
+    "subtitle": "Kontaktieren Sie mich",
+    "name": "Ihr Name",
+    "email": "Ihre E-Mail",
+    "message": "Ihre Nachricht",
+    "send": "Nachricht senden"
+  },
+  "footer": {
+    "rights": "Alle Rechte vorbehalten"
+  }
+} 
