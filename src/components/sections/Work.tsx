@@ -25,7 +25,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
     <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
       <div className="violet-gradient p-[1px] rounded-2xl">
         <div className="bg-[#1d1836] rounded-2xl overflow-hidden flex flex-col h-full">
-          <div className="relative w-full h-48 group">
+          <div className="relative w-full h-48 group overflow-hidden">
             <img
               src={project.image}
               alt={project.title}
