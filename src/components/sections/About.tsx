@@ -10,8 +10,8 @@ const About = () => {
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
         
         <motion.div 
-          initial={{ opacity: 0, x: -50 }} 
-          animate={{ opacity: 1, x: 0 }} 
+          initial={{ opacity: 0, scale: 0.95 }} 
+          animate={{ opacity: 1, scale: 1 }} 
           transition={{ duration: 0.6 }}
           className="w-48 h-48 rounded-full overflow-hidden shadow-2xl ring-4 ring-primary"
         >
@@ -24,8 +24,8 @@ const About = () => {
         </motion.div>
 
         <motion.div 
-          initial={{ opacity: 0, y: 40 }} 
-          animate={{ opacity: 1, y: 0 }} 
+          initial={{ opacity: 0, scale: 0.95 }} 
+          animate={{ opacity: 1, scale: 1 }} 
           transition={{ duration: 0.6, delay: 0.2 }}
           className="text-center md:text-left"
         >

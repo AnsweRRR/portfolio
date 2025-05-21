@@ -50,15 +50,15 @@ const Contact = () => {
   }, [formStatus]);
 
   return (
-    <div className="w-full py-20 px-4">
-      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-center gap-12">
+    <div className="w-full py-20 px-4 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-12">
         <div className="w-full md:w-1/2 aspect-square relative">
           <Raspberry />
         </div>
 
         <motion.div
-          initial={{ opacity: 0, x: 50 }}
-          whileInView={{ opacity: 0.85, x: 0 }}
+          initial={{ opacity: 0, scale: 0.95 }}
+          whileInView={{ opacity: 0.85, scale: 1 }}
           transition={{ duration: 0.6 }}
           className="w-full md:w-1/2 bg-white dark:bg-[#2a2342] p-8 rounded-2xl shadow-xl min-h-[480px] flex flex-col justify-center"
         >

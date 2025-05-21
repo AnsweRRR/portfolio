@@ -97,7 +97,7 @@ interface TechCardProps {
 const TechCard = ({index, skill}: TechCardProps) => {
   return (
     <motion.div
-      variants={fadeIn("right", "spring", index * 0.2, 0.2)}
+      variants={fadeIn("up", "spring", index * 0.2, 0.2)}
       className='w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card'
     >
       <div
