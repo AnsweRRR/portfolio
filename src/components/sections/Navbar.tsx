@@ -87,42 +87,51 @@ const Navbar = () => {
         </ul>
 
         <div className='sm:hidden flex flex-1 justify-end items-center'>
+          <button
+            onClick={() => setToggle(!toggle)}
+            className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 relative z-30"
+          >
+            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${toggle ? 'rotate-45 translate-y-2' : ''}`} />
+            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${toggle ? 'opacity-0' : ''}`} />
+            <span className={`w-6 h-0.5 bg-white transition-all duration-300 ${toggle ? '-rotate-45 -translate-y-2' : ''}`} />
+          </button>
+
           <div
             className={`${
-              !toggle ? "hidden" : "flex"
-            } p-6 black-gradient absolute top-20 right-0 mx-4 my-2 min-w-[140px] z-10 rounded-xl`}
+              !toggle ? "-translate-y-4 opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
+            } absolute top-16 right-0 w-[200px] bg-primary/95 backdrop-blur-sm rounded-xl shadow-lg transition-all duration-300 ease-in-out z-20`}
           >
-            <ul className='list-none flex justify-end items-start flex-1 flex-col gap-4'>
+            <ul className='list-none flex flex-col items-start p-4 gap-3'>
               {navLinks.map((nav) => (
                 <li
                   key={nav.id}
-                  className={`font-poppins font-medium cursor-pointer text-[16px] ${
+                  className={`font-poppins font-medium cursor-pointer text-[16px] w-full ${
                     active === nav.title ? "text-white" : "text-secondary"
-                  }`}
+                  } hover:text-white transition-colors duration-200`}
                   onClick={() => {
                     setToggle(!toggle);
                     setActive(nav.title);
                   }}
                 >
-                  <a href={`#${nav.id}`}>{t(`nav.${nav.id}`)}</a>
+                  <a href={`#${nav.id}`} className="block py-1">{t(`nav.${nav.id}`)}</a>
                 </li>
               ))}
-              <li className="flex items-center gap-2">
+              <li className="flex items-center gap-4 w-full pt-2 border-t border-white/10">
                 <button
                   onClick={() => changeLanguage('en')}
-                  className={`${i18n.language === 'en' ? 'text-white' : 'text-secondary'} hover:text-white text-[16px] font-medium cursor-pointer`}
+                  className={`${i18n.language === 'en' ? 'text-white' : 'text-secondary'} hover:text-white text-[16px] font-medium cursor-pointer transition-colors duration-200`}
                 >
                   🇬🇧
                 </button>
                 <button
                   onClick={() => changeLanguage('hu')}
-                  className={`${i18n.language === 'hu' ? 'text-white' : 'text-secondary'} hover:text-white text-[16px] font-medium cursor-pointer`}
+                  className={`${i18n.language === 'hu' ? 'text-white' : 'text-secondary'} hover:text-white text-[16px] font-medium cursor-pointer transition-colors duration-200`}
                 >
                   🇭🇺
                 </button>
                 <button
                   onClick={() => changeLanguage('de')}
-                  className={`${i18n.language === 'de' ? 'text-white' : 'text-secondary'} hover:text-white text-[16px] font-medium cursor-pointer`}
+                  className={`${i18n.language === 'de' ? 'text-white' : 'text-secondary'} hover:text-white text-[16px] font-medium cursor-pointer transition-colors duration-200`}
                 >
                   🇩🇪
                 </button>
