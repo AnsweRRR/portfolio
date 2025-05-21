@@ -1,0 +1,98 @@
+export const skills = [
+  {
+    name: "HTML",
+    level: 90,
+    tags: ["ES6+", "Async", "DOM"],
+    image: "/images/skills/html.svg",
+  },
+  {
+    name: "CSS",
+    level: 90,
+    tags: ["ES6+", "Async", "DOM"],
+    image: "/images/skills/css.svg",
+  },
+  {
+    name: "JavaScript",
+    level: 90,
+    tags: ["ES6+", "Async", "DOM"],
+    image: "/images/skills/javascript.svg",
+  },
+  {
+    name: "TypeScript",
+    level: 85,
+    tags: ["OOP", "Type Safety", "Front-end"],
+    image: "/images/skills/typescript.svg",
+  },
+  {
+    name: "C# (.NET)",
+    level: 75,
+    tags: ["Utility-first", "Responsive", "Fast UI"],
+    image: "/images/skills/csharp.svg",
+  },
+  {
+    name: "NodeJS",
+    level: 80,
+    tags: ["Hooks", "SPA", "Components"],
+    image: "/images/skills/nodejs.svg",
+  },
+  {
+    name: "React",
+    level: 80,
+    tags: ["Hooks", "SPA", "Components"],
+    image: "/images/skills/react.svg",
+  },
+  {
+    name: "React Native",
+    level: 80,
+    tags: ["Hooks", "SPA", "Components"],
+    image: "/images/skills/react-native.svg",
+  },
+  {
+    name: "Electron",
+    level: 80,
+    tags: ["Hooks", "SPA", "Components"],
+    image: "/images/skills/electron.svg",
+  },
+  {
+    name: "PostgreSQL",
+    level: 80,
+    tags: ["Hooks", "SPA", "Components"],
+    image: "/images/skills/postgresql.svg",
+  },
+  {
+    name: "MS SQL Server",
+    level: 80,
+    tags: ["Hooks", "SPA", "Components"],
+    image: "/images/skills/ms-sql-server.svg",
+  },
+  {
+    name: "MongoDB",
+    level: 80,
+    tags: ["Hooks", "SPA", "Components"],
+    image: "/images/skills/mongodb.svg",
+  },
+  {
+    name: "Firebase",
+    level: 80,
+    tags: ["Hooks", "SPA", "Components"],
+    image: "/images/skills/firebase.svg",
+  },
+  {
+    name: "Azure",
+    level: 80,
+    tags: ["Pipelines", "YAML", "Test"],
+    image: "/images/skills/azure.svg",
+  },
+  {
+    name: "Git",
+    level: 80,
+    tags: ["commit", "git-flow", "branch"],
+    image: "/images/skills/git.svg",
+  },
+  {
+    name: "Jira",
+    level: 80,
+    tags: ["reports", "crm", "kanban"],
+    image: "/images/skills/jira.svg",
+  },
+];
