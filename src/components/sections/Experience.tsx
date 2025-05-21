@@ -21,41 +21,49 @@ const ExperienceItem = ({ index, experience }: ExperienceItemProps) => {
 
   return (
     <motion.div variants={fadeIn(fadeInSide, "spring", index * 0.5, 0.75)}>
-    <div
-      key={experience.company + index}
-      className={`flex flex-col md:flex-row items-center justify-between w-full`}
-    >
-      {isLeft ? (
-        <div className="md:w-5/12 md:text-right md:pr-8 text-center md:text-right">
+      <div
+        key={experience.company + index}
+        className={`flex flex-col md:flex-row items-center justify-between w-full`}
+      >
+        {isLeft ? (
+          <div className="hidden md:block md:w-5/12 md:text-right md:pr-8">
+            <h3 className="text-xl font-semibold">{experience.position}</h3>
+            <p className="text-gray-600">{experience.company}</p>
+            <p className="italic text-sm text-gray-500">{experience.period}</p>
+            <p className="mt-2 text-gray-700">{experience.description}</p>
+          </div>
+        ) : (
+          <div className="hidden md:block md:w-5/12"></div>
+        )}
+
+        <div className="relative z-10 flex items-center justify-center w-16 h-16 rounded-full bg-white border-4 border-indigo-500 shadow-md mx-auto md:mx-0">
+          <img
+            src={experience.logo}
+            alt={`${experience.company} logo`}
+            className="object-contain w-10 h-10"
+            loading="lazy"
+          />
+        </div>
+
+        {!isLeft ? (
+          <div className="hidden md:block md:w-5/12 md:text-left md:pl-8">
+            <h3 className="text-xl font-semibold">{experience.position}</h3>
+            <p className="text-gray-600">{experience.company}</p>
+            <p className="italic text-sm text-gray-500">{experience.period}</p>
+            <p className="mt-2 text-gray-700">{experience.description}</p>
+          </div>
+        ) : (
+          <div className="hidden md:block md:w-5/12"></div>
+        )}
+
+        {/* Mobile content - always below logo */}
+        <div className="md:hidden w-full text-center mt-4">
           <h3 className="text-xl font-semibold">{experience.position}</h3>
           <p className="text-gray-600">{experience.company}</p>
           <p className="italic text-sm text-gray-500">{experience.period}</p>
           <p className="mt-2 text-gray-700">{experience.description}</p>
         </div>
-      ) : (
-        <div className="hidden md:block md:w-5/12"></div>
-      )}
-
-      <div className="relative z-10 flex items-center justify-center w-16 h-16 rounded-full bg-white border-4 border-indigo-500 shadow-md mx-auto md:mx-0">
-        <img
-          src={experience.logo}
-          alt={`${experience.company} logo`}
-          className="object-contain w-10 h-10"
-          loading="lazy"
-        />
       </div>
-
-      {!isLeft ? (
-        <div className="md:w-5/12 md:text-left md:pl-8 text-center md:text-left">
-          <h3 className="text-xl font-semibold">{experience.position}</h3>
-          <p className="text-gray-600">{experience.company}</p>
-          <p className="italic text-sm text-gray-500">{experience.period}</p>
-          <p className="mt-2 text-gray-700">{experience.description}</p>
-        </div>
-      ) : (
-        <div className="hidden md:block md:w-5/12"></div>
-      )}
-    </div>
     </motion.div>
   );
 };
