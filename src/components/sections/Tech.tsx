@@ -115,10 +115,12 @@ const TechCard = ({index, skill}: TechCardProps) => {
             <span className="text-sm text-gray-500">{skill.level}%</span>
           </div>
           <div className="w-full bg-gray-200 h-3 rounded-full mb-2">
-            <div
+            <motion.div
+              initial={{ width: 0 }}
+              animate={{ width: `${skill.level}%` }}
+              transition={{ duration: 1, ease: "easeOut" }}
               className="bg-blue-500 h-3 rounded-full"
-              style={{ width: `${skill.level}%` }}
-            ></div>
+            ></motion.div>
           </div>
           <div className="text-sm text-gray-600 flex flex-wrap gap-2">
             {skill.tags.map((tag) => (
