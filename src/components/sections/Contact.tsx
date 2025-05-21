@@ -2,7 +2,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import emailjs from 'emailjs-com';
 import { motion } from 'framer-motion';
-import Raspberry from '../canvas/Raspberry';
+// import Raspberry from '../canvas/Raspberry';
+import BusinessCard from '../canvas/BusinessCard';
 import SectionWrapper from '../../hoc/SectionWrapper';
 
 const Contact = () => {
@@ -53,7 +54,8 @@ const Contact = () => {
     <div className="w-full py-20 px-4 overflow-x-hidden">
       <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center gap-12">
         <div className="w-full md:w-1/2 aspect-square relative">
-          <Raspberry />
+          {/* <Raspberry /> */}
+          <BusinessCard />
         </div>
 
         <motion.div
