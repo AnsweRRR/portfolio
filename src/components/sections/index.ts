@@ -6,6 +6,7 @@ import Hero from "./Hero";
 import Navbar from "./Navbar";
 import Tech from "./Tech";
 import Work from "./Work";
+import Feedbacks from "./Feedbacks";
 
 export {
   About,
@@ -15,5 +16,6 @@ export {
   Hero,
   Navbar,
   Tech,
-  Work
+  Work,
+  Feedbacks
 };
