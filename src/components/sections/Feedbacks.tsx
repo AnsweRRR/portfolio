@@ -17,7 +17,7 @@ interface FeedbackCardProps {
 const FeedbackCard = ({ index, testimonial, name, designation, company, image, isActive }: FeedbackCardProps) => (
   <motion.div
     variants={fadeIn("", "spring", index * 0.5, 0.75)}
-    className={`bg-black-200 p-10 rounded-3xl xs:w-[320px] w-full transition-all duration-300 ${
+    className={`bg-black-200 p-6 sm:p-10 rounded-3xl w-[280px] sm:w-[320px] transition-all duration-300 ${
       isActive ? 'scale-110 z-10' : 'scale-90 opacity-70'
     }`}
   >
@@ -88,7 +88,7 @@ const Feedbacks = () => {
   };
 
   return (
-    <div className={`mt-12 bg-black-100 rounded-[20px] max-w-7xl mx-auto`}>
+    <div className={`mt-12 bg-black-100 rounded-[20px] w-full max-w-7xl mx-auto overflow-hidden`}>
       <div
         className={`bg-tertiary rounded-2xl ${styles.padding} min-h-[300px]`}
       >
@@ -97,7 +97,7 @@ const Feedbacks = () => {
           <h2 className={styles.sectionHeadText}>Testimonials.</h2>
         </motion.div>
       </div>
-      <div className={`-mt-20 pb-14 ${styles.paddingX} flex items-center justify-center max-w-5xl mx-auto relative`}>
+      <div className={`-mt-20 pb-14 px-4 sm:${styles.paddingX} flex items-center justify-center max-w-5xl mx-auto relative`}>
         {showSwipeHint && (
           <motion.div
             initial={{ opacity: 0 }}
@@ -162,7 +162,7 @@ const Feedbacks = () => {
         </motion.div>
 
         <motion.div 
-          className="flex gap-4 items-center cursor-grab active:cursor-grabbing relative group"
+          className="flex gap-2 sm:gap-4 items-center cursor-grab active:cursor-grabbing relative group"
           drag="x"
           dragConstraints={{ left: 0, right: 0 }}
           dragElastic={0.1}
