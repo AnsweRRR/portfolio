@@ -78,6 +78,12 @@ export const skills = [
     image: "/images/skills/firebase.svg",
   },
   {
+    name: "Three.js",
+    level: 15,
+    tags: ["Three-fiber", "Blender", "Textures"],
+    image: "/images/skills/threejs.svg",
+  },
+  {
     name: "Azure",
     level: 80,
     tags: ["Pipelines", "YAML", "Test"],
