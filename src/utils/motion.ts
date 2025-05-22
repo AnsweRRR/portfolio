@@ -16,7 +16,7 @@ export const textVariant = (delay = 0) => {
   };
 };
 
-export const fadeIn = (direction: string, type: string, delay: number, duration: number) => {
+export const fadeIn = (_direction: string, type: string, delay: number, duration: number) => {
   return {
     hidden: {
       opacity: 0,
