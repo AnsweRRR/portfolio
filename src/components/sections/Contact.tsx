@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import emailjs from 'emailjs-com';
 import { motion } from 'framer-motion';
+import ReCAPTCHA from 'react-google-recaptcha';
 // import Raspberry from '../canvas/Raspberry';
 import BusinessCard from '../canvas/BusinessCard';
 import SectionWrapper from '../../hoc/SectionWrapper';
@@ -9,33 +10,45 @@ import SectionWrapper from '../../hoc/SectionWrapper';
 const Contact = () => {
   const { t } = useTranslation();
   const formRef = useRef<HTMLFormElement>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const [formStatus, setFormStatus] = useState<'idle' | 'sending' | 'success' | 'error'>('idle');
   const [errorMessage, setErrorMessage] = useState<string>('');
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
 
-  const sendEmail = (e: React.FormEvent) => {
+  const sendEmail = async (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (!formRef.current) return;
+    if (!formRef.current || !captchaValue) {
+      setErrorMessage('Kérjük, erősítse meg, hogy nem robot.');
+      setFormStatus('error');
+      return;
+    }
 
     setFormStatus('sending');
     setErrorMessage('');
 
-    emailjs.sendForm(
-      import.meta.env.VITE_EMAILJS_SERVICE_ID,
-      import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
-      formRef.current,
-      import.meta.env.VITE_EMAILJS_PUBLIC_KEY
-    ).then(
-      () => {
-        setFormStatus('success');
-        formRef.current?.reset();
-      },
-      (error) => {
-        console.error("EmailJS hiba:", error);
-        setErrorMessage(error.text || 'Hiba történt az üzenet küldésekor. Kérjük, próbálja újra később.');
-        setFormStatus('error');
-      }
-    );
+    try {
+      await emailjs.sendForm(
+        import.meta.env.VITE_EMAILJS_SERVICE_ID,
+        import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+        formRef.current,
+        import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+      );
+      
+      setFormStatus('success');
+      formRef.current?.reset();
+      recaptchaRef.current?.reset();
+      setCaptchaValue(null);
+    } catch (error: unknown) {
+      console.error("EmailJS hiba:", error);
+      const errorMessage = error instanceof Error ? error.message : 'Hiba történt az üzenet küldésekor. Kérjük, próbálja újra később.';
+      setErrorMessage(errorMessage);
+      setFormStatus('error');
+    }
+  };
+
+  const handleCaptchaChange = (value: string | null) => {
+    setCaptchaValue(value);
   };
 
   useEffect(() => {
@@ -122,9 +135,17 @@ const Contact = () => {
                     className="mt-1 w-full p-3 bg-gray-100 dark:bg-[#3a2f60] text-gray-800 dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-[#915EFF] disabled:opacity-60 dark:disabled:opacity-50"
                   />
                 </div>
+                <div className="flex justify-center">
+                  <ReCAPTCHA
+                    ref={recaptchaRef}
+                    sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                    onChange={handleCaptchaChange}
+                    theme="dark"
+                  />
+                </div>
                 <button
                   type="submit"
-                  disabled={formStatus === 'sending'}
+                  disabled={formStatus === 'sending' || !captchaValue}
                   className="w-full bg-[#915EFF] text-white py-3 rounded-lg hover:bg-purple-600 transition-colors duration-150 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed"
                 >
                   {formStatus === 'sending' ? 'Küldés...' : t('contact.send')}

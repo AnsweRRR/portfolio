@@ -1,38 +1,5 @@
-import {
-  FaGithub,
-  FaLinkedin,
-  FaFacebook,
-} from "react-icons/fa";
-import { MdEmail, MdPhone } from "react-icons/md";
 import { useTranslation } from "react-i18next";
-
-const contactLinks = [
-  {
-    href: "mailto:pogranyitamas99@gmail.com",
-    title: "Email",
-    icon: <MdEmail size={24} />,
-  },
-  {
-    href: "tel:+36204963272",
-    title: "Phone",
-    icon: <MdPhone size={24} />,
-  },
-  {
-    href: "https://github.com/AnsweRRR",
-    title: "GitHub",
-    icon: <FaGithub size={24} />,
-  },
-  {
-    href: "https://www.linkedin.com/in/tam%C3%A1s-pogr%C3%A1nyi-a682941ba/",
-    title: "LinkedIn",
-    icon: <FaLinkedin size={24} />,
-  },
-  {
-    href: "https://www.facebook.com/pogranyitamas99/",
-    title: "Facebook",
-    icon: <FaFacebook size={24} />,
-  },
-];
+import { contactLinks } from "../../api/contact";
 
 export default function Footer() {
   const { t } = useTranslation();
@@ -54,7 +21,7 @@ export default function Footer() {
               className="hover:text-white"
               title={link.title}
             >
-              {link.icon}
+              <link.icon size={24} />
             </a>
           ))}
         </div>
