@@ -18,7 +18,7 @@ export default function Footer() {
               href={link.href}
               target={link.href.startsWith("http") ? "_blank" : undefined}
               rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
-              className="hover:text-white"
+              className="hover:opacity-100 opacity-70 transition-opacity duration-200"
               title={link.title}
             >
               <link.icon size={24} />
