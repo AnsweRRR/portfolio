@@ -30,10 +30,10 @@ const TechCard = ({index, skill}: TechCardProps) => {
         />
         <div className="flex-1 min-w-0">
           <div className="flex justify-between mb-1">
-            <h3 className="text-lg sm:text-xl font-semibold truncate">{skill.name}</h3>
-            <span className="text-sm text-gray-500 ml-2">{skill.level}%</span>
+            <h3 className="text-lg sm:text-xl font-semibold truncate text-white-100 dark:text-white-100 text-white-100-light">{skill.name}</h3>
+            <span className="text-sm text-secondary dark:text-secondary text-secondary-light ml-2">{skill.level}%</span>
           </div>
-          <div className="w-full bg-gray-200 h-2 sm:h-3 rounded-full mb-2">
+          <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 sm:h-3 rounded-full mb-2">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${skill.level}%` }}
@@ -41,11 +41,11 @@ const TechCard = ({index, skill}: TechCardProps) => {
               className="bg-blue-500 h-2 sm:h-3 rounded-full"
             ></motion.div>
           </div>
-          <div className="text-sm text-gray-600 flex flex-wrap gap-1 sm:gap-2">
+          <div className="text-sm text-secondary dark:text-secondary text-secondary-light flex flex-wrap gap-1 sm:gap-2">
             {skill.tags.map((tag) => (
               <span
                 key={tag}
-                className="bg-gray-200 px-2 py-0.5 rounded-full text-xs"
+                className="bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full text-xs"
               >
                 {tag}
               </span>
@@ -62,8 +62,8 @@ const Tech = () => {
 
   return (
     <>
-      <h2 className="text-3xl font-bold text-center mb-8">{t('tech.title')}</h2>
-      <p className="text-center text-gray-600 mb-8">{t('tech.subtitle')}</p>
+      <h2 className="text-3xl font-bold text-center mb-8 text-white-100 dark:text-white-100 text-white-100-light">{t('tech.title')}</h2>
+      <p className="text-center text-secondary dark:text-secondary text-secondary-light mb-8">{t('tech.subtitle')}</p>
       <div className="grid grid-cols-1 lg:grid-cols-3 md:grid-cols-2 gap-6 max-w-6xl mx-auto px-4">
         {skills.map((skill, index) => (
           <TechCard key={`skill-${index}`} skill={skill} index={index} />

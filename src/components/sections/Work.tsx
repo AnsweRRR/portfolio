@@ -88,8 +88,8 @@ const Work = () => {
   return (
     <div className="py-12 px-4 max-w-6xl mx-auto">
       <motion.div variants={textVariant()}>
-        <h2 className="text-3xl font-bold text-center mb-8 text-white">{t('work.title')}</h2>
-        <p className="text-center text-gray-300 mb-8">{t('work.subtitle')}</p>
+        <h2 className="text-3xl font-bold text-center mb-8 text-white-100 dark:text-white-100 text-white-100-light">{t('work.title')}</h2>
+        <p className="text-center text-secondary dark:text-secondary text-secondary-light mb-8">{t('work.subtitle')}</p>
       </motion.div>
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
         {projects.map((project, index) => (

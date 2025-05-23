@@ -27,16 +27,16 @@ const ExperienceItem = ({ index, experience }: ExperienceItemProps) => {
       >
         {isLeft ? (
           <div className="hidden md:block md:w-5/12 md:text-right md:pr-8">
-            <h3 className="text-xl font-semibold">{experience.position}</h3>
-            <p className="text-gray-600">{experience.company}</p>
-            <p className="italic text-sm text-gray-500">{experience.period}</p>
-            <p className="mt-2 text-gray-700">{experience.description}</p>
+            <h3 className="text-xl font-semibold text-white-100 dark:text-white-100 text-white-100-light">{experience.position}</h3>
+            <p className="text-secondary dark:text-secondary text-secondary-light">{experience.company}</p>
+            <p className="italic text-sm text-secondary dark:text-secondary text-secondary-light">{experience.period}</p>
+            <p className="mt-2 text-secondary dark:text-secondary text-secondary-light">{experience.description}</p>
           </div>
         ) : (
           <div className="hidden md:block md:w-5/12"></div>
         )}
 
-        <div className="relative z-10 flex items-center justify-center w-16 h-16 rounded-full bg-white border-4 border-indigo-500 shadow-md mx-auto md:mx-0">
+        <div className="relative z-10 flex items-center justify-center w-16 h-16 rounded-full bg-white dark:bg-gray-800 border-4 border-indigo-500 shadow-md mx-auto md:mx-0">
           <img
             src={experience.logo}
             alt={`${experience.company} logo`}
@@ -47,10 +47,10 @@ const ExperienceItem = ({ index, experience }: ExperienceItemProps) => {
 
         {!isLeft ? (
           <div className="hidden md:block md:w-5/12 md:text-left md:pl-8">
-            <h3 className="text-xl font-semibold">{experience.position}</h3>
-            <p className="text-gray-600">{experience.company}</p>
-            <p className="italic text-sm text-gray-500">{experience.period}</p>
-            <p className="mt-2 text-gray-700">{experience.description}</p>
+            <h3 className="text-xl font-semibold text-white-100 dark:text-white-100 text-white-100-light">{experience.position}</h3>
+            <p className="text-secondary dark:text-secondary text-secondary-light">{experience.company}</p>
+            <p className="italic text-sm text-secondary dark:text-secondary text-secondary-light">{experience.period}</p>
+            <p className="mt-2 text-secondary dark:text-secondary text-secondary-light">{experience.description}</p>
           </div>
         ) : (
           <div className="hidden md:block md:w-5/12"></div>
@@ -58,10 +58,10 @@ const ExperienceItem = ({ index, experience }: ExperienceItemProps) => {
 
         {/* Mobile content - always below logo */}
         <div className="md:hidden w-full text-center mt-4">
-          <h3 className="text-xl font-semibold">{experience.position}</h3>
-          <p className="text-gray-600">{experience.company}</p>
-          <p className="italic text-sm text-gray-500">{experience.period}</p>
-          <p className="mt-2 text-gray-700">{experience.description}</p>
+          <h3 className="text-xl font-semibold text-white-100 dark:text-white-100 text-white-100-light">{experience.position}</h3>
+          <p className="text-secondary dark:text-secondary text-secondary-light">{experience.company}</p>
+          <p className="italic text-sm text-secondary dark:text-secondary text-secondary-light">{experience.period}</p>
+          <p className="mt-2 text-secondary dark:text-secondary text-secondary-light">{experience.description}</p>
         </div>
       </div>
     </motion.div>
@@ -74,11 +74,11 @@ const Experience = () => {
   return (
     <div className="max-w-5xl mx-auto p-6">
       <motion.div variants={textVariant()}>
-        <h2 className="text-3xl font-bold text-center mb-12">{t('experience.title')}</h2>
-        <p className="text-center text-gray-600 mb-8">{t('experience.subtitle')}</p>
+        <h2 className="text-3xl font-bold text-center mb-12 text-white-100 dark:text-white-100 text-white-100-light">{t('experience.title')}</h2>
+        <p className="text-center text-secondary dark:text-secondary text-secondary-light mb-8">{t('experience.subtitle')}</p>
       </motion.div>
       <div className="relative">
-        <div className="hidden md:block absolute left-1/2 top-0 -translate-x-1/2 h-full border-l-2 border-gray-300"></div>
+        <div className="hidden md:block absolute left-1/2 top-0 -translate-x-1/2 h-full border-l-2 border-secondary dark:border-secondary border-secondary-light"></div>
         <div className="flex flex-col space-y-12">
           {experiences.map((exp, index) => <ExperienceItem key={index} experience={exp} index={index} />)}
         </div>
