@@ -3,8 +3,8 @@ import { Link } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { navLinks } from "../../api/navlink";
 import { styles } from "../../styles";
-import { useTheme } from "../../context/ThemeContext";
 import { FiSun, FiMoon } from "react-icons/fi";
+import { useTheme } from "../../hooks/useTheme";
 
 const Navbar = () => {
   const [active, setActive] = useState("");
