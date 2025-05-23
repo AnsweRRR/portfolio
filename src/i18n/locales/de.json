@@ -4,6 +4,7 @@
     "about": "Über Mich",
     "experience": "Erfahrung",
     "tech": "Technologien",
+    "testimonials": "Erfahrungsberichte",
     "work": "Projekte",
     "contact": "Kontakt"
   },
@@ -41,5 +42,10 @@
   },
   "footer": {
     "rights": "Alle Rechte vorbehalten"
+  },
+  "testimonials": {
+    "title": "Erfahrungsberichte",
+    "subtitle": "Was andere sagen",
+    "swipeHint": "Wischen zum Navigieren"
   }
 } 

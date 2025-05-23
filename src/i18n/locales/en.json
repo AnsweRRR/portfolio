@@ -4,6 +4,7 @@
     "about": "About",
     "experience": "Experience",
     "tech": "Tech",
+    "testimonials": "Testimonials",
     "work": "Work",
     "contact": "Contact"
   },
@@ -41,5 +42,10 @@
   },
   "footer": {
     "rights": "All rights reserved"
+  },
+  "testimonials": {
+    "title": "Testimonials",
+    "subtitle": "What others say",
+    "swipeHint": "Swipe to navigate"
   }
 } 

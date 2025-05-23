@@ -4,6 +4,7 @@
     "about": "Rólam",
     "experience": "Tapasztalat",
     "tech": "Technológiák",
+    "testimonials": "Ajánlások",
     "work": "Munkák",
     "contact": "Kapcsolat"
   },
@@ -41,5 +42,10 @@
   },
   "footer": {
     "rights": "Minden jog fenntartva"
+  },
+  "testimonials": {
+    "title": "Ajánlások",
+    "subtitle": "Mit mondanak rólam",
+    "swipeHint": "Húzza a navigációhoz"
   }
 } 

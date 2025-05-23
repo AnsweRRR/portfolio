@@ -1,8 +1,10 @@
 import { motion, useAnimation, PanInfo } from "framer-motion";
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { styles } from "../../styles";
 import { fadeIn, textVariant } from "../../utils/motion";
 import { testimonials } from "../../api/testimonials";
+import SectionWrapper from "../../hoc/SectionWrapper";
 
 interface FeedbackCardProps {
   index: number;
@@ -47,6 +49,7 @@ const Feedbacks = () => {
   const [activeIndex, setActiveIndex] = useState(0);
   const [showSwipeHint, setShowSwipeHint] = useState(true);
   const controls = useAnimation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -93,8 +96,8 @@ const Feedbacks = () => {
         className={`bg-tertiary dark:bg-tertiary bg-tertiary-light rounded-2xl ${styles.padding} min-h-[300px]`}
       >
         <motion.div variants={textVariant()}>
-          <p className={`${styles.sectionSubText} text-secondary dark:text-secondary text-secondary-light`}>What others say</p>
-          <h2 className={`${styles.sectionHeadText} text-white-100 dark:text-white-100 text-white-100-light`}>Testimonials.</h2>
+          <p className={`${styles.sectionSubText} text-secondary dark:text-secondary text-secondary-light`}>{t('testimonials.subtitle')}</p>
+          <h2 className={`${styles.sectionHeadText} text-white-100 dark:text-white-100 text-white-100-light`}>{t('testimonials.title')}</h2>
         </motion.div>
       </div>
       <div className={`-mt-20 pb-14 px-4 sm:${styles.paddingX} flex items-center justify-center max-w-5xl mx-auto relative`}>
@@ -130,7 +133,7 @@ const Feedbacks = () => {
                 />
               </svg>
             </motion.div>
-            <span>Swipe to navigate</span>
+            <span>{t('testimonials.swipeHint')}</span>
           </motion.div>
         )}
 
@@ -217,4 +220,5 @@ const Feedbacks = () => {
   );
 };
 
-export default Feedbacks; 
+const WrappedFeedbacks = SectionWrapper(Feedbacks, "testimonials");
+export default WrappedFeedbacks;
