@@ -24,7 +24,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
   return (
     <motion.div variants={fadeIn("up", "spring", index * 0.5, 0.75)}>
       <div className="violet-gradient p-[1px] rounded-2xl">
-        <div className="bg-[#1d1836] rounded-2xl overflow-hidden flex flex-col h-full">
+        <div className="bg-[#1d1836] dark:bg-[#1d1836] bg-gray-100 rounded-2xl overflow-hidden flex flex-col h-full">
           <div className="relative w-full h-48 group overflow-hidden">
             <img
               src={project.image}
@@ -37,7 +37,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white hover:text-[#915EFF] transition-colors duration-300"
+                  className="text-white-100 dark:text-white-100 text-white-100-light hover:text-[#915EFF] transition-colors duration-300"
                   title={t('work.viewCode')}
                 >
                   <FaGithub size={24} />
@@ -46,7 +46,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
                   href={project.live}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white hover:text-[#915EFF] transition-colors duration-300"
+                  className="text-white-100 dark:text-white-100 text-white-100-light hover:text-[#915EFF] transition-colors duration-300"
                   title={t('work.viewProject')}
                 >
                   <FiExternalLink size={24} />
@@ -56,11 +56,11 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
           </div>
           <div className="flex-1 flex flex-col justify-between p-6">
             <div>
-              <h3 className="text-xl font-semibold mb-2 text-white">
+              <h3 className="text-xl font-semibold mb-2 text-white-100 dark:text-white-100 text-white-100-light">
                 {project.title}
               </h3>
               <div className="h-24 overflow-y-auto custom-scrollbar mb-4">
-                <p className="text-sm text-gray-300">
+                <p className="text-sm text-secondary dark:text-secondary text-secondary-light">
                   {project.description}
                 </p>
               </div>
