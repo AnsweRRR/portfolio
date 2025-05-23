@@ -36,7 +36,7 @@ const ExperienceItem = ({ index, experience }: ExperienceItemProps) => {
           <div className="hidden md:block md:w-5/12"></div>
         )}
 
-        <div className="relative z-10 flex items-center justify-center w-16 h-16 rounded-full bg-white dark:bg-gray-800 border-4 border-indigo-500 shadow-md mx-auto md:mx-0">
+        <div className="relative z-10 flex items-center justify-center w-16 h-16 rounded-full bg-white border-4 border-indigo-500 shadow-md mx-auto md:mx-0">
           <img
             src={experience.logo}
             alt={`${experience.company} logo`}
