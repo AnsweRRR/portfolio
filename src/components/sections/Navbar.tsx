@@ -55,7 +55,7 @@ const Navbar = () => {
           </p>
         </Link>
 
-        <ul className='list-none hidden sm:flex flex-row gap-10 items-center'>
+        <ul className='list-none hidden lg:flex flex-row gap-10 items-center'>
           {navLinks.map((nav) => (
             <li
               key={nav.id}
@@ -100,7 +100,7 @@ const Navbar = () => {
           </li>
         </ul>
 
-        <div className='sm:hidden flex flex-1 justify-end items-center'>
+        <div className='lg:hidden flex flex-1 justify-end items-center'>
           <button
             onClick={() => setToggle(!toggle)}
             className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 relative z-30"
