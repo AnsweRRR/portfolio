@@ -47,5 +47,10 @@
     "title": "Erfahrungsberichte",
     "subtitle": "Was andere sagen",
     "swipeHint": "Wischen zum Navigieren"
+  },
+  "projects": {
+    "shoutOut": {
+      "description": "Eine App, in der ihr euch innerhalb einer Community gegenseitig Punkte geben könnt, die gegen tolle Belohnungen eingelöst werden können."
+    }
   }
 } 

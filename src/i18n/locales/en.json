@@ -47,5 +47,10 @@
     "title": "Testimonials",
     "subtitle": "What others say",
     "swipeHint": "Swipe to navigate"
+  },
+  "projects": {
+    "shoutOut": {
+      "description": "An app where you can give points to each other within a community, which can be redeemed for awesome rewards."
+    }
   }
 } 

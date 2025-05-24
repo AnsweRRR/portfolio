@@ -61,7 +61,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
               </h3>
               <div className="h-24 overflow-y-auto custom-scrollbar mb-4">
                 <p className="text-sm text-secondary dark:text-secondary text-secondary-light">
-                  {project.description}
+                  {t(project.description)}
                 </p>
               </div>
             </div>

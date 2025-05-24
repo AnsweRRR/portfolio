@@ -47,5 +47,10 @@
     "title": "Ajánlások",
     "subtitle": "Mit mondanak rólam",
     "swipeHint": "Húzza a navigációhoz"
+  },
+  "projects": {
+    "shoutOut": {
+      "description": "Egy olyan alkalmazás, ahol egy közösségben pontokat tudtok adni egymásnak, amelyből szuper jutalmakat lehet kiváltani."
+    }
   }
 } 
