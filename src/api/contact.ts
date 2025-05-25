@@ -20,12 +20,12 @@ export const contactLinks: ContactLink[] = [
     icon: MdEmail,
   },
   {
-    href: "tel:06204963272",
+    href: "tel:+36204963272",
     title: "Phone",
     icon: MdPhone,
   },
   {
-    href: "https://wa.me/06204963272",
+    href: "https://wa.me/+36204963272",
     title: "WhatsApp",
     icon: FaWhatsapp,
   },
