@@ -49,7 +49,8 @@ const Navbar = () => {
             window.scrollTo(0, 0);
           }}
         >
-          <p className='text-white-100 dark:text-white-100 text-white-100-light text-[18px] font-bold cursor-pointer flex'>
+          <p className='text-white-100 dark:text-white-100 text-white-100-light text-[18px] font-bold cursor-pointer flex items-center'>
+            <img src="/favicon/favicon-32x32.png" alt="Logo" className="w-6 h-6 mr-2" />
             {t('hero.name')} &nbsp;
             <span className='sm:block hidden'> | {t('hero.title')}</span>
           </p>
