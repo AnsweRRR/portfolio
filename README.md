@@ -1,50 +1,41 @@
-# React + TypeScript + Vite
+# Tamás Pogrányi – Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+[![Website](https://img.shields.io/badge/Live%20Site-www.pogranyitamas.com-blue?style=flat-square)](https://www.pogranyitamas.com)
 
-Currently, two official plugins are available:
+## Overview
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+This is the personal portfolio of **Tamás Pogrányi**, a Full Stack Developer specializing in React, TypeScript, and .NET. The site showcases my work, skills, and experience, and provides a way to get in touch. I develop web, mobile, and desktop applications, and enjoy learning new technologies.
 
-## Expanding the ESLint configuration
+## Features
+- About me and my background
+- Work experience and major projects
+- Tech stack and skills
+- Project portfolio with live demos and source code
+- Contact form
+- Multilingual support (EN, HU, DE)
+- Modern, responsive design
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## Tech Stack
+- **Frontend:** React, TypeScript, Vite, Tailwind CSS, Framer Motion
+- **State & i18n:** React Context, react-i18next
+- **3D/Visuals:** Three.js, @react-three/fiber, @react-three/drei
+- **Other:** EmailJS, React Icons
 
-- Configure the top-level `parserOptions` property like this:
+## Getting Started
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
+To run the project locally:
+
+```bash
+npm install
+npm run dev
 ```
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+Then open [http://localhost:5173](http://localhost:5173) in your browser.
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+## License & Credits
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+Some 3D models used in this project are licensed under CC-BY-4.0. See the `public/models` directory for details and attributions.
+
+---
+
+Visit the live site: [www.pogranyitamas.com](https://www.pogranyitamas.com)
