@@ -20,7 +20,15 @@
   },
   "experience": {
     "title": "Berufserfahrung",
-    "subtitle": "Was ich bisher gemacht habe"
+    "subtitle": "Was ich bisher gemacht habe",
+    "nanoworx": {
+      "position": "Fullstack-Entwickler",
+      "description": "Entwicklung von maßgeschneiderter Software, Betreuung von Backend- und Frontend-Aufgaben mit Schwerpunkt auf .NET."
+    },
+    "freelancer": {
+      "position": "Entwickler & Kundensupport",
+      "description": "In der Zwischenzeit habe ich begonnen, an kleineren Projekten zu arbeiten, darunter die Entwicklung von Webseiten sowie von Telegram- und Discord-Bots."
+    }
   },
   "tech": {
     "title": "Technologie-Stack",

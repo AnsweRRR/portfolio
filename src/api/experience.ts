@@ -10,9 +10,9 @@ export const experiences: ExperienceItem[] = [
   {
     company: "NanoworX",
     logo: "/images/companies/nanoworx.png",
-    position: "Fullstack Developer",
+    position: "experience.nanoworx.position",
     period: "2021 - ",
-    description: "Egyedi szoftverek fejlesztése, backend és frontend feladatok ellátása .NET fókusszal.",
+    description: "experience.nanoworx.description",
   },
   // {
   //   company: "Meta",
@@ -31,8 +31,8 @@ export const experiences: ExperienceItem[] = [
   {
     company: "Freelancer",
     logo: "/images/companies/self-employed.png",
-    position: "Developer & Customer Support",
+    position: "experience.freelancer.position",
     period: "2024 - ",
-    description: "Idő közben elkezdtem kisebb projekteken dolgozni. A feladatok között szerepel a weboldalak, Telegram valamint Discord botok fejlesztése.",
+    description: "experience.freelancer.description",
   },
 ];

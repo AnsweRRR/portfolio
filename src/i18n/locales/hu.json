@@ -20,7 +20,15 @@
   },
   "experience": {
     "title": "Munkatapasztalat",
-    "subtitle": "Amit eddig elvégeztem"
+    "subtitle": "Amit eddig elvégeztem",
+    "nanoworx": {
+      "position": "Fullstack Fejlesztő",
+      "description": "Egyedi szoftverek fejlesztése, backend és frontend feladatok ellátása .NET fókusszal."
+    },
+    "freelancer": {
+      "position": "Fejlesztő & Ügyfélszolgálat",
+      "description": "Közben kisebb projekteken is elkezdtem dolgozni, amelyek között weboldalak, valamint Telegram- és Discord botok fejlesztése is szerepel."
+    }
   },
   "tech": {
     "title": "Technológiai Stack",

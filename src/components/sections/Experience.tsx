@@ -18,6 +18,7 @@ interface ExperienceItemProps {
 const ExperienceItem = ({ index, experience }: ExperienceItemProps) => {
   const isLeft = index % 2 === 0;
   const fadeInSide = isLeft ? "right" : "left";
+  const { t } = useTranslation();
 
   return (
     <motion.div variants={fadeIn(fadeInSide, "spring", index * 0.5, 0.75)}>
@@ -27,10 +28,10 @@ const ExperienceItem = ({ index, experience }: ExperienceItemProps) => {
       >
         {isLeft ? (
           <div className="hidden md:block md:w-5/12 md:text-right md:pr-8">
-            <h3 className="text-xl font-semibold text-white-100 dark:text-white-100 text-white-100-light">{experience.position}</h3>
+            <h3 className="text-xl font-semibold text-white-100 dark:text-white-100 text-white-100-light">{t(`experience.${experience.company.toLowerCase()}.position`)}</h3>
             <p className="text-secondary dark:text-secondary text-secondary-light">{experience.company}</p>
             <p className="italic text-sm text-secondary dark:text-secondary text-secondary-light">{experience.period}</p>
-            <p className="mt-2 text-secondary dark:text-secondary text-secondary-light">{experience.description}</p>
+            <p className="mt-2 text-secondary dark:text-secondary text-secondary-light">{t(`experience.${experience.company.toLowerCase()}.description`)}</p>
           </div>
         ) : (
           <div className="hidden md:block md:w-5/12"></div>
@@ -47,10 +48,10 @@ const ExperienceItem = ({ index, experience }: ExperienceItemProps) => {
 
         {!isLeft ? (
           <div className="hidden md:block md:w-5/12 md:text-left md:pl-8">
-            <h3 className="text-xl font-semibold text-white-100 dark:text-white-100 text-white-100-light">{experience.position}</h3>
+            <h3 className="text-xl font-semibold text-white-100 dark:text-white-100 text-white-100-light">{t(`experience.${experience.company.toLowerCase()}.position`)}</h3>
             <p className="text-secondary dark:text-secondary text-secondary-light">{experience.company}</p>
             <p className="italic text-sm text-secondary dark:text-secondary text-secondary-light">{experience.period}</p>
-            <p className="mt-2 text-secondary dark:text-secondary text-secondary-light">{experience.description}</p>
+            <p className="mt-2 text-secondary dark:text-secondary text-secondary-light">{t(`experience.${experience.company.toLowerCase()}.description`)}</p>
           </div>
         ) : (
           <div className="hidden md:block md:w-5/12"></div>
@@ -58,10 +59,10 @@ const ExperienceItem = ({ index, experience }: ExperienceItemProps) => {
 
         {/* Mobile content - always below logo */}
         <div className="md:hidden w-full text-center mt-4">
-          <h3 className="text-xl font-semibold text-white-100 dark:text-white-100 text-white-100-light">{experience.position}</h3>
+          <h3 className="text-xl font-semibold text-white-100 dark:text-white-100 text-white-100-light">{t(`experience.${experience.company.toLowerCase()}.position`)}</h3>
           <p className="text-secondary dark:text-secondary text-secondary-light">{experience.company}</p>
           <p className="italic text-sm text-secondary dark:text-secondary text-secondary-light">{experience.period}</p>
-          <p className="mt-2 text-secondary dark:text-secondary text-secondary-light">{experience.description}</p>
+          <p className="mt-2 text-secondary dark:text-secondary text-secondary-light">{t(`experience.${experience.company.toLowerCase()}.description`)}</p>
         </div>
       </div>
     </motion.div>
