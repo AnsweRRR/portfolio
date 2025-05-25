@@ -7,7 +7,7 @@ const About = () => {
 
   return (
     <section 
-      className="w-full bg-gray-100 dark:bg-gray-900 py-16 px-4"
+      className="w-full bg-gray-100 dark:bg-gray-900 py-16 px-4 rounded-[2rem]"
       aria-labelledby="about-title"
     >
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
