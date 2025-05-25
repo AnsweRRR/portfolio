@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Sitemap location
+Sitemap: https://pogranyitamas.com/sitemap.xml
+
+# Disallow admin or private routes if you add them in the future
+Disallow: /admin/
+Disallow: /private/ 
