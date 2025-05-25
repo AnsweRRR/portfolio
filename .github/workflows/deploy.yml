@@ -31,7 +31,7 @@ jobs:
           host: ${{ secrets.RASPBERRY_PI_HOST }}
           username: ${{ secrets.RASPBERRY_PI_USERNAME }}
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
-          source: "dist/"
+          source: "dist"
           target: "/var/www/portfolio"
-          strip_components: 0
+          strip_components: 1
           overwrite: true 
