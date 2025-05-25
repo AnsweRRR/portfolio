@@ -19,7 +19,7 @@ const Contact = () => {
     e.preventDefault();
 
     if (!formRef.current || !captchaValue) {
-      setErrorMessage('Kérjük, erősítse meg, hogy nem robot.');
+      setErrorMessage(t('contact.captchaError'));
       setFormStatus('error');
       return;
     }
@@ -40,8 +40,8 @@ const Contact = () => {
       recaptchaRef.current?.reset();
       setCaptchaValue(null);
     } catch (error: unknown) {
-      console.error("EmailJS hiba:", error);
-      const errorMessage = error instanceof Error ? error.message : 'Hiba történt az üzenet küldésekor. Kérjük, próbálja újra később.';
+      console.error("EmailJS error:", error);
+      const errorMessage = error instanceof Error ? error.message : t('contact.genericError');
       setErrorMessage(errorMessage);
       setFormStatus('error');
     }
@@ -81,14 +81,14 @@ const Contact = () => {
             <div className="text-center">
               <img
                 src="/images/email_sent_feedback.gif"
-                alt="Email elküldve"
+                alt={t('contact.emailSentAlt')}
                 className="mx-auto mb-4 object-contain"
               />
               <h3 className="text-2xl font-semibold text-green-500 dark:text-green-400">
-                Sikeresen elküldve!
+                {t('contact.successTitle')}
               </h3>
               <p className="text-gray-600 dark:text-gray-300 mt-2">
-                Köszönjük üzenetét. Hamarosan felvesszük Önnel a kapcsolatot.
+                {t('contact.successMessage')}
               </p>
             </div>
           ) : (
@@ -97,7 +97,7 @@ const Contact = () => {
               <p className="text-gray-600 dark:text-gray-300 mb-6">{t('contact.subtitle')}</p>
               {formStatus === 'error' && (
                 <div className="mb-4 p-3 bg-red-100 dark:bg-red-800 border border-red-400 dark:border-red-600 text-red-700 dark:text-red-100 rounded-lg">
-                  <p className="font-bold">Hiba történt!</p>
+                  <p className="font-bold">{t('contact.errorTitle')}</p>
                   <p>{errorMessage}</p>
                 </div>
               )}
@@ -148,7 +148,7 @@ const Contact = () => {
                   disabled={formStatus === 'sending' || !captchaValue}
                   className="w-full bg-[#915EFF] text-white py-3 rounded-lg hover:bg-purple-600 transition-colors duration-150 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed"
                 >
-                  {formStatus === 'sending' ? 'Küldés...' : t('contact.send')}
+                  {formStatus === 'sending' ? t('contact.sending') : t('contact.send')}
                 </button>
               </form>
             </>

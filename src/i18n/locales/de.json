@@ -46,7 +46,14 @@
     "name": "Ihr Name",
     "email": "Ihre E-Mail",
     "message": "Ihre Nachricht",
-    "send": "Nachricht senden"
+    "send": "Nachricht senden",
+    "sending": "Wird gesendet...",
+    "successTitle": "Erfolgreich gesendet!",
+    "successMessage": "Vielen Dank für Ihre Nachricht. Wir werden uns in Kürze bei Ihnen melden.",
+    "errorTitle": "Ein Fehler ist aufgetreten!",
+    "captchaError": "Bitte bestätigen Sie, dass Sie kein Roboter sind.",
+    "genericError": "Beim Senden der Nachricht ist ein Fehler aufgetreten. Bitte versuchen Sie es später erneut.",
+    "emailSentAlt": "E-Mail gesendet"
   },
   "footer": {
     "rights": "Alle Rechte vorbehalten"

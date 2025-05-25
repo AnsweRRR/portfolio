@@ -46,7 +46,14 @@
     "name": "Neved",
     "email": "Email címed",
     "message": "Üzeneted",
-    "send": "Üzenet Küldése"
+    "send": "Üzenet Küldése",
+    "sending": "Küldés...",
+    "successTitle": "Sikeresen elküldve!",
+    "successMessage": "Köszönjük üzenetét. Hamarosan felvesszük Önnel a kapcsolatot.",
+    "errorTitle": "Hiba történt!",
+    "captchaError": "Kérjük, erősítse meg, hogy nem robot.",
+    "genericError": "Hiba történt az üzenet küldésekor. Kérjük, próbálja újra később.",
+    "emailSentAlt": "Email elküldve"
   },
   "footer": {
     "rights": "Minden jog fenntartva"
