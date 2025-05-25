@@ -39,7 +39,7 @@ const BusinessCard = () => {
       }}
     >
       <Suspense fallback={<CanvasLoader />}>
-        <ambientLight intensity={0.5} />
+        <ambientLight intensity={2} />
         <directionalLight position={[10, 10, 5]} intensity={1} />
         <Card />
         <OrbitControls
