@@ -13,6 +13,6 @@ export const projects = [
     image: "/images/projects/rc-car-control.png",
     github: "https://github.com/AnsweRRR/rc-car-control-mobile-app",
     live: "https://github.com/AnsweRRR/rc-car-control-mobile-app",
-    tags: ["React Native", "TypeScript", "WebSockets"]
+    tags: ["React Native", "TypeScript", "WebSockets", "IoT"]
   },
 ];
