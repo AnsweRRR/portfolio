@@ -33,4 +33,6 @@ jobs:
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
           source: "dist/."
           target: "/var/www/portfolio"
-          strip_components: 0 
+          strip_components: 0
+          overwrite: true
+          rm: true 
