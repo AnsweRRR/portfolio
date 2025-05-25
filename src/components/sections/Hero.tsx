@@ -4,7 +4,7 @@ import { styles } from "../../styles";
 import { ComputerCanvas } from "../canvas";
 
 const Hero = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <section className={`relative w-full h-screen mx-auto`}>
@@ -18,7 +18,20 @@ const Hero = () => {
 
         <div>
           <h1 className={`${styles.heroHeadText} text-white-100 dark:text-white-100 text-white-100-light`}>
-            {t('hero.greeting')} <span className='text-[#915EFF]'>{t('hero.name')}</span>
+            {i18n.language === 'hu' ? (
+              <>
+                {t('hero.greetingWithName').split('Tomi').map((part, index, array) => (
+                  <>
+                    {part}
+                    {index < array.length - 1 && <span className='text-[#915EFF]'>Tomi</span>}
+                  </>
+                ))}
+              </>
+            ) : (
+              <>
+                {t('hero.greeting')} <span className='text-[#915EFF]'>{t('hero.name')}</span>
+              </>
+            )}
           </h1>
           <p className={`${styles.heroSubText} mt-2 text-secondary dark:text-secondary text-secondary-light`}>
             {t('hero.subtitle')}
