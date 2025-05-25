@@ -13,7 +13,6 @@ function App() {
             <Navbar />
             <Hero />
           </div>
-          TESZT
           <About />
           <Experience />
           <Tech />
