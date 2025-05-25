@@ -17,11 +17,11 @@ const TechCard = ({index, skill}: TechCardProps) => {
   return (
     <motion.div
       variants={fadeIn("up", "spring", index * 0.2, 0.2)}
-      className='w-full green-pink-gradient p-[1px] rounded-[20px] shadow-card'
+      className='w-full h-full green-pink-gradient p-[1px] rounded-[20px] shadow-card'
     >
       <div
         key={skill.name}
-        className="rounded-2xl shadow-md p-4 sm:p-5 flex items-center gap-3 sm:gap-4 transition-transform transform hover:scale-105 hover:shadow-xl duration-300 bg-white dark:bg-gray-800"
+        className="h-full rounded-2xl shadow-md p-4 sm:p-5 flex items-center gap-3 sm:gap-4 transition-transform transform hover:scale-105 hover:shadow-xl duration-300 bg-white dark:bg-gray-800"
       >
         <img
           src={skill.image}

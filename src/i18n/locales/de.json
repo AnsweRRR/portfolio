@@ -51,6 +51,9 @@
   "projects": {
     "shoutOut": {
       "description": "Eine App, in der ihr euch innerhalb einer Community gegenseitig Punkte geben könnt, die gegen tolle Belohnungen eingelöst werden können."
+    },
+    "RCCarControl": {
+      "description": "Eine einfache Mobile-App, mit der man ein ferngesteuertes Auto über das Handy mit Hilfe eines Raspberry Pi steuern kann."
     }
   }
 } 

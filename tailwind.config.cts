@@ -39,8 +39,8 @@ module.exports = {
         xs: "450px",
       },
       backgroundImage: {
-        "hero-pattern": "url('/images/herobg.png')",
-        "hero-pattern-light": "url('/images/herobg-light.png')",
+        "hero-pattern": "url('/images/Plexus.png')",
+        "hero-pattern-light": "url('/images/Plexus.png')",
       },
     },
   },

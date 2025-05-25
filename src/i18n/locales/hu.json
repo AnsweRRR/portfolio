@@ -51,6 +51,9 @@
   "projects": {
     "shoutOut": {
       "description": "Egy olyan alkalmazás, ahol egy közösségben pontokat tudtok adni egymásnak, amelyből szuper jutalmakat lehet kiváltani."
+    },
+    "RCCarControl": {
+      "description": "Egy egyszerű mobil app, amivel egy távirányítós autót egy Raspberry segítségével lehet irányítani telefonról."
     }
   }
 } 

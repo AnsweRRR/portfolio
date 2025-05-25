@@ -51,6 +51,9 @@
   "projects": {
     "shoutOut": {
       "description": "An app where you can give points to each other within a community, which can be redeemed for awesome rewards."
+    },
+    "RCCarControl": {
+      "description": "A simple mobile app that allows you to control a remote-controlled car from your phone using a Raspberry Pi."
     }
   }
 } 
