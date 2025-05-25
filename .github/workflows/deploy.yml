@@ -27,12 +27,19 @@ jobs:
 
       - name: Create .env file
         run: |
-          echo "VITE_EMAILJS_SERVICE_ID=${{ secrets.VITE_EMAILJS_SERVICE_ID }}" > dist/.env
-          echo "VITE_EMAILJS_TEMPLATE_ID=${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}" >> dist/.env
-          echo "VITE_EMAILJS_PUBLIC_KEY=${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}" >> dist/.env
+          echo "VITE_EMAILJS_SERVICE_ID=${{ secrets.VITE_EMAILJS_SERVICE_ID }}" > .env
+          echo "VITE_EMAILJS_TEMPLATE_ID=${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}" >> .env
+          echo "VITE_EMAILJS_PUBLIC_KEY=${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}" >> .env
+          echo "VITE_RECAPTCHA_SITE_KEY=${{ secrets.VITE_RECAPTCHA_SITE_KEY }}" >> .env
+          echo "VITE_RECAPTCHA_SECRET_KEY=${{ secrets.VITE_RECAPTCHA_SECRET_KEY }}" >> .env
+          cp .env dist/.env
 
-          echo "VITE_RECAPTCHA_SITE_KEY=${{ secrets.VITE_RECAPTCHA_SITE_KEY }}" >> dist/.env
-          echo "VITE_RECAPTCHA_SECRET_KEY=${{ secrets.VITE_RECAPTCHA_SECRET_KEY }}" >> dist/.env
+      - name: Verify .env file
+        run: |
+          echo "Checking if .env file exists and has content:"
+          ls -la dist/.env
+          echo "Environment variables present (without values):"
+          grep -v '^#' dist/.env | cut -d'=' -f1
 
       - name: Deploy to Raspberry Pi
         uses: appleboy/scp-action@v0.1.7
