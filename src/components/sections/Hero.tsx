@@ -20,10 +20,10 @@ const Hero = () => {
           <h1 className={`${styles.heroHeadText} text-white-100 dark:text-white-100 text-white-100-light`}>
             {i18n.language === 'hu' ? (
               <>
-                {t('hero.greetingWithName').split('Tomi').map((part, index, array) => (
+                {t('hero.greetingWithName').split('Tamás').map((part, index, array) => (
                   <>
                     {part}
-                    {index < array.length - 1 && <span className='text-[#915EFF]'>Tomi</span>}
+                    {index < array.length - 1 && <span className='text-[#915EFF]'>Tamás</span>}
                   </>
                 ))}
               </>

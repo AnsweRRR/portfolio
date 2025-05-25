@@ -10,8 +10,8 @@
   },
   "hero": {
     "greeting": "Szia, én",
-    "greetingWithName": "Szia, Tomi vagyok",
-    "name": "Tomi",
+    "greetingWithName": "Szia, Tamás vagyok",
+    "name": "Tamás",
     "title": "Webfejlesztő",
     "subtitle": "Webes, mobil és natív asztali alkalmazásokat fejlesztek"
   },
