@@ -15,7 +15,7 @@ export interface ContactLink {
 
 export const contactLinks: ContactLink[] = [
   {
-    href: "mailto:pogranyitamas99@gmail.com",
+    href: "mailto:mail@pogranyitamas.com",
     title: "Email",
     icon: MdEmail,
   },
