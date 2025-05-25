@@ -13,6 +13,7 @@ const Navbar = () => {
   const { t, i18n } = useTranslation();
   const { theme, toggleTheme } = useTheme();
   const menuRef = useRef<HTMLDivElement>(null);
+  const toggleButtonRef = useRef<HTMLButtonElement>(null);
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -35,7 +36,12 @@ const Navbar = () => {
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+      if (
+        menuRef.current && 
+        !menuRef.current.contains(event.target as Node) &&
+        toggleButtonRef.current &&
+        !toggleButtonRef.current.contains(event.target as Node)
+      ) {
         setToggle(false);
       }
     };
@@ -120,6 +126,7 @@ const Navbar = () => {
 
         <div className='lg:hidden flex flex-1 justify-end items-center'>
           <button
+            ref={toggleButtonRef}
             onClick={() => setToggle(!toggle)}
             className="w-10 h-10 flex flex-col justify-center items-center gap-1.5 relative z-30"
           >
@@ -132,7 +139,7 @@ const Navbar = () => {
             ref={menuRef}
             className={`${
               !toggle ? "-translate-y-4 opacity-0 pointer-events-none" : "translate-y-0 opacity-100"
-            } absolute top-16 right-0 w-[200px] bg-primary/95 dark:bg-primary/95 bg-primary-light/95 backdrop-blur-sm rounded-xl shadow-lg transition-all duration-300 ease-in-out z-20`}
+            } absolute top-16 right-0 w-[200px] bg-primary/95 dark:bg-primary/95 bg-white/95 backdrop-blur-sm rounded-xl shadow-lg transition-all duration-300 ease-in-out z-20`}
           >
             <ul className="list-none flex flex-col gap-4 p-4">
               {navLinks.map((nav) => (
