@@ -61,7 +61,13 @@
   "testimonials": {
     "title": "Testimonials",
     "subtitle": "What others say",
-    "swipeHint": "Swipe to navigate"
+    "swipeHint": "Swipe to navigate",
+    "bence": {
+      "testimonial": "Tamás developed a patient management app for me that allows me to automatically track incoming inquiries, saving me a lot of time. We've known each other for a long time, but this was our first time working together, and he did an absolutely professional job. He quickly understood what was needed and remained flexible throughout the task."
+    },
+    "peter": {
+      "testimonial": "It started as a kind of hobby project when Tamás helped me create the web interface for my smart home system. The end result was a clean, user-friendly UI that perfectly complements the system's operation from a tablet."
+    }
   },
   "projects": {
     "shoutOut": {

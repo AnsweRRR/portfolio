@@ -62,7 +62,13 @@
   "testimonials": {
     "title": "Ajánlások",
     "subtitle": "Mit mondanak rólam",
-    "swipeHint": "Húzza a navigációhoz"
+    "swipeHint": "Húzza a navigációhoz",
+    "bence": {
+      "testimonial": "Tamás fejlesztett nekem egy pácienskezelő appot, amivel automatikusan nyomon tudom követni a bejövő érdeklődőket, így rengeteg időt spórolok. Régóta ismerjük egymást, de most dolgoztunk először együtt, és abszolút profi munkát végzett. Gyorsan átlátta, mire van szükség, és végig rugalmasan állt a feladathoz."
+    },
+    "peter": {
+      "testimonial": "Egyfajta hobbiprojektként indult, amikor a saját házamhoz épített okosotthonhoz Tamás segített a webes felület kialakításában. A végeredmény egy letisztult, jól használható UI lett, ami remekül kiegészíti a rendszer működését egy tabletről."
+    }
   },
   "projects": {
     "shoutOut": {
