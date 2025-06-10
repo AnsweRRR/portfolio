@@ -58,7 +58,7 @@ const Feedbacks = () => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setShowSwipeHint(false);
-    }, 3000);
+    }, 5000);
 
     return () => clearTimeout(timer);
   }, []);
@@ -110,7 +110,7 @@ const Feedbacks = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute -top-12 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-secondary dark:text-secondary text-secondary-light text-sm"
+            className="absolute -top-16 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-secondary dark:text-secondary text-secondary-light text-sm bg-black-100 dark:bg-black-100 bg-black-100-light px-4 py-2 rounded-full"
           >
             <motion.div
               animate={{
@@ -141,12 +141,7 @@ const Feedbacks = () => {
           </motion.div>
         )}
 
-        <motion.div
-          initial={{ opacity: 0, x: -100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center mr-4"
-        >
+        <div className="flex items-center mr-4 z-10">
           <button
             onClick={prevTestimonial}
             className="bg-tertiary dark:bg-tertiary bg-tertiary-light p-2 rounded-full hover:bg-secondary dark:hover:bg-secondary hover:bg-secondary-light transition-colors"
@@ -166,39 +161,37 @@ const Feedbacks = () => {
               />
             </svg>
           </button>
-        </motion.div>
+        </div>
 
-        <motion.div 
-          className="flex gap-2 sm:gap-4 items-center cursor-grab active:cursor-grabbing relative"
-          drag="x"
-          dragConstraints={{ left: 0, right: 0 }}
-          dragElastic={0.1}
-          onDragEnd={handleDragEnd}
-          animate={controls}
-        >
-          {getVisibleTestimonials().map((testimonial, index) => (
-            <motion.div
-              key={testimonial.name}
-              initial={{ opacity: 0, scale: 0.8 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.8 }}
-              transition={{ duration: 0.3 }}
-            >
-              <FeedbackCard
-                {...testimonial}
-                index={index}
-                isActive={index === 1}
-              />
-            </motion.div>
-          ))}
-        </motion.div>
+        <div className="relative flex-1 flex justify-center">
+          <motion.div 
+            className="flex gap-2 sm:gap-4 items-center cursor-grab active:cursor-grabbing"
+            drag="x"
+            dragConstraints={{ left: 0, right: 0 }}
+            dragElastic={0.1}
+            onDragEnd={handleDragEnd}
+            animate={controls}
+          >
+            {getVisibleTestimonials().map((testimonial, index) => (
+              <motion.div
+                key={`${testimonial.name}-${index}`}
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                exit={{ opacity: 0, scale: 0.8 }}
+                transition={{ duration: 0.3 }}
+                className="flex-shrink-0"
+              >
+                <FeedbackCard
+                  {...testimonial}
+                  index={index}
+                  isActive={index === 1}
+                />
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
 
-        <motion.div
-          initial={{ opacity: 0, x: 100 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.5 }}
-          className="flex items-center ml-4"
-        >
+        <div className="flex items-center ml-4 z-10">
           <button
             onClick={nextTestimonial}
             className="bg-tertiary dark:bg-tertiary bg-tertiary-light p-2 rounded-full hover:bg-secondary dark:hover:bg-secondary hover:bg-secondary-light transition-colors"
@@ -218,7 +211,7 @@ const Feedbacks = () => {
               />
             </svg>
           </button>
-        </motion.div>
+        </div>
       </div>
     </div>
   );
