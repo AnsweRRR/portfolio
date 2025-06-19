@@ -75,6 +75,9 @@
     },
     "RCCarControl": {
       "description": "Eine einfache Mobile-App, mit der man ein ferngesteuertes Auto über das Handy mit Hilfe eines Raspberry Pi steuern kann."
+    },
+    "3DPortfolio": {
+      "description": "Du bist tatsächlich hier. Schau dich um :)"
     }
   }
 } 

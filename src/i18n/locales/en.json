@@ -75,6 +75,9 @@
     },
     "RCCarControl": {
       "description": "A simple mobile app that allows you to control a remote-controlled car from your phone using a Raspberry Pi."
+    },
+    "3DPortfolio": {
+      "description": "You are here actually. Look around :)"
     }
   }
 } 

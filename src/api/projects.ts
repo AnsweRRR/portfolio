@@ -15,4 +15,12 @@ export const projects = [
     live: "https://github.com/AnsweRRR/rc-car-control-mobile-app",
     tags: ["React Native", "TypeScript", "WebSockets", "IoT"]
   },
+  {
+    title: "3D Portfolio",
+    description: "projects.3DPortfolio.description",
+    image: "/images/projects/3d-portfolio.png",
+    github: "https://github.com/AnsweRRR/portfolio",
+    live: "https://pogranyitamas.com",
+    tags: ["React Native", "TypeScript", "Three.js", "Three Fiber"]
+  },
 ];

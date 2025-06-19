@@ -76,6 +76,9 @@
     },
     "RCCarControl": {
       "description": "Egy egyszerű mobil app, amivel egy távirányítós autót egy Raspberry segítségével lehet irányítani telefonról."
+    },
+    "3DPortfolio": {
+      "description": "Ezen az oldaon vagy tulajdonképpen. Nézz körül :)"
     }
   }
 } 

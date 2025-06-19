@@ -19,7 +19,7 @@ const About = () => {
           className="w-48 h-48 rounded-full overflow-hidden shadow-2xl ring-4 ring-primary"
         >
           <img 
-            src="/images/ghibly_myself.png" 
+            src="/images/pogranyitamas.png" 
             alt="Tamas Pogranyi - Full Stack Developer" 
             className="w-full h-full animate-pulse"
             style={{ imageRendering: 'auto' }}
