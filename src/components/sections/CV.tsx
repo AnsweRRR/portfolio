@@ -2,7 +2,6 @@ import React from "react";
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { PaperTabletCanvas } from "../canvas";
-import SectionWrapper from "../../hoc/SectionWrapper";
 import Scroller from "../Scroller";
 
 interface CVProps {
@@ -61,6 +60,4 @@ const CV: React.FC<CVProps> = ({ isModal }) => {
   );
 };
 
-const WrappedCV = SectionWrapper(CV, "cv");
-export default WrappedCV;
-export { CV }; 
+export default CV; 

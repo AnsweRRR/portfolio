@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import SectionWrapper from '../../hoc/SectionWrapper';
 import { useState } from 'react';
 import Modal from '../Modal';
-import { CV } from './CV';
+import CV from './CV';
 import { FiExternalLink } from 'react-icons/fi';
 
 const About = () => {
