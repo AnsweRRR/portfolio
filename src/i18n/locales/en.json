@@ -85,8 +85,7 @@
   },
   "cv": {
     "title": "CV / Resume",
-    "description": "Interactive 3D resume - rotate the tablet for better viewing!",
-    "instruction": "Use your mouse to rotate the tablet",
+    "description": "Interactive 3D resume - rotate the clipboard for better viewing!",
     "download_hu": "Hungarian",
     "download_en": "English"
   }
