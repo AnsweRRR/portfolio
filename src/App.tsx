@@ -1,6 +1,6 @@
 import { BrowserRouter } from "react-router-dom";
 import StarsCanvas from "./components/canvas/Stars";
-import { Navbar, About, Contact, Experience, Footer, Hero, Tech, Work, CV, Feedbacks } from "./components/sections";
+import { Navbar, About, Contact, Experience, Footer, Hero, Tech, Work, Feedbacks } from "./components/sections";
 import { ThemeProvider } from "./context/ThemeContext";
 import './i18n/i18n';
 
@@ -14,7 +14,6 @@ function App() {
             <Hero />
           </div>
           <About />
-          <CV />
           <Experience />
           <Tech />
           <Work />

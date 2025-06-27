@@ -3,9 +3,10 @@ import { useTranslation } from 'react-i18next';
 import emailjs from 'emailjs-com';
 import { motion } from 'framer-motion';
 import ReCAPTCHA from 'react-google-recaptcha';
-// import Raspberry from '../canvas/Raspberry';
 import BusinessCard from '../canvas/BusinessCard';
 import SectionWrapper from '../../hoc/SectionWrapper';
+import { FiSend } from 'react-icons/fi';
+// import Raspberry from '../canvas/Raspberry';
 
 const Contact = () => {
   const { t } = useTranslation();
@@ -146,9 +147,16 @@ const Contact = () => {
                 <button
                   type="submit"
                   disabled={formStatus === 'sending' || !captchaValue}
-                  className="w-full bg-[#915EFF] text-white py-3 rounded-lg hover:bg-purple-600 transition-colors duration-150 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed"
+                  className="w-full bg-[#915EFF] text-white py-3 rounded-lg hover:bg-purple-600 transition-colors duration-150 disabled:bg-gray-400 dark:disabled:bg-gray-500 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
-                  {formStatus === 'sending' ? t('contact.sending') : t('contact.send')}
+                  {formStatus === 'sending' ? (
+                    t('contact.sending')
+                  ) : (
+                    <>
+                      <FiSend className="mr-2 h-4 w-4" />
+                      {t('contact.send')}
+                    </>
+                  )}
                 </button>
               </form>
             </>

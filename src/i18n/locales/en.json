@@ -44,7 +44,9 @@
   "cv": {
     "title": "CV / Resume",
     "description": "Interactive 3D resume - rotate the tablet for better viewing!",
-    "instruction": "Use your mouse to rotate the tablet"
+    "instruction": "Use your mouse to rotate the tablet",
+    "download_hu": "Download CV in Hungarian",
+    "download_en": "Download CV in English"
   },
   "contact": {
     "title": "Contact",
