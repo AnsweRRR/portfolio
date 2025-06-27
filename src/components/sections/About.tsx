@@ -4,7 +4,7 @@ import SectionWrapper from '../../hoc/SectionWrapper';
 import { useState, useEffect } from 'react';
 import Modal from '../Modal';
 import CV from './CV';
-import { FiExternalLink } from 'react-icons/fi';
+// import { FiExternalLink } from 'react-icons/fi';
 
 // Gépelős effektus hook
 function useTypewriter(text: string, speed: number = 30) {
