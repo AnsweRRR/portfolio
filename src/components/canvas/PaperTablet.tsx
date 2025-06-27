@@ -12,21 +12,21 @@ const PaperTablet: React.FC<PaperTabletProps> = ({ isMobile }) => {
 
   return (
     <mesh>
-      <hemisphereLight intensity={1} groundColor="black" />
+      <hemisphereLight intensity={3} groundColor="black" />
       <spotLight
         position={[-20, 50, 10]}
-        angle={0.12}
+        angle={0.2}
         penumbra={1}
-        intensity={10000}
+        intensity={35000}
         castShadow
-        shadow-mapSize={1024}
+        shadow-mapSize={2048}
       />
-      <pointLight intensity={1} />
+      <pointLight intensity={3} />
       <primitive
         object={paperTablet.scene}
         scale={isMobile ? 12.0 : 18.0}
         position={[0, 0, 0]}
-        rotation={[0, 0, 0]}
+        rotation={[0, Math.PI / 2 - 0.3, 0]}
       />
     </mesh>
   );

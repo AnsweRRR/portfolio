@@ -14,10 +14,10 @@ function App() {
             <Hero />
           </div>
           <About />
+          <CV />
           <Experience />
           <Tech />
           <Work />
-          <CV />
           <div className='relative z-0'>
             <Feedbacks />
             <Contact />
