@@ -14,7 +14,7 @@ function useTypewriter(text: string, speed: number = 30) {
     if (!text) return;
     let i = 0;
     const interval = setInterval(() => {
-      setDisplayed((prev) => prev + text[i]);
+      setDisplayed(text.slice(0, i + 1));
       i++;
       if (i >= text.length) clearInterval(interval);
     }, speed);
