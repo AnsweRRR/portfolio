@@ -1,9 +1,33 @@
 import { motion } from 'framer-motion';
 import { useTranslation } from 'react-i18next';
 import SectionWrapper from '../../hoc/SectionWrapper';
+import { useState, useEffect } from 'react';
+import Modal from '../Modal';
+import CV from './CV';
+import { FiExternalLink } from 'react-icons/fi';
+
+// Gépelős effektus hook
+function useTypewriter(text: string, speed: number = 30) {
+  const [displayed, setDisplayed] = useState('');
+  useEffect(() => {
+    setDisplayed('');
+    if (!text) return;
+    let i = 0;
+    const interval = setInterval(() => {
+      setDisplayed(text.slice(0, i + 1));
+      i++;
+      if (i >= text.length) clearInterval(interval);
+    }, speed);
+    return () => clearInterval(interval);
+  }, [text, speed]);
+  return displayed;
+}
 
 const About = () => {
   const { t } = useTranslation();
+  const [isCVOpen, setCVOpen] = useState(false);
+  const description = t('about.description');
+  const typedDescription = useTypewriter(description, 18);
 
   return (
     <section 
@@ -34,9 +58,19 @@ const About = () => {
           className="text-center md:text-left"
         >
           <h2 id="about-title" className="text-4xl font-bold text-gray-800 dark:text-white mb-4">{t('about.title')}</h2>
-          <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed max-w-2xl">
-            {t('about.description')}
+          <p className="text-gray-700 dark:text-gray-300 text-lg leading-relaxed max-w-2xl min-h-[3em]">
+            {typedDescription}
           </p>
+          {/* <button
+            className="mt-6 px-6 py-2 bg-primary text-white rounded-lg shadow hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-all duration-150 font-semibold flex items-center justify-center gap-2"
+            onClick={() => setCVOpen(true)}
+          >
+            <FiExternalLink className="mr-2 h-4 w-4" />
+            {t('about.cv_button')}
+          </button> */}
+          <Modal isOpen={isCVOpen} onClose={() => setCVOpen(false)}>
+            <CV isModal />
+          </Modal>
         </motion.div>
 
       </div>

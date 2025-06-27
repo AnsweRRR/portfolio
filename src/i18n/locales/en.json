@@ -6,6 +6,7 @@
     "tech": "Tech",
     "testimonials": "Testimonials",
     "work": "Work",
+    "cv": "CV",
     "contact": "Contact"
   },
   "hero": {
@@ -16,7 +17,8 @@
   },
   "about": {
     "title": "About Me",
-    "description": "I've been working in software development for 5 years, mainly with .NET, and I feel most at home on the backend. That said, I'm also comfortable with frontend development, primarily using React. I enjoy learning new things, so I occasionally dive into mobile development (React Native) and desktop apps (Electron) as well. I'm always looking for ways to improve myself."
+    "description": "I've been working in software development for 5 years, mainly with .NET, and I feel most at home on the backend. That said, I'm also comfortable with frontend development, primarily using React. I enjoy learning new things, so I occasionally dive into mobile development (React Native) and desktop apps (Electron) as well. I'm always looking for ways to improve myself.",
+    "cv_button": "View CV"
   },
   "experience": {
     "title": "Work Experience",
@@ -48,6 +50,7 @@
     "message": "Your Message",
     "send": "Send Message",
     "sending": "Sending...",
+    "response_time": "I typically respond within 24 hours",
     "successTitle": "Successfully Sent!",
     "successMessage": "Thank you for your message. We'll get back to you soon.",
     "errorTitle": "An Error Occurred!",
@@ -79,5 +82,11 @@
     "3DPortfolio": {
       "description": "You are here actually. Look around :)"
     }
+  },
+  "cv": {
+    "title": "CV / Resume",
+    "description": "Interactive 3D resume - rotate the clipboard for better viewing!",
+    "download_hu": "Hungarian",
+    "download_en": "English"
   }
 } 
