@@ -158,6 +158,9 @@ const Contact = () => {
                     </>
                   )}
                 </button>
+                <div className="text-center text-gray-500 text-xs mt-2">
+                  {t('contact.response_time')}
+                </div>
               </form>
             </>
           )}

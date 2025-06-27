@@ -16,8 +16,8 @@ const CV: React.FC<CVProps> = ({ isModal }) => {
     <section
       className={
         isModal
-          ? "w-full bg-gray-100 dark:bg-gray-900 py-6 px-2 rounded-xl overflow-x-hidden"
-          : "w-full bg-gray-100 dark:bg-gray-900 py-16 px-4 rounded-[2rem] overflow-x-hidden"
+          ? "w-full bg-gray-100 dark:bg-gray-900 py-2 px-2 rounded-xl overflow-x-hidden overflow-y-hidden"
+          : "w-full bg-gray-100 dark:bg-gray-900 py-16 px-4 rounded-[2rem] overflow-x-hidden overflow-y-hidden"
       }
       aria-labelledby="cv-title"
     >
@@ -28,10 +28,10 @@ const CV: React.FC<CVProps> = ({ isModal }) => {
           transition={{ duration: 0.6 }}
           className="text-center"
         >
-          <h2 id="cv-title" className="text-4xl font-bold text-gray-800 dark:text-white mb-4">
+          <h2 id="cv-title" className={isModal ? "text-xl font-bold text-gray-800 dark:text-white mb-4" : "text-4xl font-bold text-gray-800 dark:text-white mb-4"}>
             {t('cv.title', 'CV / Önéletrajz')}
           </h2>
-          <p className="text-gray-700 dark:text-gray-300 text-lg max-w-2xl mx-auto">
+          <p className={isModal ? "text-gray-700 dark:text-gray-300 text-base max-w-2xl mx-auto" : "text-gray-700 dark:text-gray-300 text-lg max-w-2xl mx-auto"}>
             {t('cv.description', 'Interaktív 3D önéletrajz - forgasd meg a tablettet a jobb megtekintéshez!')}
           </p>
         </motion.div>
@@ -54,9 +54,6 @@ const CV: React.FC<CVProps> = ({ isModal }) => {
           transition={{ duration: 0.6, delay: 0.4 }}
           className="text-center mt-4 sm:mt-8 relative"
         >
-          <p className="text-gray-600 dark:text-gray-400 text-sm">
-            {t('cv.instruction', 'Használd az egeret a tablett forgatásához')}
-          </p>
           {!isModal && <Scroller targetHref="#experience" />}
         </motion.div>
       </div>

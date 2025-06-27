@@ -17,7 +17,8 @@
   },
   "about": {
     "title": "Über Mich",
-    "description": "Ich beschäftige mich seit 5 Jahren mit Softwareentwicklung, hauptsächlich mit .NET, und fühle mich vor allem im Backend-Bereich zu Hause. Auch das Frontend ist mir nicht fremd – hier arbeite ich überwiegend mit React. Ich lerne gerne neue Dinge, deshalb schaue ich auch immer wieder in die Mobile-Entwicklung (React Native) und Desktop-Anwendungen (Electron) hinein. Ich bin stets auf der Suche nach Möglichkeiten, mich weiterzuentwickeln."
+    "description": "Ich beschäftige mich seit 5 Jahren mit Softwareentwicklung, hauptsächlich mit .NET, und fühle mich vor allem im Backend-Bereich zu Hause. Auch das Frontend ist mir nicht fremd – hier arbeite ich überwiegend mit React. Ich lerne gerne neue Dinge, deshalb schaue ich auch immer wieder in die Mobile-Entwicklung (React Native) und Desktop-Anwendungen (Electron) hinein. Ich bin stets auf der Suche nach Möglichkeiten, mich weiterzuentwickeln.",
+    "cv_button": "Lebenslauf anzeigen"
   },
   "experience": {
     "title": "Berufserfahrung",
@@ -49,6 +50,7 @@
     "message": "Ihre Nachricht",
     "send": "Nachricht senden",
     "sending": "Wird gesendet...",
+    "response_time": "In der Regel antworte ich innerhalb von 24 Stunden",
     "successTitle": "Erfolgreich gesendet!",
     "successMessage": "Vielen Dank für Ihre Nachricht. Wir werden uns in Kürze bei Ihnen melden.",
     "errorTitle": "Ein Fehler ist aufgetreten!",
@@ -84,6 +86,8 @@
   "cv": {
     "title": "CV / Lebenslauf",
     "description": "Interaktiver 3D-Lebenslauf - drehen Sie das Tablet für eine bessere Ansicht!",
-    "instruction": "Verwenden Sie Ihre Maus, um das Tablet zu drehen"
+    "instruction": "Verwenden Sie Ihre Maus, um das Tablet zu drehen",
+    "download_hu": "Ungarischen",
+    "download_en": "Englischen"
   }
 } 

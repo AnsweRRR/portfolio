@@ -56,22 +56,22 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
               <span className="leading-none">&times;</span>
             </button>
             {children}
-            <div className="flex flex-col sm:flex-row gap-4 justify-center items-center border-t pt-6 border-gray-200 dark:border-gray-700">
+            <div className="flex flex-row gap-4 justify-center items-center border-t pt-4 border-gray-200 dark:border-gray-700 overflow-x-visible">
               <a
                 href="/pdf/cv_hu.pdf"
                 download
-                className="w-48 flex items-center justify-center gap-2 px-6 py-2 rounded-lg bg-[#915EFF] text-white font-semibold shadow hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-colors duration-150"
+                className="w-36 sm:w-48 md:w-60 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#915EFF] text-white font-semibold shadow hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-colors duration-150"
               >
-                <FiDownload className="mr-2 h-6 w-6 text-white" />
-                {t('cv.download_hu')}
+                <FiDownload className="mr-2 h-4 w-4 sm:h-6 sm:w-6 text-white" />
+                <span className="truncate text-sm sm:text-base">{t('cv.download_hu')}</span>
               </a>
               <a
                 href="/pdf/cv_en.pdf"
                 download
-                className="w-48 flex items-center justify-center gap-2 px-6 py-2 rounded-lg bg-[#915EFF] text-white font-semibold shadow hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-colors duration-150"
+                className="w-36 sm:w-48 md:w-60 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#915EFF] text-white font-semibold shadow hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-colors duration-150"
               >
-                <FiDownload className="mr-2 h-6 w-6 text-white" />
-                {t('cv.download_en')}
+                <FiDownload className="mr-2 h-4 w-4 sm:h-6 sm:w-6 text-white" />
+                <span className="truncate text-sm sm:text-base">{t('cv.download_en')}</span>
               </a>
             </div>
           </motion.div>

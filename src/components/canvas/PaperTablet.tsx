@@ -7,7 +7,7 @@ interface PaperTabletProps {
   isMobile: boolean;
 }
 
-const PaperTablet: React.FC<PaperTabletProps> = ({ isMobile }) => {
+const PaperTablet: React.FC<PaperTabletProps> = (/* { isMobile } */) => {
   const paperTablet = useGLTF("./models/paper_tablet/scene.gltf");
 
   return (
@@ -24,7 +24,7 @@ const PaperTablet: React.FC<PaperTabletProps> = ({ isMobile }) => {
       <pointLight intensity={3} />
       <primitive
         object={paperTablet.scene}
-        scale={isMobile ? 12.0 : 18.0}
+        scale={18.0}
         position={[0, 0, 0]}
         rotation={[0, Math.PI / 2 - 0.3, 0]}
       />

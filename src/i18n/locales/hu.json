@@ -18,7 +18,8 @@
   },
   "about": {
     "title": "Rólam",
-    "description": "5 éve foglalkozom szoftverfejlesztéssel, főleg .NET-ben, leginkább backend oldalon érzem otthon magam. A frontend se áll távol tőlem, amihez főként React-et használok. Szeretek új dolgokat tanulni, így időnként belekóstolok mobilfejlesztésbe (React Native) és desktop appokba is (Electron). Mindig keresem, mivel tudom fejleszteni magam."
+    "description": "5 éve foglalkozom szoftverfejlesztéssel, főleg .NET-ben, leginkább backend oldalon érzem otthon magam. A frontend se áll távol tőlem, amihez főként React-et használok. Szeretek új dolgokat tanulni, így időnként belekóstolok mobilfejlesztésbe (React Native) és desktop appokba is (Electron). Mindig keresem, mivel tudom fejleszteni magam.",
+    "cv_button": "Önéletrajz megtekintése"
   },
   "experience": {
     "title": "Munkatapasztalat",
@@ -50,6 +51,7 @@
     "message": "Üzeneted",
     "send": "Üzenet Küldése",
     "sending": "Küldés...",
+    "response_time": "Általában 24 órán belül válaszolok",
     "successTitle": "Sikeresen elküldve!",
     "successMessage": "Köszönjük üzenetét. Hamarosan felvesszük Önnel a kapcsolatot.",
     "errorTitle": "Hiba történt!",
@@ -85,8 +87,7 @@
   "cv": {
     "title": "CV / Önéletrajz",
     "description": "Interaktív 3D önéletrajz - forgasd meg a tablettet a jobb megtekintéshez!",
-    "instruction": "Használd az egeret a tablett forgatásához",
-    "download_hu": "Magyar CV letöltése",
-    "download_en": "Angol CV letöltése"
+    "download_hu": "Magyar",
+    "download_en": "Angol"
   }
 } 

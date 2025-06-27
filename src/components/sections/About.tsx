@@ -4,6 +4,7 @@ import SectionWrapper from '../../hoc/SectionWrapper';
 import { useState } from 'react';
 import Modal from '../Modal';
 import { CV } from './CV';
+import { FiExternalLink } from 'react-icons/fi';
 
 const About = () => {
   const { t } = useTranslation();
@@ -42,11 +43,11 @@ const About = () => {
             {t('about.description')}
           </p>
           <button
-            className="mt-6 px-6 py-2 bg-primary text-white rounded-lg shadow hover:bg-primary-dark transition font-semibold flex items-center justify-center gap-2"
+            className="mt-6 px-6 py-2 bg-primary text-white rounded-lg shadow hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-all duration-150 font-semibold flex items-center justify-center gap-2"
             onClick={() => setCVOpen(true)}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M18 13v6a2 2 0 01-2 2H6a2 2 0 01-2-2V8a2 2 0 012-2h6m5-3h3m0 0v3m0-3L10 14" /></svg>
-            {t('about.cv_button', 'Önéletrajz megtekintése')}
+            <FiExternalLink className="mr-2 h-4 w-4" />
+            {t('about.cv_button')}
           </button>
           <Modal isOpen={isCVOpen} onClose={() => setCVOpen(false)}>
             <CV isModal />
