@@ -6,7 +6,6 @@ import Modal from '../Modal';
 import CV from './CV';
 // import { FiExternalLink } from 'react-icons/fi';
 
-// Gépelős effektus hook
 function useTypewriter(text: string, speed: number = 30) {
   const [displayed, setDisplayed] = useState('');
   useEffect(() => {
