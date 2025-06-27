@@ -10,7 +10,7 @@ export const testimonials = [
     testimonialKey: "testimonials.bence.testimonial",
     name: "Bence Csillag",
     designation: "Sales Manager",
-    company: "Medcare Dental Clinic",
+    company: "Medicare Dental Clinic",
     image: "/images/testimonials/bencecsillag.jpg",
   },
 ];
