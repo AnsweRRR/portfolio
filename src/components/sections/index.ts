@@ -1,5 +1,6 @@
 import About from "./About";
 import Contact from "./Contact";
+import CV from "./CV";
 import Experience from "./Experience";
 import Footer from "./Footer";
 import Hero from "./Hero";
@@ -11,6 +12,7 @@ import Feedbacks from "./Feedbacks";
 export {
   About,
   Contact,
+  CV,
   Experience,
   Footer,
   Hero,

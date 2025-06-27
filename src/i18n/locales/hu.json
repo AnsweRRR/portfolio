@@ -6,6 +6,7 @@
     "tech": "Technológiák",
     "testimonials": "Ajánlások",
     "work": "Munkák",
+    "cv": "CV",
     "contact": "Kapcsolat"
   },
   "hero": {
@@ -80,5 +81,10 @@
     "3DPortfolio": {
       "description": "Ezen az oldaon vagy tulajdonképpen. Nézz körül :)"
     }
+  },
+  "cv": {
+    "title": "CV / Önéletrajz",
+    "description": "Interaktív 3D önéletrajz - forgasd meg a tablettet a jobb megtekintéshez!",
+    "instruction": "Használd az egeret a tablett forgatásához"
   }
 } 

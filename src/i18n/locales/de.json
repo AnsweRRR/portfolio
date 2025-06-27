@@ -6,6 +6,7 @@
     "tech": "Technologien",
     "testimonials": "Erfahrungsberichte",
     "work": "Projekte",
+    "cv": "CV",
     "contact": "Kontakt"
   },
   "hero": {
@@ -79,5 +80,10 @@
     "3DPortfolio": {
       "description": "Du bist tatsächlich hier. Schau dich um :)"
     }
+  },
+  "cv": {
+    "title": "CV / Lebenslauf",
+    "description": "Interaktiver 3D-Lebenslauf - drehen Sie das Tablet für eine bessere Ansicht!",
+    "instruction": "Verwenden Sie Ihre Maus, um das Tablet zu drehen"
   }
 } 
