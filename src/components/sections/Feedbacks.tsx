@@ -1,6 +1,7 @@
 import { motion, useAnimation, PanInfo } from "framer-motion";
 import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
+import { FiChevronLeft, FiChevronRight, FiMove } from "react-icons/fi";
 import { styles } from "../../styles";
 import { fadeIn, textVariant } from "../../utils/motion";
 import { testimonials } from "../../api/testimonials";
@@ -122,20 +123,7 @@ const Feedbacks = () => {
                 ease: "easeInOut"
               }}
             >
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-5 w-5"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"
-                />
-              </svg>
+              <FiMove className="h-5 w-5" />
             </motion.div>
             <span>{t('testimonials.swipeHint')}</span>
           </motion.div>
@@ -146,20 +134,7 @@ const Feedbacks = () => {
             onClick={prevTestimonial}
             className="bg-tertiary dark:bg-tertiary bg-tertiary-light p-2 rounded-full hover:bg-secondary dark:hover:bg-secondary hover:bg-secondary-light transition-colors"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-white-100 dark:text-white-100 text-white-100-light"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M15 19l-7-7 7-7"
-              />
-            </svg>
+            <FiChevronLeft className="h-6 w-6 text-white-100 dark:text-white-100 text-white-100-light" />
           </button>
         </div>
 
@@ -196,20 +171,7 @@ const Feedbacks = () => {
             onClick={nextTestimonial}
             className="bg-tertiary dark:bg-tertiary bg-tertiary-light p-2 rounded-full hover:bg-secondary dark:hover:bg-secondary hover:bg-secondary-light transition-colors"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6 text-white-100 dark:text-white-100 text-white-100-light"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M9 5l7 7-7 7"
-              />
-            </svg>
+            <FiChevronRight className="h-6 w-6 text-white-100 dark:text-white-100 text-white-100-light" />
           </button>
         </div>
       </div>
