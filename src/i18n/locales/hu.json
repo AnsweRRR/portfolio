@@ -53,7 +53,7 @@
     "sending": "Küldés...",
     "response_time": "Általában 24 órán belül válaszolok",
     "successTitle": "Sikeresen elküldve!",
-    "successMessage": "Köszönjük üzenetét. Hamarosan felvesszük Önnel a kapcsolatot.",
+    "successMessage": "Köszönöm üzenetét. Hamarosan válaszolni fogok Önnek.",
     "errorTitle": "Hiba történt!",
     "captchaError": "Kérjük, erősítse meg, hogy nem robot.",
     "genericError": "Hiba történt az üzenet küldésekor. Kérjük, próbálja újra később.",

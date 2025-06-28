@@ -52,7 +52,7 @@
     "sending": "Sending...",
     "response_time": "I typically respond within 24 hours",
     "successTitle": "Successfully Sent!",
-    "successMessage": "Thank you for your message. We'll get back to you soon.",
+    "successMessage": "Thank you for your message. I will get back to you shortly.",
     "errorTitle": "An Error Occurred!",
     "captchaError": "Please confirm that you are not a robot.",
     "genericError": "An error occurred while sending the message. Please try again later.",
