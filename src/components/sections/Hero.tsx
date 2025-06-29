@@ -22,10 +22,10 @@ const Hero = () => {
             {i18n.language === 'hu' ? (
               <>
                 {t('hero.greetingWithName').split('Tamás').map((part, index, array) => (
-                  <div key={index}>
+                  <span key={index}>
                     {part}
                     {index < array.length - 1 && <span className='text-[#915EFF]'>Tamás</span>}
-                  </div>
+                  </span>
                 ))}
               </>
             ) : (

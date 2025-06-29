@@ -10,8 +10,8 @@
     "contact": "Kapcsolat"
   },
   "hero": {
-    "greeting": "Szia, én",
-    "greetingWithName": "Szia, Tamás vagyok",
+    "greeting": "Üdv, én",
+    "greetingWithName": "Üdv, Tamás vagyok",
     "name": "Tamás",
     "title": "Webfejlesztő",
     "subtitle": "Szoftverfejlesztő"
