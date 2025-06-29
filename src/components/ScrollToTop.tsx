@@ -20,6 +20,13 @@ const ScrollToTop = () => {
   }, []);
 
   const scrollToTop = () => {
+    const currentUrl = window.location.href;
+    const urlWithoutHash = currentUrl.split('#')[0];
+    
+    window.history.replaceState(null, '', urlWithoutHash);
+    
+    window.dispatchEvent(new CustomEvent('scrollToTop'));
+    
     window.scrollTo({
       top: 0,
       behavior: 'smooth',

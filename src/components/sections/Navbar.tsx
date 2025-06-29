@@ -55,6 +55,18 @@ const Navbar = () => {
     };
   }, [toggle]);
 
+  useEffect(() => {
+    const handleScrollToTop = () => {
+      setActive("");
+    };
+
+    window.addEventListener('scrollToTop', handleScrollToTop);
+
+    return () => {
+      window.removeEventListener('scrollToTop', handleScrollToTop);
+    };
+  }, []);
+
   return (
     <nav
       className={`${

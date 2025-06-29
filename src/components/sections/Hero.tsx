@@ -2,6 +2,7 @@ import { useTranslation } from "react-i18next";
 import { styles } from "../../styles";
 import { ComputerCanvas } from "../canvas";
 import Scroller from "../Scroller";
+import Typewriter from "../Typewriter";
 
 const Hero = () => {
   const { t, i18n } = useTranslation();
@@ -33,9 +34,13 @@ const Hero = () => {
               </>
             )}
           </h1>
-          <p className={`${styles.heroSubText} mt-2 text-secondary dark:text-secondary text-secondary-light`}>
-            {t('hero.subtitle')}
-          </p>
+          <div className={`${styles.heroSubText} mt-2 text-secondary dark:text-secondary text-secondary-light`}>
+            <Typewriter 
+              text={t('hero.subtitle')} 
+              speed={50} 
+              delay={1000}
+            />
+          </div>
         </div>
       </div>
 
