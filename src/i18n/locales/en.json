@@ -52,7 +52,7 @@
     "sending": "Sending...",
     "response_time": "I typically respond within 24 hours",
     "successTitle": "Successfully Sent!",
-    "successMessage": "Thank you for your message. We'll get back to you soon.",
+    "successMessage": "Thank you for your message. I will get back to you shortly.",
     "errorTitle": "An Error Occurred!",
     "captchaError": "Please confirm that you are not a robot.",
     "genericError": "An error occurred while sending the message. Please try again later.",
@@ -85,7 +85,7 @@
   },
   "cv": {
     "title": "CV / Resume",
-    "description": "Interactive 3D resume - rotate the clipboard for better viewing!",
+    "description": "Interactive 3D résumé - Zoom in or rotate the board for a better view!",
     "download_hu": "Hungarian",
     "download_en": "English"
   }

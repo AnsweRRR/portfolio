@@ -1,5 +1,5 @@
 const CACHE_NAME = 'portfolio-cache-v1';
-const CACHE_DURATION = 24 * 60 * 60 * 1000; // 1 day
+const CACHE_DURATION = 60 * 60 * 1000; // 1 hour
 const urlsToCache = [
   '/',
   '/index.html',
