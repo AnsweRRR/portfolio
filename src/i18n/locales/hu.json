@@ -10,11 +10,11 @@
     "contact": "Kapcsolat"
   },
   "hero": {
-    "greeting": "Szia, én",
-    "greetingWithName": "Szia, Tamás vagyok",
+    "greeting": "Üdv, én",
+    "greetingWithName": "Üdv, Tamás vagyok",
     "name": "Tamás",
     "title": "Webfejlesztő",
-    "subtitle": "Webes, mobil és natív asztali alkalmazásokat fejlesztek"
+    "subtitle": "Szoftverfejlesztő"
   },
   "about": {
     "title": "Rólam",
