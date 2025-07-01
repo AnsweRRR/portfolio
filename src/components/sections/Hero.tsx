@@ -36,7 +36,7 @@ const Hero = () => {
           </h1>
           <div className={`${styles.heroSubText} mt-2 text-secondary dark:text-secondary text-secondary-light`}>
             <Typewriter 
-              text={t('hero.subtitle')} 
+              text={[t('hero.subtitle'), t('hero.subtitle2')]} 
               speed={50} 
               delay={1000}
             />

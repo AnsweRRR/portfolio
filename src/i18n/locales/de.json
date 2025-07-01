@@ -13,7 +13,8 @@
     "greeting": "Hallo, ich bin",
     "name": "Thomas",
     "title": "Webentwickler",
-    "subtitle": "Softwareentwickler"
+    "subtitle": "Softwareentwickler",
+    "subtitle2": "aus Ungarn"
   },
   "about": {
     "title": "Über Mich",
