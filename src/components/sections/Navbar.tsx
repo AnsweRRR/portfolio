@@ -78,13 +78,13 @@ const Navbar = () => {
       <div className='w-full flex justify-between items-center max-w-7xl mx-auto'>
         <Link
           to='/'
-          className='flex items-center gap-2'
+          className='flex items-center gap-2 hover:text-[#915EFF] transition-colors duration-200'
           onClick={() => {
             setActive("");
             window.scrollTo(0, 0);
           }}
         >
-          <p className='text-white-100 dark:text-white-100 text-white-100-light text-[18px] font-bold cursor-pointer flex items-center'>
+          <p className='text-white-100 dark:text-white-100 text-white-100-light text-[18px] font-bold cursor-pointer flex items-center hover:text-[#915EFF] dark:hover:text-[#b89cff] transition-colors duration-200'>
             <img src="/favicon/favicon-32x32.png" alt="Logo" className="w-6 h-6 mr-2" />
             {t('hero.name')} &nbsp;
             <span className='sm:block hidden'> | {t('hero.title')}</span>
