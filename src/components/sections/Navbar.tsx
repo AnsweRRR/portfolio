@@ -5,6 +5,7 @@ import { navLinks } from "../../api/navlink";
 import { styles } from "../../styles";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { useTheme } from "../../hooks/useTheme";
+import styled from "@emotion/styled";
 
 const Navbar = () => {
   const [active, setActive] = useState("");
@@ -67,6 +68,43 @@ const Navbar = () => {
     };
   }, []);
 
+  const StyledNavLink = styled.a`
+    text-decoration: none;
+    position: relative;
+
+    &::before,
+    &::after {
+      content: "";
+      position: absolute;
+      display: block;
+      border: 0 solid transparent;
+      width: 0%;
+      height: 0%;
+      transition: all 0.3s ease;
+    }
+
+    &::after {
+      top: -6px;
+      left: -6px;
+      border-top: 2px solid transparent;
+      border-left: 2px solid transparent;
+    }
+
+    &::before {
+      right: -6px;
+      bottom: -6px;
+      border-bottom: 2px solid transparent;
+      border-right: 2px solid transparent;
+    }
+
+    &:hover::before,
+    &:hover::after {
+      width: 18px;
+      height: 18px;
+      border-color: #A6A6A6;
+    }
+  `;
+
   return (
     <nav
       className={`${
@@ -100,7 +138,7 @@ const Navbar = () => {
               } hover:text-white-100 dark:hover:text-white-100 hover:text-white-100-light text-[18px] font-medium cursor-pointer`}
               onClick={() => setActive(nav.title)}
             >
-              <a href={`#${nav.id}`}>{t(`nav.${nav.id}`)}</a>
+              <StyledNavLink href={`#${nav.id}`}>{t(`nav.${nav.id}`)}</StyledNavLink>
             </li>
           ))}
           <li className="flex items-center gap-4">
@@ -165,7 +203,7 @@ const Navbar = () => {
                     setActive(nav.title);
                   }}
                 >
-                  <a href={`#${nav.id}`} className="block py-1">{t(`nav.${nav.id}`)}</a>
+                  <StyledNavLink href={`#${nav.id}`} className="block py-1">{t(`nav.${nav.id}`)}</StyledNavLink>
                 </li>
               ))}
               <li className="flex items-center justify-between w-full pt-2 border-t border-white/10">
