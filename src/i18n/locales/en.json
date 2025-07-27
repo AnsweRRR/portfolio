@@ -18,7 +18,7 @@
   },
   "about": {
     "title": "About Me",
-    "description": "I've been working in software development for 5 years, mainly with .NET, and I feel most at home on the backend. That said, I'm also comfortable with frontend development, primarily using React. I enjoy learning new things, so I occasionally dive into mobile development (React Native) and desktop apps (Electron) as well. I'm always looking for ways to improve myself.",
+    "description": "I've been working in software development for 5 years, mainly with .NET, and I feel most at home on the backend. That said, I'm also comfortable with frontend development, primarily using React. I enjoy learning new things, so I occasionally dive into mobile development (React Native) and desktop apps (Electron, MAUI) as well. I'm always looking for ways to improve myself.",
     "cv_button": "View CV"
   },
   "experience": {

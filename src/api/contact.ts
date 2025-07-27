@@ -4,6 +4,7 @@ import {
   FaLinkedin,
   FaFacebook,
   FaWhatsapp,
+  FaInstagram
 } from "react-icons/fa";
 import { MdEmail, MdPhone } from "react-icons/md";
 
@@ -30,7 +31,7 @@ export const contactLinks: ContactLink[] = [
     icon: FaWhatsapp,
   },
   {
-    href: "https://www.linkedin.com/in/tam%C3%A1s-pogr%C3%A1nyi-a682941ba/",
+    href: "https://www.linkedin.com/in/pogranyitamas/",
     title: "LinkedIn",
     icon: FaLinkedin,
   },
@@ -38,6 +39,11 @@ export const contactLinks: ContactLink[] = [
     href: "https://www.facebook.com/pogranyitamas99/",
     title: "Facebook",
     icon: FaFacebook,
+  },
+  {
+    href: "https://www.instagram.com/tamas.pogranyi/",
+    title: "Instagram",
+    icon: FaInstagram,
   },
   {
     href: "https://github.com/AnsweRRR",

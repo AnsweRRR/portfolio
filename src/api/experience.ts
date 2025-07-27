@@ -14,20 +14,6 @@ export const experiences: ExperienceItem[] = [
     period: "2021 - ",
     description: "experience.nanoworx.description",
   },
-  // {
-  //   company: "Meta",
-  //   logo: "/images/companies/meta.png",
-  //   position: "Frontend Developer",
-  //   period: "2018 - 2020",
-  //   description: "React alapú webalkalmazások fejlesztése és karbantartása.",
-  // },
-  // {
-  //   company: "Microsoft",
-  //   logo: "/images/companies/microsoft.png",
-  //   position: "Backend Developer",
-  //   period: "2017 - 2018",
-  //   description: "Backend fejlesztési alapok elsajátítása, kisebb feature-ök implementálása.",
-  // },
   {
     company: "Freelancer",
     logo: "/images/companies/self-employed.png",

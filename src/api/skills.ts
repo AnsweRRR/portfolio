@@ -42,6 +42,12 @@ export const skills = [
     image: "/images/skills/react.svg",
   },
   {
+    name: "Next.js",
+    level: 60,
+    tags: ["SSR", "SSG", "API Routes", "App Router"],
+    image: "/images/skills/next-js.svg",
+  },
+  {
     name: "React Native",
     level: 70,
     tags: ["Mobile", "Expo", "Navigation", "Hooks"],
@@ -89,10 +95,28 @@ export const skills = [
     tags: ["WebGL", "3D Models"],
     image: "/images/skills/threejs.svg",
   },
-  // {
-  //   name: "Jira",
-  //   level: 80,
-  //   tags: ["Agile", "Kanban", "Sprint", "Tickets"],
-  //   image: "/images/skills/jira.svg",
-  // },
+  {
+    name: "Figma",
+    level: 50,
+    tags: ["UI/UX Design", "Site Building"],
+    image: "/images/skills/figma.svg",
+  },
+  {
+    name: "Docker",
+    level: 60,
+    tags: ["Containers", "Docker Compose", "Images"],
+    image: "/images/skills/docker.svg",
+  },
+  {
+    name: "Arduino",
+    level: 50,
+    tags: ["Microcontroller", "Sensors"],
+    image: "/images/skills/arduino.svg",
+  },
+  {
+    name: "Raspberry Pi",
+    level: 50,
+    tags: ["IoT", "Linux", "GPIO"],
+    image: "/images/skills/raspberry-pi.svg",
+  },
 ];
