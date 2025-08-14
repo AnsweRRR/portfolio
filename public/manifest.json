@@ -2,6 +2,8 @@
   "name": "Tamás Pogrányi - Portfolio",
   "short_name": "Portfolio",
   "display": "standalone",
+  "background_color": "#050816",
+  "theme_color": "#050816",
   "start_url": "/",
   "icons": [
     {
