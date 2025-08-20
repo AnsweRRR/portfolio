@@ -26,8 +26,14 @@ export const skills = [
   {
     name: "C# (.NET)",
     level: 94,
-    tags: ["LINQ", "Entity Framework", "SignalR"],
+    tags: ["MVC", "LINQ", "Entity Framework", "SignalR"],
     image: "/images/skills/csharp.svg",
+  },
+  {
+    name: "Blazor",
+    level: 60,
+    tags: ["WebAssembly", "MAUI (Blazor Hybrid)", "Radzen"],
+    image: "/images/skills/blazor.svg",
   },
   {
     name: "NodeJS",
