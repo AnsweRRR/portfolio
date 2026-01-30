@@ -1,9 +1,10 @@
-interface ExperienceItem {
+export interface ExperienceItem {
   company: string;
   logo: string;
   position: string;
   period: string;
   description: string;
+  url: string;
 }
 
 export const experiences: ExperienceItem[] = [
@@ -13,6 +14,7 @@ export const experiences: ExperienceItem[] = [
     position: "experience.nanoworx.position",
     period: "2021 - 2026",
     description: "experience.nanoworx.description",
+    url: "https://nanoworx.hu"
   },
   {
     company: "Freelancer",
@@ -20,6 +22,7 @@ export const experiences: ExperienceItem[] = [
     position: "experience.freelancer.position",
     period: "2024 - ",
     description: "experience.freelancer.description",
+    url: "https://pogranyitamas.com/"
   },
   {
     company: "DGITAL",
@@ -27,5 +30,6 @@ export const experiences: ExperienceItem[] = [
     position: "experience.dgital.position",
     period: "2026 - ",
     description: "experience.dgital.description",
+    url: "https://dgital.com"
   },
 ];

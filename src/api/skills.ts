@@ -14,19 +14,19 @@ export const skills = [
   {
     name: "JavaScript",
     level: 90,
-    tags: ["ES6+", "Async"],
+    tags: ["ES6+", "Frontend", "Backend"],
     image: "/images/skills/javascript.svg",
   },
   {
     name: "TypeScript",
     level: 80,
-    tags: ["Type Safety", "OOP"],
+    tags: ["Type Safety", "OOP", "Frontend", "Backend"],
     image: "/images/skills/typescript.svg",
   },
   {
     name: "C# (.NET)",
     level: 94,
-    tags: ["MVC", "LINQ", "Entity Framework", "SignalR"],
+    tags: ["MVC", "LINQ", "Entity Framework", "SignalR", "API"],
     image: "/images/skills/csharp.svg",
   },
   {
