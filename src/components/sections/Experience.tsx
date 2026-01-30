@@ -57,7 +57,6 @@ const ExperienceItem = ({ index, experience }: ExperienceItemProps) => {
           <div className="hidden md:block md:w-5/12"></div>
         )}
 
-        {/* Mobile content - always below logo */}
         <div className="md:hidden w-full text-center mt-4">
           <h3 className="text-xl font-semibold text-white-100 dark:text-white-100 text-white-100-light">{t(`experience.${experience.company.toLowerCase()}.position`)}</h3>
           <p className="text-secondary dark:text-secondary text-secondary-light">{experience.company}</p>

@@ -26,11 +26,15 @@
     "subtitle": "What I have done so far",
     "nanoworx": {
       "position": "Fullstack Developer",
-      "description": "Development of custom software, handling backend and frontend tasks with .NET focus."
+      "description": "We mainly developed manufacturing execution systems (MES) and custom software solutions, where I worked as a fullstack developer, contributing to both backend and frontend tasks."
     },
     "freelancer": {
       "position": "Developer & Customer Support",
       "description": "In the meantime, I started working on smaller projects, including developing websites as well as Telegram and Discord bots, Chrome extensions, and more."
+    },
+    "dgital": {
+      "position": "Backend Developer",
+      "description": "We develop software for airlines, and I mainly work as a backend developer, occasionally helping with frontend development as well."
     }
   },
   "tech": {
