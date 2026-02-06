@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import Modal from '../Modal';
 import CV from './CV';
 import { FiExternalLink } from 'react-icons/fi';
+import CodeBlockCSharp from '../CodeBlockCSharp';
 
 function useTypewriter(text: string, speed: number = 30) {
   const [displayed, setDisplayed] = useState('');
@@ -83,7 +84,7 @@ const About = () => {
 
   return (
     <section 
-      className="w-full bg-gray-100 dark:bg-gray-900 py-16 px-4 rounded-[2rem]"
+      className="w-full bg-gray-100 dark:bg-gray-900 py-16 px-4 rounded-[2rem] relative overflow-visible"
       aria-labelledby="about-title"
     >
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center gap-10">
@@ -158,7 +159,14 @@ const About = () => {
             <CV isModal />
           </Modal>
         </motion.div>
-
+      </div>
+      
+      <div className="hidden lg:block absolute bottom-0 right-0 translate-x-1/3 translate-y-1/2 w-[500px]">
+        <CodeBlockCSharp />
+      </div>
+      
+      <div className="lg:hidden mt-8 w-full max-w-md mx-auto px-4">
+        <CodeBlockCSharp />
       </div>
     </section>
   );
