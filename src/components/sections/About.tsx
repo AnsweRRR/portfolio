@@ -161,11 +161,11 @@ const About = () => {
         </motion.div>
       </div>
       
-      <div className="hidden lg:block absolute bottom-0 right-0 translate-x-1/3 translate-y-1/2 w-[500px]">
+      <div className="hidden min-[1600px]:block absolute bottom-0 right-0 translate-x-1/3 translate-y-1/2 w-[500px]">
         <CodeBlockCSharp />
       </div>
       
-      <div className="lg:hidden mt-8 w-full max-w-md mx-auto px-4">
+      <div className="min-[1600px]:hidden mt-8 w-full max-w-md md:max-w-lg mx-auto px-4">
         <CodeBlockCSharp />
       </div>
     </section>

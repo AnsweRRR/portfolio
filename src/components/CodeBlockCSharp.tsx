@@ -46,8 +46,8 @@ const CodeBlockCSharp = () => {
         </div>
       </div>
 
-      <div className="p-6 bg-gradient-to-br from-gray-100 to-gray-50 dark:from-slate-900 dark:to-slate-800 overflow-x-auto custom-scrollbar">
-        <pre className="text-gray-800 dark:text-slate-300 text-sm leading-relaxed whitespace-pre">
+      <div className="p-6 bg-gradient-to-br from-gray-100 to-gray-50 dark:from-slate-900 dark:to-slate-800 overflow-x-auto md:overflow-x-hidden custom-scrollbar">
+        <pre className="text-gray-800 dark:text-slate-300 text-xs md:text-sm leading-relaxed whitespace-pre">
           <Token type="keyword">public</Token>{" "}
           <Token type="keyword">class</Token>{" "}
           <Token type="identifier">Developer</Token>
