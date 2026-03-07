@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 
-const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
+const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 const USE_PROXY = import.meta.env.VITE_TUYA_USE_PROXY === 'true';
 interface ApiResult {
   code: string;
@@ -16,8 +16,8 @@ interface ApiResponse {
 type DeviceStatus = ApiResponse;
 
 async function fetchDeviceStatus(): Promise<DeviceStatus> {
-  // Use /api proxy by default if API_BASE_URL is not set or USE_PROXY is true
-  const url = (USE_PROXY || !API_BASE_URL) 
+  // Use /api proxy by default if API_BASE_URL is not set, is "undefined" string, or USE_PROXY is true
+  const url = (USE_PROXY || !API_BASE_URL || API_BASE_URL === 'undefined') 
     ? '/api/tuya/status' 
     : `${API_BASE_URL}/api/tuya/status`;
   const res = await fetch(url);
