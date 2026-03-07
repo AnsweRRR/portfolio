@@ -33,7 +33,7 @@ const WeatherWidget = () => {
     return "text-green-400";
   };
 
-  const TempIcon = () => {
+  const renderTempIcon = () => {
     if (temp !== undefined) {
       if (temp >= 25) return <FiSun className={`w-5 h-5 ${getTempColor()}`} />;
       if (temp <= 18) return <FiCloud className={`w-5 h-5 ${getTempColor()}`} />;
@@ -42,7 +42,7 @@ const WeatherWidget = () => {
   };
 
   return (
-    rawTemp && rawHumidity && (
+    rawTemp !== undefined && rawHumidity !== undefined && (
       <AnimatePresence>
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -55,7 +55,7 @@ const WeatherWidget = () => {
             <FiHome className="w-6 h-6" />
           </span>
           <div className="flex items-center gap-1" title={t('weather.tempTooltip')}>
-            <TempIcon />
+            {renderTempIcon()}
             <span className="font-semibold">{displayTemp}</span>
           </div>
           <div className="flex items-center gap-1" title={t('weather.humidityTooltip')}>

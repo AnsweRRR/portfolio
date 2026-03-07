@@ -30,6 +30,7 @@ const About = () => {
   const [currentImage, setCurrentImage] = useState(0);
   const [progress, setProgress] = useState(0);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const slideStartTimeRef = useRef<number>(0);
   const description = t('about.description');
   const typedDescription = useTypewriter(description, 18);
 
@@ -39,43 +40,44 @@ const About = () => {
   ];
 
   useEffect(() => {
-    if (isHovered) {
-      const startProgress = () => {
+    if (!isHovered) {
+      return;
+    }
+
+    slideStartTimeRef.current = Date.now();
+    const duration = 2000;
+
+    progressIntervalRef.current = setInterval(() => {
+      const elapsed = Date.now() - slideStartTimeRef.current;
+      const newProgress = Math.min((elapsed / duration) * 100, 100);
+      setProgress(newProgress);
+
+      if (newProgress >= 100) {
+        setCurrentImage((prev) => (prev + 1) % images.length);
+        slideStartTimeRef.current = Date.now();
         setProgress(0);
-        const startTime = Date.now();
-        const duration = 2000;
+      }
+    }, 16);
 
-        const interval = setInterval(() => {
-          const elapsed = Date.now() - startTime;
-          const newProgress = Math.min((elapsed / duration) * 100, 100);
-          setProgress(newProgress);
-
-          if (newProgress >= 100) {
-            setCurrentImage(prev => (prev + 1) % images.length);
-            if (isHovered) {
-              clearInterval(interval);
-              startProgress();
-            }
-          }
-        }, 16);
-
-        progressIntervalRef.current = interval;
-      };
-
-      startProgress();
-
-      return () => {
-        if (progressIntervalRef.current) {
-          clearInterval(progressIntervalRef.current);
-        }
-      };
-    } else {
+    return () => {
       if (progressIntervalRef.current) {
         clearInterval(progressIntervalRef.current);
       }
-      setProgress(0);
-    }
+    };
   }, [isHovered, images.length]);
+
+  const handleMouseEnter = () => {
+    setProgress(0);
+    setIsHovered(true);
+  };
+
+  const handleMouseLeave = () => {
+    if (progressIntervalRef.current) {
+      clearInterval(progressIntervalRef.current);
+    }
+    setIsHovered(false);
+    setProgress(0);
+  };
 
   const radius = 98;
   const circumference = 2 * Math.PI * radius;
@@ -94,8 +96,8 @@ const About = () => {
           animate={{ opacity: 1, scale: 1 }} 
           transition={{ duration: 0.6 }}
           className="relative w-56 h-56"
-          onMouseEnter={() => setIsHovered(true)}
-          onMouseLeave={() => setIsHovered(false)}
+          onMouseEnter={handleMouseEnter}
+          onMouseLeave={handleMouseLeave}
         >
           <div className="w-56 h-56 rounded-full overflow-hidden shadow-2xl ring-4 ring-primary relative z-20">
             <img 

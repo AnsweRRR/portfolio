@@ -3,6 +3,8 @@ import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
 import CanvasLoader from "../Loader";
 
+const MOBILE_MEDIA_QUERY = "(max-width: 500px)";
+
 interface ComputersProps {
   isMobile: boolean;
 }
@@ -33,12 +35,16 @@ const Computers: React.FC<ComputersProps> = ({ isMobile }) => {
 };
 
 const ComputerCanvas = () => {
-  const [isMobile, setIsMobile] = useState(false);
+  const [isMobile, setIsMobile] = useState(
+    () => typeof window !== "undefined" && window.matchMedia(MOBILE_MEDIA_QUERY).matches,
+  );
 
   useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 500px)");
+    if (typeof window === "undefined") {
+      return;
+    }
 
-    setIsMobile(mediaQuery.matches);
+    const mediaQuery = window.matchMedia(MOBILE_MEDIA_QUERY);
 
     const handleMediaQueryChange = (event: MediaQueryListEvent) => {
       setIsMobile(event.matches);
