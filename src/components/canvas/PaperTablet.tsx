@@ -1,13 +1,9 @@
-import React, { Suspense, useEffect, useState } from "react";
+import React, { Suspense } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, Preload, useGLTF } from "@react-three/drei";
 import CanvasLoader from "../Loader";
 
-interface PaperTabletProps {
-  isMobile: boolean;
-}
-
-const PaperTablet: React.FC<PaperTabletProps> = (/* { isMobile } */) => {
+const PaperTablet: React.FC = () => {
   const paperTablet = useGLTF("./models/paper_tablet/scene.gltf");
 
   return (
@@ -33,24 +29,6 @@ const PaperTablet: React.FC<PaperTabletProps> = (/* { isMobile } */) => {
 };
 
 const PaperTabletCanvas = () => {
-  const [isMobile, setIsMobile] = useState(false);
-
-  useEffect(() => {
-    const mediaQuery = window.matchMedia("(max-width: 500px)");
-
-    setIsMobile(mediaQuery.matches);
-
-    const handleMediaQueryChange = (event: MediaQueryListEvent) => {
-      setIsMobile(event.matches);
-    };
-
-    mediaQuery.addEventListener("change", handleMediaQueryChange);
-
-    return () => {
-      mediaQuery.removeEventListener("change", handleMediaQueryChange);
-    };
-  }, []);
-
   return (
     <Canvas
       frameloop="demand"
@@ -68,7 +46,7 @@ const PaperTabletCanvas = () => {
           minDistance={3}
           maxDistance={20}
         />
-        <PaperTablet isMobile={isMobile} />
+        <PaperTablet />
       </Suspense>
 
       <Preload all />

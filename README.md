@@ -23,14 +23,75 @@ This is the personal portfolio of **Tamás Pogrányi**, a Full Stack Developer s
 
 ## Getting Started
 
-To run the project locally:
+### Local Development
 
+#### 1. Setup Environment Variables
+
+Copy the example environment file and fill in your actual API keys:
 ```bash
-npm install
-npm run dev
+cp .env.example .env
 ```
 
-Then open [http://localhost:5173](http://localhost:5173) in your browser.
+Edit `.env` with your credentials:
+- EmailJS service ID, template ID, and public key
+- reCAPTCHA site and secret keys  
+- Tuya API credentials (device ID, client ID, secret, access token)
+
+#### 2. Install Dependencies & Run
+
+```bash
+npm install              # Install all dependencies
+
+# Option 1: Run frontend + backend together
+npm run dev:all          # Starts Express server (port 3001) + Vite dev server (port 5173)
+
+# Option 2: Run separately
+npm run start-server     # Start Express proxy on port 3001
+npm run dev              # Start Vite frontend on port 5173 (in separate terminal)
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Deployment to Vercel
+
+#### 1. Environment Variables in Vercel Dashboard
+
+Go to your Vercel project → **Settings** → **Environment Variables** and add all variables from your `.env` file:
+
+**Important:** Add these environment variables for all environments (Production, Preview, Development):
+- `VITE_EMAILJS_SERVICE_ID`
+- `VITE_EMAILJS_TEMPLATE_ID`
+- `VITE_EMAILJS_PUBLIC_KEY`
+- `VITE_RECAPTCHA_SITE_KEY`
+- `VITE_RECAPTCHA_SECRET_KEY`
+- `VITE_TUYA_API_BASE_URL`
+- `VITE_TUYA_DEVICE_ID`
+- `VITE_TUYA_CLIENT_ID`
+- `VITE_TUYA_SECRET`
+- `EASY_ACCESS_TOKEN` (optional, for faster testing)
+
+**Note:** You don't need to set `VITE_API_BASE_URL` or `VITE_TUYA_USE_PROXY` for Vercel deployments, as the serverless API functions at `/api/*` are automatically used.
+
+#### 2. Deploy
+
+Push to GitHub and Vercel will automatically build and deploy:
+
+```bash
+git add .
+git commit -m "Deploy to Vercel"
+git push origin main
+```
+
+#### 3. Architecture
+
+**Development:**
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:3001`
+- Vite proxy: `/api` → `localhost:3001`
+
+**Production:**
+- Frontend + Backend: `https://your-project.vercel.app`
+- API endpoints: `https://your-project.vercel.app/api/*`
 
 ## License & Credits
 

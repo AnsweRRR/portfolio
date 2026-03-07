@@ -93,5 +93,11 @@
     "description": "Interaktiver 3D-Lebenslauf - Zoomen oder drehen Sie die Klemmbrett für eine bessere Ansicht!",
     "download_hu": "Ungarischen",
     "download_en": "Englischen"
+  },
+  "weather": {
+    "homeTooltip": "Raumsensor (betrieben von Tuya)",
+    "tempTooltip": "Temperatur",
+    "humidityTooltip": "Luftfeuchtigkeit",
+    "batteryTooltip": "Batteriestand"
   }
-} 
+}
