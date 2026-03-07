@@ -2,10 +2,24 @@ import { useTranslation } from "react-i18next";
 import { FiHome, FiThermometer, FiDroplet, FiSun, FiCloud, FiBattery } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useDeviceStatus } from "../api/clients/smartHomeClient";
+import { useState, useEffect } from "react";
 
 const WeatherWidget = () => {
   const { data, isLoading } = useDeviceStatus();
   const { t } = useTranslation();
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+    
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+    
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const rawTemp = data?.result.find((r) => r.code === "va_temperature")?.value as number | undefined;
   const rawHumidity = data?.result.find((r) => r.code === "va_humidity")?.value as number | undefined;
@@ -49,23 +63,37 @@ const WeatherWidget = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
-          className="fixed bottom-8 left-8 z-50 flex items-center gap-3 bg-tertiary dark:bg-tertiary text-white rounded-lg shadow-lg p-3 cursor-default"
+          className="fixed bottom-8 left-8 z-50 flex items-center gap-3 bg-tertiary dark:bg-tertiary text-white rounded-lg shadow-lg p-3 cursor-pointer"
+          onClick={() => isMobile && setIsExpanded(!isExpanded)}
         >
           <span title={t('weather.homeTooltip')}>
             <FiHome className="w-6 h-6" />
           </span>
-          <div className="flex items-center gap-1" title={t('weather.tempTooltip')}>
-            {renderTempIcon()}
-            <span className="font-semibold">{displayTemp}</span>
-          </div>
-          <div className="flex items-center gap-1" title={t('weather.humidityTooltip')}>
-            <FiDroplet className="w-5 h-5 text-blue-300" />
-            <span className="font-semibold">{displayHumidity}</span>
-          </div>
-          <div className="flex items-center gap-1" title={t('weather.batteryTooltip')}>
-            <FiBattery className={`w-5 h-5 ${getBatteryColor()}`} />
-            <span className="font-semibold">{displayBattery}</span>
-          </div>
+          
+          {(!isMobile || isExpanded) && (
+            <>
+              <motion.div 
+                initial={isMobile ? { opacity: 0, width: 0 } : false}
+                animate={isMobile ? { opacity: 1, width: "auto" } : {}}
+                exit={isMobile ? { opacity: 0, width: 0 } : {}}
+                transition={{ duration: 0.3 }}
+                className="flex items-center gap-3"
+              >
+                <div className="flex items-center gap-1" title={t('weather.tempTooltip')}>
+                  {renderTempIcon()}
+                  <span className="font-semibold">{displayTemp}</span>
+                </div>
+                <div className="flex items-center gap-1" title={t('weather.humidityTooltip')}>
+                  <FiDroplet className="w-5 h-5 text-blue-300" />
+                  <span className="font-semibold">{displayHumidity}</span>
+                </div>
+                <div className="flex items-center gap-1" title={t('weather.batteryTooltip')}>
+                  <FiBattery className={`w-5 h-5 ${getBatteryColor()}`} />
+                  <span className="font-semibold">{displayBattery}</span>
+                </div>
+              </motion.div>
+            </>
+          )}
         </motion.div>
       </AnimatePresence>
     )
