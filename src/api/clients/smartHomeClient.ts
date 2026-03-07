@@ -2,10 +2,6 @@ import { useQuery } from '@tanstack/react-query';
 
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 const USE_PROXY = import.meta.env.VITE_TUYA_USE_PROXY === 'true';
-
-if (!API_BASE_URL && !USE_PROXY) {
-  console.warn('smartHomeClient: missing VITE_API_BASE_URL environment variable');
-}
 interface ApiResult {
   code: string;
   value: string | number | boolean;
@@ -20,7 +16,10 @@ interface ApiResponse {
 type DeviceStatus = ApiResponse;
 
 async function fetchDeviceStatus(): Promise<DeviceStatus> {
-  const url = `${USE_PROXY ? '/api' : `${API_BASE_URL}/api`}/tuya/status`;
+  // Use /api proxy by default if API_BASE_URL is not set or USE_PROXY is true
+  const url = (USE_PROXY || !API_BASE_URL) 
+    ? '/api/tuya/status' 
+    : `${API_BASE_URL}/api/tuya/status`;
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to fetch device status: ${res.status}`);
