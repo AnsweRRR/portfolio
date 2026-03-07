@@ -12,6 +12,17 @@
   scroll-behavior: smooth;
 }
 
+/* Apply theme background colors to html and body */
+html,
+body {
+  @apply bg-primary-light dark:bg-primary;
+  min-height: 100vh;
+}
+
+#root {
+  min-height: 100vh;
+}
+
 .hash-span {
   margin-top: -80px;
   padding-bottom: 80px;
