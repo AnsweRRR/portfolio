@@ -23,28 +23,68 @@ This is the personal portfolio of **Tamás Pogrányi**, a Full Stack Developer s
 
 ## Getting Started
 
-This repository now includes a lightweight proxy server used to communicate
-with the Tuya smart‑home API (the cloud service returns malformed CORS
-headers which prohibit direct browser access). Before running the frontend,
-start the proxy if you plan to work with live device data.
+### Local Development
 
+#### 1. Setup Environment Variables
+
+Copy the example environment file and fill in your actual API keys:
 ```bash
-npm install              # install dependencies (frontend + backend)
-npm run start-server     # runs the Express proxy on port 3001
-# in a separate shell...
-npm run dev               # start Vite frontend
+cp .env.example .env
 ```
 
-By default the frontend is configured via `.env` to use the proxy; set
-`VITE_TUYA_USE_PROXY=true` if you wish to enable it.
+Edit `.env` with your credentials:
+- EmailJS service ID, template ID, and public key
+- reCAPTCHA site and secret keys  
+- Tuya API credentials (device ID, client ID, secret, access token)
 
-**Tuya proxy (.env):** A status API-hoz a szervernek `client_id`, `secret` és
-opcionálisan `EASY_ACCESS_TOKEN` kell. Ha megadod az `EASY_ACCESS_TOKEN`-t
-(Postmanból vagy egy token endpoint hívással kapott érték), a szerver ezt
-használja és nem hívja a token endpointot. (`EASY_REFRESH_TOKEN` később
-használható lehet token megújításra.)
+#### 2. Install Dependencies & Run
 
-Finally, open [http://localhost:5173](http://localhost:5173) in your browser.
+```bash
+npm install              # Install all dependencies
+
+# Option 1: Run frontend + backend together
+npm run dev:all          # Starts Express server (port 3001) + Vite dev server (port 5173)
+
+# Option 2: Run separately
+npm run start-server     # Start Express proxy on port 3001
+npm run dev              # Start Vite frontend on port 5173 (in separate terminal)
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Deployment to Vercel
+
+#### 1. Environment Variables in Vercel Dashboard
+
+Go to your Vercel project → **Settings** → **Environment Variables** and add all variables from your `.env` file plus:
+
+```env
+VITE_API_BASE_URL=https://your-project.vercel.app
+VITE_TUYA_USE_PROXY=false
+```
+
+**Important:** Copy all other variables from your local `.env` file (EmailJS, reCAPTCHA, Tuya credentials).
+
+#### 2. Deploy
+
+Push to GitHub and Vercel will automatically build and deploy:
+
+```bash
+git add .
+git commit -m "Deploy to Vercel"
+git push origin main
+```
+
+#### 3. Architecture
+
+**Development:**
+- Frontend: `http://localhost:5173`
+- Backend: `http://localhost:3001`
+- Vite proxy: `/api` → `localhost:3001`
+
+**Production:**
+- Frontend + Backend: `https://your-project.vercel.app`
+- API endpoints: `https://your-project.vercel.app/api/*`
 
 ## License & Credits
 
