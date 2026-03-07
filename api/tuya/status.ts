@@ -1,6 +1,5 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
 import crypto from 'crypto';
-import fetch from 'node-fetch';
 
 const BASE_URL = process.env.VITE_TUYA_API_BASE_URL as string;
 const DEVICE_ID = process.env.VITE_TUYA_DEVICE_ID as string;

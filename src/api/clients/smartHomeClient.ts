@@ -16,10 +16,18 @@ interface ApiResponse {
 type DeviceStatus = ApiResponse;
 
 async function fetchDeviceStatus(): Promise<DeviceStatus> {
-  // Use /api proxy by default if API_BASE_URL is not set, is "undefined" string, or USE_PROXY is true
-  const url = (USE_PROXY || !API_BASE_URL || API_BASE_URL === 'undefined') 
-    ? '/api/tuya/status' 
-    : `${API_BASE_URL}/api/tuya/status`;
+  // Determine the base URL for the API request
+  let baseUrl = '';
+  
+  if (USE_PROXY || !API_BASE_URL || API_BASE_URL === 'undefined') {
+    // Use relative URL (works for both local dev proxy and Vercel deployments)
+    baseUrl = '';
+  } else {
+    // Use the configured API_BASE_URL for production
+    baseUrl = API_BASE_URL;
+  }
+  
+  const url = `${baseUrl}/api/tuya/status`;
   const res = await fetch(url);
   if (!res.ok) {
     throw new Error(`Failed to fetch device status: ${res.status}`);

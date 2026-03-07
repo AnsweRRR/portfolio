@@ -56,14 +56,21 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 #### 1. Environment Variables in Vercel Dashboard
 
-Go to your Vercel project → **Settings** → **Environment Variables** and add all variables from your `.env` file plus:
+Go to your Vercel project → **Settings** → **Environment Variables** and add all variables from your `.env` file:
 
-```env
-VITE_API_BASE_URL=https://your-project.vercel.app
-VITE_TUYA_USE_PROXY=false
-```
+**Important:** Add these environment variables for all environments (Production, Preview, Development):
+- `VITE_EMAILJS_SERVICE_ID`
+- `VITE_EMAILJS_TEMPLATE_ID`
+- `VITE_EMAILJS_PUBLIC_KEY`
+- `VITE_RECAPTCHA_SITE_KEY`
+- `VITE_RECAPTCHA_SECRET_KEY`
+- `VITE_TUYA_API_BASE_URL`
+- `VITE_TUYA_DEVICE_ID`
+- `VITE_TUYA_CLIENT_ID`
+- `VITE_TUYA_SECRET`
+- `EASY_ACCESS_TOKEN` (optional, for faster testing)
 
-**Important:** Copy all other variables from your local `.env` file (EmailJS, reCAPTCHA, Tuya credentials).
+**Note:** You don't need to set `VITE_API_BASE_URL` or `VITE_TUYA_USE_PROXY` for Vercel deployments, as the serverless API functions at `/api/*` are automatically used.
 
 #### 2. Deploy
 
