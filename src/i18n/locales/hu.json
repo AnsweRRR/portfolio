@@ -94,5 +94,11 @@
     "description": "Interaktív 3D önéletrajz - nagyítsd/forgasd meg a táblát a jobb megtekintéshez!",
     "download_hu": "Magyar",
     "download_en": "Angol"
+  },
+  "weather": {
+    "homeTooltip": "Szobaszenzor (Tuya által)",
+    "tempTooltip": "Hőmérséklet",
+    "humidityTooltip": "Páratartalom",
+    "batteryTooltip": "Akkumulátor szint"
   }
 } 

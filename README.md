@@ -23,14 +23,28 @@ This is the personal portfolio of **Tamás Pogrányi**, a Full Stack Developer s
 
 ## Getting Started
 
-To run the project locally:
+This repository now includes a lightweight proxy server used to communicate
+with the Tuya smart‑home API (the cloud service returns malformed CORS
+headers which prohibit direct browser access). Before running the frontend,
+start the proxy if you plan to work with live device data.
 
 ```bash
-npm install
-npm run dev
+npm install              # install dependencies (frontend + backend)
+npm run start-server     # runs the Express proxy on port 3001
+# in a separate shell...
+npm run dev               # start Vite frontend
 ```
 
-Then open [http://localhost:5173](http://localhost:5173) in your browser.
+By default the frontend is configured via `.env` to use the proxy; set
+`VITE_TUYA_USE_PROXY=true` if you wish to enable it.
+
+**Tuya proxy (.env):** A status API-hoz a szervernek `client_id`, `secret` és
+opcionálisan `EASY_ACCESS_TOKEN` kell. Ha megadod az `EASY_ACCESS_TOKEN`-t
+(Postmanból vagy egy token endpoint hívással kapott érték), a szerver ezt
+használja és nem hívja a token endpointot. (`EASY_REFRESH_TOKEN` később
+használható lehet token megújításra.)
+
+Finally, open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ## License & Credits
 
