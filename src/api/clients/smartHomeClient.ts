@@ -3,7 +3,7 @@ import { useQuery } from '@tanstack/react-query';
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL as string;
 const USE_PROXY = import.meta.env.VITE_TUYA_USE_PROXY === 'true';
 
-if (!API_BASE_URL) {
+if (!API_BASE_URL && !USE_PROXY) {
   console.warn('smartHomeClient: missing VITE_API_BASE_URL environment variable');
 }
 interface ApiResult {

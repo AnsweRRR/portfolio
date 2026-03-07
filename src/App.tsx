@@ -13,7 +13,7 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
-        <BrowserRouter>
+        <BrowserRouter future={{ v7_startTransition: true, v7_relativeSplatPath: true }}>
           <div className='relative z-0 dark:bg-primary bg-primary-light'>
             <div className='dark:bg-hero-pattern bg-hero-pattern-light bg-cover bg-no-repeat bg-center'>
               <Navbar />
