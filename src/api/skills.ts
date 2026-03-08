@@ -36,9 +36,9 @@ export const skills = [
     image: "/images/skills/blazor.svg",
   },
   {
-    name: "NodeJS",
+    name: "Node.js",
     level: 72,
-    tags: ["Express", "REST API"],
+    tags: ["Express", "REST API", "Prisma", "Serverless"],
     image: "/images/skills/nodejs.svg",
   },
   {
@@ -56,7 +56,7 @@ export const skills = [
   {
     name: "React Native",
     level: 70,
-    tags: ["Mobile", "Expo", "Navigation", "Hooks"],
+    tags: ["Mobile", "Expo", "Navigation", "Tamagui"],
     image: "/images/skills/react-native.svg",
   },
   {
@@ -92,13 +92,13 @@ export const skills = [
   {
     name: "Git",
     level: 90,
-    tags: ["Version Control", "Branching", "Merging"],
+    tags: ["Version Control", "Branching", "Merging", "Git flow"],
     image: "/images/skills/git.svg",
   },
   {
     name: "Three.js",
-    level: 15,
-    tags: ["WebGL", "3D Models"],
+    level: 30,
+    tags: ["WebGL", "3D Models", "Animations"],
     image: "/images/skills/threejs.svg",
   },
   {
@@ -112,6 +112,18 @@ export const skills = [
     level: 60,
     tags: ["Containers", "Docker Compose", "Images"],
     image: "/images/skills/docker.svg",
+  },
+  {
+    name: "Semantic Kernel",
+    level: 70,
+    tags: ["AI", "Machine Learning", "Plugins"],
+    image: "/images/skills/semantic-kernel.svg",
+  },
+  {
+    name: "Ollama",
+    level: 60,
+    tags: ["Self-Hosted LLM", "AI Development", "Training Models"],
+    image: "/images/skills/ollama.svg",
   },
   {
     name: "Arduino",

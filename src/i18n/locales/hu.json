@@ -19,7 +19,7 @@
   },
   "about": {
     "title": "Rólam",
-    "description": "5 éve foglalkozom szoftverfejlesztéssel, főleg .NET-ben, leginkább backend oldalon érzem otthon magam. A frontend se áll távol tőlem, amihez főként React-et használok. Szeretek új dolgokat tanulni, így időnként belekóstolok mobilfejlesztésbe (React Native) és desktop appokba is (Electron, MAUI). Mindig keresem, mivel tudom fejleszteni magam.",
+    "description": "2020 óta foglalkozom szoftverfejlesztéssel, főleg .NET-ben, leginkább backend oldalon érzem otthon magam. A frontend se áll távol tőlem, amihez főként React-et használok. Szeretek új dolgokat tanulni, így időnként belekóstolok mobilfejlesztésbe (React Native) és desktop appokba is (Electron, MAUI). Szeretek SmartHome témával foglalkozni, így van is egy saját projektem, amivel valamennyi okoseszközömet a saját igényeim szerint tudom automatizálni.",
     "cv_button": "Önéletrajz megtekintése"
   },
   "experience": {

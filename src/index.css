@@ -12,11 +12,21 @@
   scroll-behavior: smooth;
 }
 
-/* Apply theme background colors to html and body */
 html,
 body {
-  @apply bg-primary-light dark:bg-primary;
   min-height: 100vh;
+}
+
+html {
+  @apply bg-primary-light;
+}
+
+html.dark {
+  @apply bg-primary;
+}
+
+body {
+  @apply bg-primary-light dark:bg-primary;
 }
 
 #root {
