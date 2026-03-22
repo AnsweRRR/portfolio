@@ -18,7 +18,7 @@ const Hero = () => {
         </div>
 
         <div>
-          <h1 className={`${styles.heroHeadText} text-white-100 dark:text-white-100 text-white-100-light`}>
+          <h1 className={`${styles.heroHeadText} text-white-100`}>
             {i18n.language === 'hu' ? (
               <>
                 {t('hero.greetingWithName').split('Tamás').map((part, index, array) => (
@@ -34,7 +34,7 @@ const Hero = () => {
               </>
             )}
           </h1>
-          <div className={`${styles.heroSubText} mt-2 text-secondary dark:text-secondary text-secondary-light`}>
+          <div className={`${styles.heroSubText} mt-2 text-secondary`}>
             <Typewriter 
               text={[t('hero.subtitle'), t('hero.subtitle2')]} 
               speed={50} 

@@ -33,7 +33,7 @@ const ErrorPage = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-primary dark:bg-primary bg-primary-light">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-primary">
       <div className="w-64 h-64 mb-8">
         <RaspberryCanvas />
       </div>

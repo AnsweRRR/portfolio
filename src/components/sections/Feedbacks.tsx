@@ -23,19 +23,19 @@ const FeedbackCard = ({ index, testimonialKey, name, designation, company, image
   return (
     <motion.div
       variants={fadeIn("", "spring", index * 0.5, 0.75)}
-      className={`bg-black-200 dark:bg-black-200 bg-black-200-light p-6 sm:p-10 rounded-3xl w-[280px] sm:w-[320px] transition-all duration-300 ${
+      className={`bg-black-200 p-6 sm:p-10 rounded-3xl w-[280px] sm:w-[320px] transition-all duration-300 ${
         isActive ? 'scale-110 z-10' : 'scale-90 opacity-70'
       }`}
     >
-      <p className="text-white-100 dark:text-white-100 text-white-100-light font-black text-[48px]">"</p>
+      <p className="text-white-100 font-black text-[48px]">"</p>
       <div className="mt-1">
-        <p className="text-white-100 dark:text-white-100 text-white-100-light tracking-wider text-[18px]">{t(testimonialKey)}</p>
+        <p className="text-white-100 tracking-wider text-[18px]">{t(testimonialKey)}</p>
         <div className="mt-7 flex justify-between items-center gap-1">
           <div className="flex-1 flex flex-col">
-            <p className="text-white-100 dark:text-white-100 text-white-100-light font-medium text-[16px]">
+            <p className="text-white-100 font-medium text-[16px]">
               <span className="blue-text-gradient">@</span> {name}
             </p>
-            <p className="mt-1 text-secondary dark:text-secondary text-secondary-light text-[12px]">
+            <p className="mt-1 text-secondary text-[12px]">
               {designation} of {company}
             </p>
           </div>
@@ -96,13 +96,13 @@ const Feedbacks = () => {
   };
 
   return (
-    <div className={`mt-12 bg-black-100 dark:bg-black-100 bg-black-100-light rounded-[20px] w-full max-w-7xl mx-auto overflow-hidden`}>
+    <div className={`mt-12 bg-black-100 rounded-[20px] w-full max-w-7xl mx-auto overflow-hidden`}>
       <div
-        className={`bg-tertiary dark:bg-tertiary bg-tertiary-light rounded-2xl ${styles.padding} min-h-[300px]`}
+        className={`bg-tertiary rounded-2xl ${styles.padding} min-h-[300px]`}
       >
         <motion.div variants={textVariant()}>
-          <p className={`${styles.sectionSubText} text-secondary dark:text-secondary text-secondary-light`}>{t('testimonials.subtitle')}</p>
-          <h2 className={`${styles.sectionHeadText} text-white-100 dark:text-white-100 text-white-100-light`}>{t('testimonials.title')}</h2>
+          <p className={`${styles.sectionSubText} text-secondary`}>{t('testimonials.subtitle')}</p>
+          <h2 className={`${styles.sectionHeadText} text-white-100`}>{t('testimonials.title')}</h2>
         </motion.div>
       </div>
       <div className={`-mt-20 pb-14 px-4 sm:${styles.paddingX} flex items-center justify-center max-w-5xl mx-auto relative`}>
@@ -111,7 +111,7 @@ const Feedbacks = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            className="absolute -top-16 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-secondary dark:text-secondary text-secondary-light text-sm bg-black-100 dark:bg-black-100 bg-black-100-light px-4 py-2 rounded-full"
+            className="absolute -top-16 left-1/2 transform -translate-x-1/2 flex items-center gap-2 text-secondary text-sm bg-black-100 px-4 py-2 rounded-full"
           >
             <motion.div
               animate={{
@@ -132,9 +132,9 @@ const Feedbacks = () => {
         <div className="flex items-center mr-4 z-10">
           <button
             onClick={prevTestimonial}
-            className="bg-tertiary dark:bg-tertiary bg-tertiary-light p-2 rounded-full hover:bg-secondary dark:hover:bg-secondary hover:bg-secondary-light transition-colors"
+            className="bg-tertiary p-2 rounded-full hover:bg-secondary transition-colors"
           >
-            <FiChevronLeft className="h-6 w-6 text-white-100 dark:text-white-100 text-white-100-light" />
+            <FiChevronLeft className="h-6 w-6 text-white-100" />
           </button>
         </div>
 
@@ -169,9 +169,9 @@ const Feedbacks = () => {
         <div className="flex items-center ml-4 z-10">
           <button
             onClick={nextTestimonial}
-            className="bg-tertiary dark:bg-tertiary bg-tertiary-light p-2 rounded-full hover:bg-secondary dark:hover:bg-secondary hover:bg-secondary-light transition-colors"
+            className="bg-tertiary p-2 rounded-full hover:bg-secondary transition-colors"
           >
-            <FiChevronRight className="h-6 w-6 text-white-100 dark:text-white-100 text-white-100-light" />
+            <FiChevronRight className="h-6 w-6 text-white-100" />
           </button>
         </div>
       </div>

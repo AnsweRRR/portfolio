@@ -14,8 +14,8 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <BrowserRouter>
-          <div className='relative z-0 dark:bg-primary bg-primary-light'>
-            <div className='dark:bg-hero-pattern bg-hero-pattern-light bg-cover bg-no-repeat bg-center'>
+          <div className='relative z-0 bg-primary'>
+            <div className='bg-hero-pattern bg-cover bg-no-repeat bg-center'>
               <Navbar />
               {/* <MacOSMenuBar /> */}
               <Hero />

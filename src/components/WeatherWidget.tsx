@@ -63,7 +63,7 @@ const WeatherWidget = () => {
           animate={{ opacity: 1, y: 0 }}
           exit={{ opacity: 0, y: 20 }}
           transition={{ duration: 0.5 }}
-          className="fixed bottom-8 left-8 z-50 flex items-center gap-3 bg-tertiary dark:bg-tertiary text-white rounded-lg shadow-lg p-3 cursor-pointer"
+          className="fixed bottom-8 left-8 z-50 flex items-center gap-3 bg-[#151030] text-white rounded-lg shadow-lg p-3 cursor-pointer"
           onClick={() => isMobile && setIsExpanded(!isExpanded)}
         >
           <span title={t('weather.homeTooltip')}>

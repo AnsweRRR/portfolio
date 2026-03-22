@@ -151,7 +151,7 @@ const About = () => {
             {typedDescription}
           </p>
           <button
-            className="mt-6 px-6 py-2 bg-primary text-white rounded-lg shadow hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-all duration-150 font-semibold flex items-center justify-center gap-2"
+            className="mt-6 px-6 py-2 bg-[#050816] text-white rounded-lg shadow hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-all duration-150 font-semibold flex items-center justify-center gap-2"
             onClick={() => setCVOpen(true)}
           >
             <FiExternalLink className="mr-2 h-4 w-4" />

@@ -6,30 +6,12 @@ module.exports = {
   theme: {
     extend: {
       colors: {
-        primary: {
-          DEFAULT: "#050816",
-          light: "#ffffff",
-        },
-        secondary: {
-          DEFAULT: "#aaa6c3",
-          light: "#4b5563",
-        },
-        tertiary: {
-          DEFAULT: "#151030",
-          light: "#f3f4f6",
-        },
-        "black-100": {
-          DEFAULT: "#100d25",
-          light: "#f9fafb",
-        },
-        "black-200": {
-          DEFAULT: "#090325",
-          light: "#f3f4f6",
-        },
-        "white-100": {
-          DEFAULT: "#f3f3f3",
-          light: "#1f2937",
-        },
+        primary: "var(--color-primary)",
+        secondary: "var(--color-secondary)",
+        tertiary: "var(--color-tertiary)",
+        "black-100": "var(--color-black-100)",
+        "black-200": "var(--color-black-200)",
+        "white-100": "var(--color-white-100)",
       },
       boxShadow: {
         card: "0px 35px 120px -15px #211e35",
@@ -40,7 +22,6 @@ module.exports = {
       },
       backgroundImage: {
         "hero-pattern": "url('/images/Plexus.png')",
-        "hero-pattern-light": "url('/images/Plexus.png')",
       },
     },
   },

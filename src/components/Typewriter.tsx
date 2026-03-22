@@ -110,7 +110,7 @@ const Typewriter: React.FC<TypewriterProps> = ({
         <motion.span
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
-          className="inline-block align-middle w-1 h-[1em] sm:h-8 bg-white-100 dark:bg-white-100 bg-white-100-light ml-1"
+          className="inline-block align-middle w-1 h-[1em] sm:h-8 bg-white-100 ml-1"
           style={{ verticalAlign: 'middle' }}
         />
       )}

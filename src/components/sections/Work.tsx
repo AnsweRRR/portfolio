@@ -38,7 +38,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
                   href={project.github}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white-100 dark:text-white-100 text-white-100-light hover:text-[#915EFF] transition-colors duration-300"
+                  className="text-white-100 hover:text-[#915EFF] transition-colors duration-300"
                   title={t('work.viewCode')}
                   aria-label={`View ${project.title} source code on GitHub`}
                 >
@@ -48,7 +48,7 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
                   href={project.live}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-white-100 dark:text-white-100 text-white-100-light hover:text-[#915EFF] transition-colors duration-300"
+                  className="text-white-100 hover:text-[#915EFF] transition-colors duration-300"
                   title={t('work.viewProject')}
                   aria-label={`View ${project.title} live project`}
                 >
@@ -59,11 +59,11 @@ const ProjectCard = ({ project, index }: ProjectCardProps) => {
           </div>
           <div className="flex-1 flex flex-col justify-between p-6">
             <div>
-              <h3 className="text-xl font-semibold mb-2 text-white-100 dark:text-white-100 text-white-100-light">
+              <h3 className="text-xl font-semibold mb-2 text-white-100">
                 {project.title}
               </h3>
               <div className="h-24 overflow-y-auto custom-scrollbar mb-4">
-                <p className="text-sm text-secondary dark:text-secondary text-secondary-light">
+                <p className="text-sm text-secondary">
                   {t(project.description)}
                 </p>
               </div>
@@ -95,8 +95,8 @@ const Work = () => {
       aria-labelledby="work-title"
     >
       <motion.div variants={textVariant()}>
-        <h2 id="work-title" className="text-3xl font-bold text-center mb-8 text-white-100 dark:text-white-100 text-white-100-light">{t('work.title')}</h2>
-        <p className="text-center text-secondary dark:text-secondary text-secondary-light mb-8">{t('work.subtitle')}</p>
+        <h2 id="work-title" className="text-3xl font-bold text-center mb-8 text-white-100">{t('work.title')}</h2>
+        <p className="text-center text-secondary mb-8">{t('work.subtitle')}</p>
       </motion.div>
       <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3" role="list" aria-label="Project portfolio">
         {projects.map((project, index) => (
