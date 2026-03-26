@@ -1,5 +1,16 @@
 import { VercelRequest, VercelResponse } from '@vercel/node';
-import { getSupabaseClient } from '../../src/api/clients/supabaseClient.ts';
+import { createClient } from '@supabase/supabase-js';
+
+function getSupabaseClient() {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SECRET_KEY;
+  if (!url || !key) {
+    throw new Error(
+      'Missing Supabase config: set SUPABASE_URL and SUPABASE_SECRET_KEY environment variables.',
+    );
+  }
+  return createClient(url, key);
+}
 
 const WEATHER_HISTORY_MS = 24 * 60 * 60 * 1000;
 
@@ -9,6 +20,12 @@ function datapointTimeToMs(t: number): number {
 }
 
 export default async (req: VercelRequest, res: VercelResponse): Promise<void> => {
+  console.log('[weather/history] invoked', {
+    method: req.method,
+    hasSupabaseUrl: Boolean(process.env.SUPABASE_URL),
+    hasSupabaseKey: Boolean(process.env.SUPABASE_SECRET_KEY),
+  });
+
   // CORS headers (a tuya endpoint mintájára).
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
