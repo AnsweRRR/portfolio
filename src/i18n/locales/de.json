@@ -98,6 +98,10 @@
     "homeTooltip": "Raumsensor (betrieben von Tuya)",
     "tempTooltip": "Temperatur",
     "humidityTooltip": "Luftfeuchtigkeit",
-    "batteryTooltip": "Batteriestand"
+    "batteryTooltip": "Batteriestand",
+    "chartTitle": "Letzte 24 Stunden",
+    "chartTemp": "Temp (°C)",
+    "chartHumidity": "Feuchte (%)",
+    "lastMeasurement": "Letzte Messung:"
   }
 }

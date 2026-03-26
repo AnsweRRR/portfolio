@@ -3,11 +3,16 @@ import cors from 'cors';
 import fetch from 'node-fetch';
 import crypto from 'crypto';
 import dotenv from 'dotenv';
+import { getSupabaseClient } from './src/api/clients/supabaseClient.ts';
+import { TuyaRegionConfigEnum } from './src/tuya-sdk/config.ts';
+import TuyaMessageSubscribeWebsocket from './src/tuya-sdk/index.ts';
 
 dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3001;
+
+app.use(express.json());
 
 const BASE_URL = process.env.VITE_TUYA_API_BASE_URL as string;
 const DEVICE_ID = process.env.VITE_TUYA_DEVICE_ID as string;
@@ -170,3 +175,157 @@ app.get('/api/tuya/status', async (req: express.Request, res: express.Response) 
 app.listen(PORT, () => {
   console.log(`Proxy server running on http://localhost:${PORT}`);
 });
+
+const WEATHER_HISTORY_MS = 24 * 60 * 60 * 1000;
+
+function datapointTimeToMs(t: number): number {
+  return t > 100_000_000_000 ? t : t * 1000;
+}
+
+app.get('/api/weather/history', async (_req: express.Request, res: express.Response) => {
+  try {
+    let supabase: ReturnType<typeof getSupabaseClient>;
+    try {
+      supabase = getSupabaseClient();
+    } catch {
+      res.json({ temperature: [], humidity: [] });
+      return;
+    }
+
+    const since = Date.now() - WEATHER_HISTORY_MS;
+
+    const [tempRes, humRes] = await Promise.all([
+      supabase.from('temp_current').select('time,value').order('time', { ascending: false }).limit(3000),
+      supabase.from('humidity_value').select('time,value').order('time', { ascending: false }).limit(3000),
+    ]);
+
+    if (tempRes.error) {
+      console.error('[weather/history] temp_current:', tempRes.error);
+    }
+    if (humRes.error) {
+      console.error('[weather/history] humidity_value:', humRes.error);
+    }
+
+    const temperature = (tempRes.data ?? [])
+      .filter((r) => datapointTimeToMs(r.time) >= since)
+      .map((r) => ({ time: r.time, value: r.value }))
+      .sort((a, b) => datapointTimeToMs(a.time) - datapointTimeToMs(b.time));
+
+    const humidity = (humRes.data ?? [])
+      .filter((r) => datapointTimeToMs(r.time) >= since)
+      .map((r) => ({ time: r.time, value: r.value }))
+      .sort((a, b) => datapointTimeToMs(a.time) - datapointTimeToMs(b.time));
+
+    res.json({ temperature, humidity });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    console.error(err);
+    res.status(500).json({ error: msg });
+  }
+});
+
+/** Message Center WebSocket: külön access páros lehet a REST API client_id / secret-től. */
+const TUYA_CLIENT_ID = process.env.VITE_TUYA_CLIENT_ID;
+const TUYA_SECRET = process.env.VITE_TUYA_SECRET;
+
+const RELEVANT_CODES = new Set([
+  'battery_percentage',
+  'humidity_value',
+  'temp_current'
+]);
+
+function tuyaMessageRegionUrl(): TuyaRegionConfigEnum {
+  const r = (process.env.TUYA_MSG_REGION ?? 'EU').toUpperCase();
+  const map: Record<string, TuyaRegionConfigEnum | undefined> = {
+    CN: TuyaRegionConfigEnum.CN,
+    US: TuyaRegionConfigEnum.US,
+    EU: TuyaRegionConfigEnum.EU,
+    IN: TuyaRegionConfigEnum.IN,
+  };
+  return map[r] ?? TuyaRegionConfigEnum.EU;
+}
+
+if (TUYA_CLIENT_ID && TUYA_SECRET) {
+  const client = new TuyaMessageSubscribeWebsocket({
+    accessId: TUYA_CLIENT_ID,
+    accessKey: TUYA_SECRET,
+    url: tuyaMessageRegionUrl(),
+    env: TuyaMessageSubscribeWebsocket.env.PROD,
+    maxRetryTimes: 100,
+  });
+
+  client.open(() => {
+    console.log('[tuya-ws] open');
+  });
+
+  client.message((_ws, message) => {
+    type TuyaProperty = {
+      code: string;
+      dpId: string | number;
+      time: string | number;
+      value: unknown;
+    };
+
+    type TuyaPayloadData = {
+      bizData?: {
+        properties?: unknown;
+      };
+    };
+
+    const messageId =
+      'messageId' in message && typeof message.messageId === 'string' ? message.messageId : undefined;
+    if (messageId) {
+      client.ackMessage(messageId);
+    }
+
+    const props = (message.payload?.data as TuyaPayloadData | undefined)?.bizData?.properties;
+
+    if (!Array.isArray(props)) return;
+
+    const supabase = getSupabaseClient();
+    (async () => {
+      for (const dp of props as TuyaProperty[]) {
+        if (!RELEVANT_CODES.has(dp.code)) continue;
+
+        // console.log("----------------------");
+        // console.log('Filtered data:', dp);
+        // console.log("----------------------");
+
+        try {
+          const { error } = await supabase
+            .from(dp.code)
+            .insert([{ code: dp.code, dpid: dp.dpId, time: dp.time, value: dp.value }]);
+          if (error) {
+            console.error('Supabase insert error:', error);
+          }
+        } catch (err) {
+          console.error('Supabase save exception:', err);
+        }
+      }
+    })();
+  });
+
+  client.reconnect(() => {
+    console.log('[tuya-ws] reconnect');
+  });
+
+  client.ping(() => {
+    console.log('[tuya-ws] ping');
+  });
+
+  client.pong(() => {
+    console.log('[tuya-ws] pong');
+  });
+
+  client.close((code, reason) => {
+    console.log('[tuya-ws] close', code, reason.toString());
+  });
+
+  client.error((_ws, error) => {
+    console.error('[tuya-ws] error', error);
+  });
+
+  client.start();
+} else {
+  console.warn('[tuya-ws] missing TUYA_MSG_ACCESS_ID and/or TUYA_MSG_ACCESS_KEY env variables.');
+}

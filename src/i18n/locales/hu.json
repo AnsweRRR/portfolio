@@ -99,6 +99,10 @@
     "homeTooltip": "Szobaszenzor (Tuya által)",
     "tempTooltip": "Hőmérséklet",
     "humidityTooltip": "Páratartalom",
-    "batteryTooltip": "Akkumulátor szint"
+    "batteryTooltip": "Akkumulátor szint",
+    "chartTitle": "Elmúlt 24 óra",
+    "chartTemp": "Hőm. (°C)",
+    "chartHumidity": "Párat. (%)",
+    "lastMeasurement": "Utolsó mérés:"
   }
 } 

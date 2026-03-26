@@ -98,6 +98,10 @@
     "homeTooltip": "Room sensor (powered by Tuya)",
     "tempTooltip": "Temperature",
     "humidityTooltip": "Humidity",
-    "batteryTooltip": "Battery level"
+    "batteryTooltip": "Battery level",
+    "chartTitle": "Last 24 hours",
+    "chartTemp": "Temp (°C)",
+    "chartHumidity": "Humidity (%)",
+    "lastMeasurement": "Last measurement:"
   }
 } 
