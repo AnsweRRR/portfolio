@@ -1,37 +1,75 @@
 import { useTranslation } from "react-i18next";
 import { FiHome, FiThermometer, FiDroplet, FiSun, FiCloud, FiBattery } from "react-icons/fi";
 import { motion, AnimatePresence } from "framer-motion";
-import { useDeviceStatus } from "../api/clients/smartHomeClient";
+import {
+  useDeviceStatus,
+  type WeatherHistoryResponse,
+} from "../api/clients/smartHomeClient";
 import { useState, useEffect, useMemo } from "react";
 import WeatherChart from "./WeatherChart";
 import type { WeatherDataPoint } from "./WeatherChart";
 
-const generateDummyHistory = (): WeatherDataPoint[] => {
-  const now = new Date();
-  return Array.from({ length: 24 }, (_, i) => {
-    const hoursAgo = 23 - i;
-    const d = new Date(now.getTime() - hoursAgo * 60 * 60 * 1000);
-    const hour = d.getHours().toString().padStart(2, "0") + ":00";
-    const baseTemp = 21;
-    const tempVariance = Math.sin((i / 24) * 2 * Math.PI - Math.PI / 2) * 3;
-    const temp = parseFloat(
-      (baseTemp + tempVariance + (Math.random() - 0.5)).toFixed(1)
-    );
-    const humidity = Math.round(
-      55 + Math.cos((i / 24) * 2 * Math.PI) * 10 + (Math.random() - 0.5) * 5
-    );
-    return { hour, temp, humidity };
-  });
-};
+function datapointTimeToMs(t: number): number {
+  return t > 100_000_000_000 ? t : t * 1000;
+}
+
+function historyToChartPoints(history: WeatherHistoryResponse): WeatherDataPoint[] {
+  const temps = [...history.temperature].sort(
+    (a, b) => datapointTimeToMs(a.time) - datapointTimeToMs(b.time),
+  );
+  const hums = [...history.humidity].sort(
+    (a, b) => datapointTimeToMs(a.time) - datapointTimeToMs(b.time),
+  );
+
+  const now = Date.now();
+  let lastTemp = 21;
+  let lastHum = 55;
+  const points: WeatherDataPoint[] = [];
+
+  for (let i = 23; i >= 0; i--) {
+    const bucketEnd = now - i * 60 * 60 * 1000;
+    const bucketStart = bucketEnd - 60 * 60 * 1000;
+    const d = new Date(bucketEnd);
+    const hour = `${d.getHours().toString().padStart(2, "0")}:00`;
+
+    const pickLast = <T extends { time: number }>(rows: T[]) => {
+      let best: T | null = null;
+      for (const r of rows) {
+        const ms = datapointTimeToMs(r.time);
+        if (ms >= bucketStart && ms < bucketEnd) {
+          if (!best || ms > datapointTimeToMs(best.time)) best = r;
+        }
+      }
+      return best;
+    };
+
+    const tRow = pickLast(temps);
+    const hRow = pickLast(hums);
+    if (tRow) lastTemp = tRow.value / 10;
+    if (hRow) lastHum = hRow.value;
+
+    points.push({ hour, temp: lastTemp, humidity: lastHum });
+  }
+
+  return points;
+}
 
 const WeatherWidget = () => {
-  const { data, isLoading } = useDeviceStatus();
+  const { data, isLoading, weatherHistory } = useDeviceStatus();
   const { t } = useTranslation();
   const [isExpanded, setIsExpanded] = useState(false);
   const [isMobile, setIsMobile] = useState(false);
   const [showChart, setShowChart] = useState(false);
 
-  const historyData = useMemo(() => generateDummyHistory(), []);
+  const historyData = useMemo(() => {
+    if (
+      weatherHistory &&
+      (weatherHistory.temperature.length > 0 || weatherHistory.humidity.length > 0)
+    ) {
+      return historyToChartPoints(weatherHistory);
+    }
+    return [];
+  }, [weatherHistory]);
 
   useEffect(() => {
     const checkMobile = () => {
@@ -44,9 +82,9 @@ const WeatherWidget = () => {
     return () => window.removeEventListener('resize', checkMobile);
   }, []);
 
-  const rawTemp = data?.result.find((r) => r.code === "va_temperature")?.value as number | undefined;
-  const rawHumidity = data?.result.find((r) => r.code === "va_humidity")?.value as number | undefined;
-  const rawBattery = data?.result.find((r) => r.code === "battery_percentage")?.value as number | undefined;
+  const rawTemp = data?.result?.find((r) => r.code === "va_temperature")?.value as number | undefined;
+  const rawHumidity = data?.result?.find((r) => r.code === "va_humidity")?.value as number | undefined;
+  const rawBattery = data?.result?.find((r) => r.code === "battery_percentage")?.value as number | undefined;
 
   const temp = rawTemp !== undefined ? rawTemp / 10 : undefined;
   const humidity = rawHumidity !== undefined ? rawHumidity : undefined;
