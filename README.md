@@ -43,10 +43,10 @@ Edit `.env` with your credentials:
 npm install              # Install all dependencies
 
 # Option 1: Run frontend + backend together
-npm run dev:all          # Starts Express server (port 3001) + Vite dev server (port 5173)
+npm run dev:all          # Starts Vercel API dev server (port 3001) + Vite dev server (port 5173)
 
 # Option 2: Run separately
-npm run start-server     # Start Express proxy on port 3001
+npm run dev:api          # Start local Vercel serverless API on port 3001
 npm run dev              # Start Vite frontend on port 5173 (in separate terminal)
 ```
 
@@ -86,8 +86,8 @@ git push origin main
 
 **Development:**
 - Frontend: `http://localhost:5173`
-- Backend: `http://localhost:3001`
-- Vite proxy: `/api` → `localhost:3001`
+- Backend (Vercel functions): `http://localhost:3001/api/*`
+- Vite proxy: `/api` -> `localhost:3001`
 
 **Production:**
 - Frontend + Backend: `https://your-project.vercel.app`
