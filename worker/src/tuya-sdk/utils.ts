@@ -1,6 +1,6 @@
-import CryptoJS from 'crypto-js';
-import crypto from 'node:crypto';
-import { Buffer } from 'node:buffer';
+import { Buffer } from "node:buffer";
+import crypto from "node:crypto";
+import CryptoJS from "crypto-js";
 
 export type JsonObject = Record<string, unknown>;
 
@@ -11,7 +11,7 @@ export function getTopicUrl(websocketUrl: string, accessId: string, env: string,
 export function buildQuery(query: Record<string, number | string>): string {
   return Object.keys(query)
     .map((key) => `${key}=${encodeURIComponent(query[key])}`)
-    .join('&');
+    .join("&");
 }
 
 export function buildPassword(accessId: string, accessKey: string): string {
@@ -19,15 +19,15 @@ export function buildPassword(accessId: string, accessKey: string): string {
   return CryptoJS.MD5(`${accessId}${key}`).toString().slice(8, 24);
 }
 
-export function decrypt(data: string, accessKey: string, encryptyModel: string): JsonObject | '' {
-  if (encryptyModel === 'aes_gcm') {
+export function decrypt(data: string, accessKey: string, encryptyModel: string): JsonObject | "" {
+  if (encryptyModel === "aes_gcm") {
     return decryptByGCM(data, accessKey);
   }
 
   return decryptByECB(data, accessKey);
 }
 
-export function decryptByECB(data: string, accessKey: string): JsonObject | '' {
+export function decryptByECB(data: string, accessKey: string): JsonObject | "" {
   try {
     const realKey = CryptoJS.enc.Utf8.parse(accessKey.substring(8, 24));
     const json = CryptoJS.AES.decrypt(data, realKey, {
@@ -37,23 +37,23 @@ export function decryptByECB(data: string, accessKey: string): JsonObject | '' {
     const dataStr = CryptoJS.enc.Utf8.stringify(json).toString();
     return JSON.parse(dataStr);
   } catch {
-    return '';
+    return "";
   }
 }
 
-export function decryptByGCM(data: string, accessKey: string): JsonObject | '' {
+export function decryptByGCM(data: string, accessKey: string): JsonObject | "" {
   try {
-    const bData = Buffer.from(data, 'base64');
+    const bData = Buffer.from(data, "base64");
     const iv = bData.subarray(0, 12);
     const tag = bData.subarray(bData.length - 16);
     const cipherData = bData.subarray(12, bData.length - 16);
-    const decipher = crypto.createDecipheriv('aes-128-gcm', accessKey.substring(8, 24), iv);
+    const decipher = crypto.createDecipheriv("aes-128-gcm", accessKey.substring(8, 24), iv);
     decipher.setAuthTag(tag);
-    let dataStr = decipher.update(cipherData, undefined, 'utf8');
-    dataStr += decipher.final('utf8');
+    let dataStr = decipher.update(cipherData, undefined, "utf8");
+    dataStr += decipher.final("utf8");
     return JSON.parse(dataStr);
   } catch {
-    return '';
+    return "";
   }
 }
 
@@ -67,6 +67,6 @@ export function encrypt(data: unknown, accessKey: string): string {
     }).toString();
     return retData;
   } catch {
-    return '';
+    return "";
   }
 }

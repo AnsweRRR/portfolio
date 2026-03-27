@@ -8,10 +8,10 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "start-worker": "tsx src/worker/server-worker.ts",
+    "worker:dev": "npm --prefix worker run dev",
     "dev:api": "vercel dev --listen 3001",
     "dev:app": "concurrently \"npm run dev:api\" \"npm run dev\"",
-    "dev:all": "concurrently \"npm run dev:api\" \"npm run start-worker\" \"npm run dev\""
+    "dev:all": "concurrently \"npm run dev:api\" \"npm run worker:dev\" \"npm run dev\""
   },
   "dependencies": {
     "@emotion/react": "^11.14.0",

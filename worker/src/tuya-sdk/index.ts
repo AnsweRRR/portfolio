@@ -1,11 +1,11 @@
-import EventEmitter from 'node:events';
-import { Buffer } from 'node:buffer';
-import WebSocket, { type RawData } from 'ws';
+import { Buffer } from "node:buffer";
+import EventEmitter from "node:events";
+import WebSocket, { type RawData } from "ws";
 
-import { TUYA_PASULAR_ENV, getTuyaEnvConfig, TuyaRegionConfigEnum } from './config';
-import { buildPassword, buildQuery, decrypt, type JsonObject, getTopicUrl } from './utils';
+import { TUYA_PASULAR_ENV, getTuyaEnvConfig, TuyaRegionConfigEnum } from "./config";
+import { buildPassword, buildQuery, decrypt, type JsonObject, getTopicUrl } from "./utils";
 
-type LoggerLevel = 'INFO' | 'ERROR';
+type LoggerLevel = "INFO" | "ERROR";
 
 interface IConfig {
   accessId: string;
@@ -32,13 +32,13 @@ class TuyaMessageSubscribeWebsocket {
   static readonly URL = TuyaRegionConfigEnum;
   static readonly env = TUYA_PASULAR_ENV;
 
-  static readonly data = 'TUYA_DATA';
-  static readonly error = 'TUYA_ERROR';
-  static readonly open = 'TUYA_OPEN';
-  static readonly close = 'TUYA_CLOSE';
-  static readonly reconnect = 'TUYA_RECONNECT';
-  static readonly ping = 'TUYA_PING';
-  static readonly pong = 'TUYA_PONG';
+  static readonly data = "TUYA_DATA";
+  static readonly error = "TUYA_ERROR";
+  static readonly open = "TUYA_OPEN";
+  static readonly close = "TUYA_CLOSE";
+  static readonly reconnect = "TUYA_RECONNECT";
+  static readonly ping = "TUYA_PING";
+  static readonly pong = "TUYA_PONG";
 
   private config: IConfig;
   private server?: WebSocket;
@@ -52,7 +52,7 @@ class TuyaMessageSubscribeWebsocket {
       maxRetryTimes: 100,
       timeout: 30000,
       logger: (level, ...args) => {
-        if (level === 'ERROR') {
+        if (level === "ERROR") {
           console.error(...args);
           return;
         }
@@ -119,7 +119,7 @@ class TuyaMessageSubscribeWebsocket {
       url,
       accessId,
       getTuyaEnvConfig(env).value,
-      `?${buildQuery({ subscriptionType: 'Failover', ackTimeoutMillis: 30000 })}`,
+      `?${buildQuery({ subscriptionType: "Failover", ackTimeoutMillis: 30000 })}`,
     );
     const password = buildPassword(accessId, accessKey);
     this.server = new WebSocket(topicUrl, {
@@ -136,7 +136,7 @@ class TuyaMessageSubscribeWebsocket {
   }
 
   private subOpen(server: WebSocket, isInit = true): void {
-    server.on('open', () => {
+    server.on("open", () => {
       if (server.readyState === WebSocket.OPEN) {
         this.retryTimes = 0;
       }
@@ -149,7 +149,7 @@ class TuyaMessageSubscribeWebsocket {
   }
 
   private subPing(server: WebSocket): void {
-    server.on('ping', () => {
+    server.on("ping", () => {
       this.event.emit(TuyaMessageSubscribeWebsocket.ping, this.server);
       this.keepAlive(server);
       server.pong(this.config.accessId);
@@ -157,28 +157,27 @@ class TuyaMessageSubscribeWebsocket {
   }
 
   private subPong(server: WebSocket): void {
-    server.on('pong', () => {
+    server.on("pong", () => {
       this.keepAlive(server);
       this.event.emit(TuyaMessageSubscribeWebsocket.pong, this.server);
     });
   }
 
   private subMessage(server: WebSocket): void {
-    server.on('message', (data: RawData) => {
+    server.on("message", (data: RawData) => {
       try {
         this.keepAlive(server);
         const obj = this.handleMessage(data);
-        // this.logger('INFO', 'the real message data:', obj);
         this.event.emit(TuyaMessageSubscribeWebsocket.data, this.server, obj);
       } catch (error) {
-        this.logger('ERROR', error);
+        this.logger("ERROR", error);
         this.event.emit(TuyaMessageSubscribeWebsocket.error, this.server, error);
       }
     });
   }
 
   private subClose(server: WebSocket): void {
-    server.on('close', (code: number, reason: Buffer) => {
+    server.on("close", (code: number, reason: Buffer) => {
       this._reconnect();
       this.clearKeepAlive();
       this.event.emit(TuyaMessageSubscribeWebsocket.close, code, reason);
@@ -186,7 +185,7 @@ class TuyaMessageSubscribeWebsocket {
   }
 
   private subError(server: WebSocket): void {
-    server.on('error', (error: Error) => {
+    server.on("error", (error: Error) => {
       this.event.emit(TuyaMessageSubscribeWebsocket.error, this.server, error);
     });
   }
@@ -216,10 +215,10 @@ class TuyaMessageSubscribeWebsocket {
       [key: string]: unknown;
     };
     const { payload, properties, ...others } = parsed;
-    const encryptyModel = properties?.em ?? '';
-    const pStr = Buffer.from(payload, 'base64').toString('utf-8');
+    const encryptyModel = properties?.em ?? "";
+    const pStr = Buffer.from(payload, "base64").toString("utf-8");
     const pJson = JSON.parse(pStr);
-    if (typeof pJson.data === 'string') {
+    if (typeof pJson.data === "string") {
       pJson.data = decrypt(pJson.data, this.config.accessKey, encryptyModel);
     }
     return { payload: pJson, ...others };

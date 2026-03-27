@@ -27,7 +27,7 @@ This is the personal portfolio of **Tamás Pogrányi**, a Full Stack Developer s
 
 #### 1. Setup Environment Variables
 
-Copy the example environment file and fill in your actual API keys:
+Copy the app environment file and fill in your actual API keys:
 ```bash
 cp .env.example .env
 ```
@@ -35,24 +35,31 @@ cp .env.example .env
 Edit `.env` with your credentials:
 - EmailJS service ID, template ID, and public key
 - reCAPTCHA site and secret keys  
-- Tuya API credentials (device ID, client ID, secret, access token)
+- Tuya API credentials for Vercel functions (device ID, client ID, secret, access token)
+
+For the websocket worker, create a separate env file:
+```bash
+cp worker/.env.example worker/.env
+```
 
 #### 2. Install Dependencies & Run
 
 ```bash
 npm install              # Install all dependencies
+npm --prefix worker install  # Install websocket worker dependencies
 
-# Option 1: Run frontend + backend together
-npm run dev:all          # Starts Vercel API dev server (port 3001) + Vite dev server (port 5173)
+# Option 1: Run frontend + Vercel API + websocket worker together
+npm run dev:all          # Vercel API (3001) + worker + Vite app (5173)
 
 # Option 2: Run separately
 npm run dev:api          # Start local Vercel serverless API on port 3001
+npm run worker:dev       # Start websocket worker (in separate terminal)
 npm run dev              # Start Vite frontend on port 5173 (in separate terminal)
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
 
-### Deployment to Vercel
+### Deployment to Vercel (App only)
 
 #### 1. Environment Variables in Vercel Dashboard
 
@@ -66,13 +73,13 @@ Go to your Vercel project → **Settings** → **Environment Variables** and add
 - `VITE_RECAPTCHA_SECRET_KEY`
 - `VITE_TUYA_API_BASE_URL`
 - `VITE_TUYA_DEVICE_ID`
-- `VITE_TUYA_CLIENT_ID`
-- `VITE_TUYA_SECRET`
+- `TUYA_CLIENT_ID`
+- `TUYA_SECRET`
 - `EASY_ACCESS_TOKEN` (optional, for faster testing)
 
 **Note:** You don't need to set `VITE_API_BASE_URL` or `VITE_TUYA_USE_PROXY` for Vercel deployments, as the serverless API functions at `/api/*` are automatically used.
 
-#### 2. Deploy
+#### 2. Deploy App
 
 Push to GitHub and Vercel will automatically build and deploy:
 
@@ -82,16 +89,35 @@ git commit -m "Deploy to Vercel"
 git push origin main
 ```
 
-#### 3. Architecture
+#### 3. Websocket Worker Deployment (separate service)
+
+Deploy the `worker` folder to a long-running Node host (Railway, Render, Fly.io, VPS, Docker), not to Vercel Functions:
+
+```bash
+cd worker
+npm install
+npm run start
+```
+
+Required worker env vars:
+- `SUPABASE_URL`
+- `SUPABASE_SECRET_KEY`
+- `TUYA_CLIENT_ID`
+- `TUYA_SECRET`
+- `TUYA_MSG_REGION` (optional, default: `EU`)
+
+#### 4. Architecture
 
 **Development:**
 - Frontend: `http://localhost:5173`
 - Backend (Vercel functions): `http://localhost:3001/api/*`
+- Websocket worker: separate Node process (`worker/src/server-worker.ts`)
 - Vite proxy: `/api` -> `localhost:3001`
 
 **Production:**
 - Frontend + Backend: `https://your-project.vercel.app`
 - API endpoints: `https://your-project.vercel.app/api/*`
+- Websocket worker: separate deployment (Railway/Render/Fly/VPS)
 
 ## License & Credits
 
