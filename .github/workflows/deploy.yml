@@ -31,13 +31,45 @@ jobs:
           VITE_RECAPTCHA_SECRET_KEY: ${{ secrets.VITE_RECAPTCHA_SECRET_KEY }}
         run: npm run build
         
-      - name: Deploy to Raspberry Pi
+      # This is not needed since it is hosted on Vercel currently
+      # - name: Deploy frontend to Raspberry Pi
+      #   uses: appleboy/scp-action@v0.1.7
+      #   with:
+      #     host: ${{ secrets.RASPBERRY_PI_HOST }}
+      #     username: ${{ secrets.RASPBERRY_PI_USERNAME }}
+      #     key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
+      #     source: "dist"
+      #     target: "/var/www/portfolio"
+      #     strip_components: 1
+      #     overwrite: true
+          
+      - name: Generate Worker .env file
+        run: |
+          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > worker/.env
+          echo "SUPABASE_SECRET_KEY=${{ secrets.SUPABASE_SECRET_KEY }}" >> worker/.env
+          echo "TUYA_CLIENT_ID=${{ secrets.TUYA_CLIENT_ID }}" >> worker/.env
+          echo "TUYA_SECRET=${{ secrets.TUYA_SECRET }}" >> worker/.env
+          echo "TUYA_MSG_REGION=EU" >> worker/.env
+
+      - name: Deploy Worker to Raspberry Pi
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.RASPBERRY_PI_HOST }}
           username: ${{ secrets.RASPBERRY_PI_USERNAME }}
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
-          source: "dist"
-          target: "/var/www/portfolio"
-          strip_components: 1
-          overwrite: true 
+          source: "worker/src,worker/package.json,worker/tsconfig.json,worker/.env"
+          target: "/var/www/portfolio-worker"
+          overwrite: true
+
+      - name: Install dependencies and restart Worker
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.RASPBERRY_PI_HOST }}
+          username: ${{ secrets.RASPBERRY_PI_USERNAME }}
+          key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
+          script: |
+            cd /var/www/portfolio-worker/worker
+            npm install
+            pm2 describe tuya-worker > /dev/null || pm2 start npm --name "tuya-worker" -- start
+            pm2 restart tuya-worker
+            pm2 save
