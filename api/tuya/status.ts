@@ -3,8 +3,8 @@ import crypto from 'crypto';
 
 const BASE_URL = process.env.VITE_TUYA_API_BASE_URL as string;
 const DEVICE_ID = process.env.VITE_TUYA_DEVICE_ID as string;
-const CLIENT_ID = process.env.VITE_TUYA_CLIENT_ID as string;
-const SECRET = process.env.VITE_TUYA_SECRET as string;
+const CLIENT_ID = process.env.TUYA_CLIENT_ID as string;
+const SECRET = process.env.TUYA_SECRET as string;
 const EASY_ACCESS_TOKEN = process.env.EASY_ACCESS_TOKEN as string | undefined;
 
 if (!BASE_URL || !DEVICE_ID || !CLIENT_ID || !SECRET) {
