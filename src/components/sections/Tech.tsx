@@ -3,6 +3,7 @@ import { useTranslation } from "react-i18next";
 import SectionWrapper from "../../hoc/SectionWrapper";
 import { fadeIn } from "../../utils/motion";
 import { skills } from "../../api/skills";
+import { featureFlagService } from "../../services/featureFlagService";
 interface TechCardProps {
   index: number;
   skill: {
@@ -14,6 +15,9 @@ interface TechCardProps {
 }
 
 const TechCard = ({index, skill}: TechCardProps) => {
+  const showProgress = featureFlagService.isEnabled('showSkillProgress');
+  const showPercentage = featureFlagService.isEnabled('showSkillPercentage');
+
   return (
     <motion.div
       variants={fadeIn("up", "spring", index * 0.2, 0.2)}
@@ -31,16 +35,18 @@ const TechCard = ({index, skill}: TechCardProps) => {
         <div className="flex-1 min-w-0">
           <div className="flex justify-between mb-1">
             <h3 className="text-lg sm:text-xl font-semibold truncate text-white-100">{skill.name}</h3>
-            <span className="text-sm text-secondary ml-2">{skill.level}%</span>
+            {showPercentage && <span className="text-sm text-secondary ml-2">{skill.level}%</span>}
           </div>
-          <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 sm:h-3 rounded-full mb-2">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: `${skill.level}%` }}
-              transition={{ duration: 1, ease: "easeOut" }}
-              className="bg-blue-500 h-2 sm:h-3 rounded-full"
-            ></motion.div>
-          </div>
+          {showProgress && (
+            <div className="w-full bg-gray-200 dark:bg-gray-700 h-2 sm:h-3 rounded-full mb-2">
+              <motion.div
+                initial={{ width: 0 }}
+                animate={{ width: `${skill.level}%` }}
+                transition={{ duration: 1, ease: "easeOut" }}
+                className="bg-blue-500 h-2 sm:h-3 rounded-full"
+              ></motion.div>
+            </div>
+          )}
           <div className="text-sm text-secondary flex flex-wrap gap-1 sm:gap-2">
             {skill.tags.map((tag) => (
               <span

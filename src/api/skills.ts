@@ -126,6 +126,12 @@ export const skills = [
     image: "/images/skills/ollama.svg",
   },
   {
+    name: "Claude",
+    level: 80,
+    tags: ["Skills", "Rules", "AI Development"],
+    image: "/images/skills/claude.svg",
+  },
+  {
     name: "Arduino",
     level: 50,
     tags: ["Microcontroller", "Sensors"],
