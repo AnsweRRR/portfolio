@@ -24,7 +24,7 @@ export const skills = [
     image: "/images/skills/typescript.svg",
   },
   {
-    name: "C# (.NET)",
+    name: "C# / .NET",
     level: 94,
     tags: ["MVC", "LINQ", "Entity Framework", "SignalR", "API"],
     image: "/images/skills/csharp.svg",
