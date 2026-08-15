@@ -1,0 +1,34 @@
+# Build kimenetek — a builder stage újragenerálja őket (a dist/ lokálisan ~39 MB).
+node_modules
+**/node_modules
+dist
+**/dist
+build
+
+# Verziókezelés / CI / szerkesztő
+.git
+.gitignore
+.github
+.vscode
+.idea
+
+# Titkok: soha ne kerüljenek be a build contextbe, még köztes rétegbe sem.
+.env
+.env.*
+!.env.docker.example
+
+# Deploy platform artifactok
+.vercel
+.vercelignore
+
+# Docker saját fájljai (a Dockerfile-nak nincs rájuk szüksége a contextben)
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+# Dokumentáció és egyéb, a buildhez nem szükséges fájlok
+*.md
+LICENSE
+.eslintcache
+coverage
+*.log

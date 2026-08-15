@@ -12,6 +12,10 @@ dist
 dist-ssr
 *.local
 
+# Az `api`/`worker` esbuild bundle-jei (pnpm build:bundles) — a Docker builder
+# generálja őket, a repóba nem valók.
+out
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json

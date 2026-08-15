@@ -1,0 +1,11 @@
+# A Vercel deploynak csak a frontend + az api/ handlerek kellenek. A Docker/Pi
+# oldali dolgok feleslegesen növelnék a deploy méretét és a build időt.
+server
+worker
+scripts
+docker
+Dockerfile
+.dockerignore
+docker-compose.yml
+docker-compose.override.yml
+.env.docker.example

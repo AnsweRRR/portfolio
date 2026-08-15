@@ -111,6 +111,9 @@ importers:
       css-loader:
         specifier: ^7.1.4
         version: 7.1.4
+      esbuild:
+        specifier: ^0.28.2
+        version: 0.28.2
       eslint:
         specifier: ^10.8.1
         version: 10.8.1(jiti@2.7.0)

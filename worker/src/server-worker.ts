@@ -2,12 +2,33 @@ import { createClient } from "@supabase/supabase-js";
 import dotenv from "dotenv";
 import TuyaMessageSubscribeWebsocket from "./tuya-sdk/index.js";
 import { TuyaRegionConfigEnum } from "./tuya-sdk/config.js";
+import {
+  markConnected,
+  markDisconnected,
+  markError,
+  markInsert,
+  markMessage,
+  startHealthServer,
+} from "./health.js";
 
-dotenv.config();
+// quiet: konténerben nincs .env fájl (az env-változók kívülről jönnek), a dotenv
+// indulási bannere csak zajt tenne a logba.
+dotenv.config({ quiet: true });
+
+function requireEnv(name: string): string {
+  const value = process.env[name];
+  if (!value) {
+    // Konténerben a hiányzó env-változó a leggyakoribb indulási hiba — jobb
+    // egyértelmű üzenettel elhasalni, mint a Supabase kliens homályos hibájával.
+    console.error(`[worker] Missing required environment variable: ${name}`);
+    process.exit(1);
+  }
+  return value;
+}
 
 const supabase = createClient(
-  process.env.SUPABASE_URL!,
-  process.env.SUPABASE_SECRET_KEY!,
+  requireEnv("SUPABASE_URL"),
+  requireEnv("SUPABASE_SECRET_KEY"),
 );
 
 const RELEVANT_CODES = new Set([
@@ -34,23 +55,29 @@ function tuyaMessageRegionUrl(): TuyaRegionConfigEnum {
 }
 
 function start() {
+  const healthServer = startHealthServer();
+
   const client = new TuyaMessageSubscribeWebsocket({
-    accessId: process.env.TUYA_CLIENT_ID!,
-    accessKey: process.env.TUYA_SECRET!,
+    accessId: requireEnv("TUYA_CLIENT_ID"),
+    accessKey: requireEnv("TUYA_SECRET"),
     url: tuyaMessageRegionUrl(),
     env: TuyaMessageSubscribeWebsocket.env.PROD,
     maxRetryTimes: 100,
   });
 
   client.open(() => {
+    markConnected();
     console.log("[tuya-ws] open");
   });
 
   client.close((code, reason) => {
+    markDisconnected();
     console.log("[tuya-ws] close", code, reason.toString());
   });
 
   client.message(async (_ws, message) => {
+    markMessage();
+
     try {
       const messageId =
         "messageId" in message && typeof message.messageId === "string"
@@ -79,25 +106,41 @@ function start() {
         ]);
 
         if (error) {
+          markError(error);
           console.error("Supabase error:", error);
         } else {
+          markInsert();
           console.log("[insert]", dp.code, dp.value);
         }
       }
     } catch (err) {
+      markError(err);
       console.error("Processing error:", err);
     }
   });
 
   client.reconnect(() => {
+    markConnected();
     console.log("[tuya-ws] reconnect");
   });
 
   client.error((_ws, err) => {
+    markError(err);
     console.error("[tuya-ws] error", err);
   });
 
   client.start();
+
+  // A `docker compose down`/`restart` SIGTERM-et küld; e nélkül 10 másodperc
+  // múlva SIGKILL jön.
+  const shutdown = (signal: string) => {
+    console.log(`[worker] ${signal} received, shutting down`);
+    healthServer.close(() => process.exit(0));
+    setTimeout(() => process.exit(0), 5000).unref();
+  };
+
+  process.on("SIGTERM", () => shutdown("SIGTERM"));
+  process.on("SIGINT", () => shutdown("SIGINT"));
 }
 
 start();

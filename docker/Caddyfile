@@ -1,0 +1,70 @@
+# Caddy konfiguráció a `web` konténerhez: statikus SPA kiszolgálás, /api proxy
+# az `api` konténerre, és — domain esetén — automatikus Let's Encrypt TLS.
+#
+# A viselkedést egyetlen env-változó kapcsolja:
+#   SITE_ADDRESS=:80                  -> sima HTTP (LAN, lokális teszt)
+#   SITE_ADDRESS=portfolio.pelda.hu   -> automatikus HTTPS + HTTP->HTTPS redirect
+#
+# Ha kellenek a Let's Encrypt lejárati értesítők, vedd fel ide a globális
+# `email valaki@pelda.hu` opciót (üresen hagyva Caddyfile parse hibát adna,
+# ezért nincs env-változóból kötve).
+
+{
+	admin off
+}
+
+# Belső healthcheck endpoint. Szándékosan külön site a fő site helyett: domain
+# esetén a fő site a 80-as porton HTTP->HTTPS átirányítást adna, amitől a
+# healthcheck hamis "unhealthy"-t jelezne.
+:8080 {
+	log {
+		output discard
+	}
+	respond /healthz "ok" 200
+	respond 404
+}
+
+{$SITE_ADDRESS} {
+	encode zstd gzip
+
+	handle /api/* {
+		reverse_proxy {$API_UPSTREAM:api:3001}
+	}
+
+	# A hash-elt Vite assetek SZÁNDÉKOSAN külön handle-ben, SPA fallback nélkül:
+	# egy nem létező /assets/... kérésre 404 a helyes válasz, nem 200 + index.html.
+	# A fallback ott azt okozná, hogy a böngésző HTML-t kapna .js helyett, és
+	# némán elszállna. Ez akkor válik élessé, ha ugyanazt a hostnevet két külön
+	# build szolgálja ki (Vercel + Pi): a chunk-hashek eltérhetnek, és egy
+	# átirányított kliens régi asset-URL-t kérhet.
+	handle /assets/* {
+		root * /srv
+		header Cache-Control "public, max-age=31536000, immutable"
+		file_server
+	}
+
+	handle {
+		root * /srv
+
+		# `route` és nem sima direktívalista: a Caddy alapból a saját sorrendjében
+		# futtatja a direktívákat, ott pedig a `header` a `try_files` ELŐTT fut.
+		# Emiatt a `/index.html` matcher a `/` és a deep linkek esetén nem
+		# illeszkedne, és az entrypoint Cache-Control fejléc nélkül menne ki.
+		# A `route` megőrzi az itt leírt sorrendet, így az átírás UTÁNI útvonalra
+		# is tudunk illeszteni.
+		route {
+			# A service worker soha nem cache-elhető.
+			header /sw.js Cache-Control "no-cache"
+
+			# SPA history fallback — a react-router BrowserRouter deep linkjeihez
+			# (pl. /projects közvetlen megnyitása vagy F5).
+			try_files {path} /index.html
+
+			# Az átírás után futva ez a `/`-t és minden deep linket is lefed.
+			# E nélkül a felhasználók beragadnának egy régi build-be.
+			header /index.html Cache-Control "no-cache"
+
+			file_server
+		}
+	}
+}

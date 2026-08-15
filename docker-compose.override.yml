@@ -1,0 +1,38 @@
+# Lokális fejlesztés/tesztelés: forrásból buildeli a stacket a GHCR helyett.
+# A compose ezt automatikusan betölti a docker-compose.yml mellé, tehát elég:
+#
+#   docker compose up --build
+#
+# A Pi-re CSAK a docker-compose.yml megy ki, ez a fájl ott nincs jelen.
+
+services:
+  web:
+    build:
+      context: .
+      target: web
+      args:
+        # Ugyanazok a publikus kulcsok, amiket a CI is build-argként ad át.
+        # Lokálisan a projektgyökér .env-jéből jönnek.
+        VITE_EMAILJS_SERVICE_ID: ${VITE_EMAILJS_SERVICE_ID:-}
+        VITE_EMAILJS_TEMPLATE_ID: ${VITE_EMAILJS_TEMPLATE_ID:-}
+        VITE_EMAILJS_PUBLIC_KEY: ${VITE_EMAILJS_PUBLIC_KEY:-}
+        VITE_RECAPTCHA_SITE_KEY: ${VITE_RECAPTCHA_SITE_KEY:-}
+        VITE_SHOW_SKILL_PROGRESS: ${VITE_SHOW_SKILL_PROGRESS:-}
+    pull_policy: build
+    # A portokat a docker-compose.yml adja; ha a 80-as foglalt a gépeden, tedd
+    # be a .env-be, hogy HTTP_PORT=8080.
+
+  api:
+    build:
+      context: .
+      target: api
+    pull_policy: build
+    # Lokálisan kényelmes közvetlenül is elérni (curl localhost:3001/healthz).
+    ports:
+      - "${API_PORT:-3001}:3001"
+
+  worker:
+    build:
+      context: .
+      target: worker
+    pull_policy: build

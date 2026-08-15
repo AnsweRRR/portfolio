@@ -1,89 +1,203 @@
 name: Deploy to Raspberry Pi
 
+# ALAPÉRTELMEZÉS (push master-re): csak a `worker` image épül és indul a Pi-n.
+# A webapp és az API a Vercelen fut, azt a Vercel saját pipeline-ja deployolja
+# ugyanerre a commitra.
+#
+# A teljes stack (web + api + worker) a Pi-n kézzel indítható:
+#   Actions -> Deploy to Raspberry Pi -> Run workflow -> "full_stack" bepipálva.
+
 on:
   push:
     branches:
       - master
   workflow_dispatch:
+    inputs:
+      full_stack:
+        description: "A web + api image-eket is építsük, és a Pi-n is induljanak (nem csak a worker)"
+        type: boolean
+        default: false
+
+env:
+  REGISTRY: ghcr.io
+  # A GHCR csak kisbetűs image-neveket enged; a metadata-action automatikusan
+  # kisbetűsíti a `${{ github.repository_owner }}`-t.
+  IMAGE_PREFIX: ${{ github.repository_owner }}/portfolio
 
 jobs:
-  build-and-deploy:
+  # ---------------------------------------------------------------------------
+  # Eldönti, mely image-eket kell építeni. Így a build job egyetlen definíció
+  # marad, ahelyett hogy szolgáltatásonként duplikálnánk.
+  # ---------------------------------------------------------------------------
+  plan:
+    name: Plan build
     runs-on: ubuntu-latest
-    
+    outputs:
+      services: ${{ steps.pick.outputs.services }}
+      full_stack: ${{ steps.pick.outputs.full_stack }}
+
+    steps:
+      - name: Pick services to build
+        id: pick
+        run: |
+          # `inputs.full_stack` push eseménynél üres, tehát a worker-only ág fut.
+          if [ "${{ inputs.full_stack }}" = "true" ]; then
+            echo 'services=["worker","api","web"]' >> "$GITHUB_OUTPUT"
+            echo 'full_stack=true' >> "$GITHUB_OUTPUT"
+          else
+            echo 'services=["worker"]' >> "$GITHUB_OUTPUT"
+            echo 'full_stack=false' >> "$GITHUB_OUTPUT"
+          fi
+
+  # ---------------------------------------------------------------------------
+  # Multi-arch image build + push a GHCR-be.
+  # ---------------------------------------------------------------------------
+  build:
+    name: Build ${{ matrix.service }} image
+    runs-on: ubuntu-latest
+    needs: plan
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      fail-fast: false
+      matrix:
+        service: ${{ fromJSON(needs.plan.outputs.services) }}
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Ennek a setup-node ELŐTT kell futnia, különben a `cache: 'pnpm'` nem találja
-      # a store elérési útját. Verzió nincs megadva: a package.json packageManager mezőjéből olvassa.
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v3
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GHCR
+        uses: docker/login-action@v3
         with:
-          node-version: '22'
-          cache: 'pnpm'
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+      - name: Docker metadata
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_PREFIX }}-${{ matrix.service }}
+          tags: |
+            type=raw,value=latest
+            type=sha,format=short
 
-      - name: Build
-        env:
-          VITE_EMAILJS_SERVICE_ID: ${{ secrets.VITE_EMAILJS_SERVICE_ID }}
-          VITE_EMAILJS_TEMPLATE_ID: ${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}
-          VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
-          VITE_RECAPTCHA_SITE_KEY: ${{ secrets.VITE_RECAPTCHA_SITE_KEY }}
-          VITE_RECAPTCHA_SECRET_KEY: ${{ secrets.VITE_RECAPTCHA_SECRET_KEY }}
-        run: pnpm run build
-        
-      # This is not needed since it is hosted on Vercel currently
-      # - name: Deploy frontend to Raspberry Pi
-      #   uses: appleboy/scp-action@v0.1.7
-      #   with:
-      #     host: ${{ secrets.RASPBERRY_PI_HOST }}
-      #     username: ${{ secrets.RASPBERRY_PI_USERNAME }}
-      #     key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
-      #     source: "dist"
-      #     target: "/var/www/portfolio"
-      #     strip_components: 1
-      #     overwrite: true
-          
-      - name: Generate Worker .env file
+      # Csak a `web` target fogyaszt build-argot: a Vite build-időben inline-olja
+      # a VITE_* értékeket. A `secrets` context nem érhető el a `strategy`-ben,
+      # ezért kerül ide lépésbe és nem a matrixba.
+      #
+      # A VITE_RECAPTCHA_SECRET_KEY szándékosan hiányzik: a kódban sehol nem
+      # hivatkozott, titokként pedig semmi keresnivalója egy kliens bundle-ben.
+      - name: Compose web build args
+        if: matrix.service == 'web'
         run: |
-          echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}" > worker/.env
-          echo "SUPABASE_SECRET_KEY=${{ secrets.SUPABASE_SECRET_KEY }}" >> worker/.env
-          echo "TUYA_CLIENT_ID=${{ secrets.TUYA_CLIENT_ID }}" >> worker/.env
-          echo "TUYA_SECRET=${{ secrets.TUYA_SECRET }}" >> worker/.env
-          echo "TUYA_MSG_REGION=EU" >> worker/.env
+          {
+            echo 'BUILD_ARGS<<EOF'
+            echo "VITE_EMAILJS_SERVICE_ID=${{ secrets.VITE_EMAILJS_SERVICE_ID }}"
+            echo "VITE_EMAILJS_TEMPLATE_ID=${{ secrets.VITE_EMAILJS_TEMPLATE_ID }}"
+            echo "VITE_EMAILJS_PUBLIC_KEY=${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}"
+            echo "VITE_RECAPTCHA_SITE_KEY=${{ secrets.VITE_RECAPTCHA_SITE_KEY }}"
+            echo 'EOF'
+          } >> "$GITHUB_ENV"
 
-      - name: Deploy Worker to Raspberry Pi
+      - name: Build and push
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          target: ${{ matrix.service }}
+          # A build stage-ek --platform=$BUILDPLATFORM-mal futnak, így a nehéz
+          # munka egyszer megy natívan amd64-en, és csak a vékony runtime réteg
+          # épül architektúránként. Ha a Pi-n 32 bites OS fut, ide kell még a
+          # linux/arm/v7 is.
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha,scope=${{ matrix.service }}
+          cache-to: type=gha,mode=max,scope=${{ matrix.service }}
+          build-args: ${{ env.BUILD_ARGS }}
+
+  # ---------------------------------------------------------------------------
+  # A Pi soha nem buildel: csak a compose fájlt és a .env-et kapja meg, majd
+  # lehúzza az új image-eket.
+  # ---------------------------------------------------------------------------
+  deploy:
+    name: Deploy to Raspberry Pi
+    runs-on: ubuntu-latest
+    needs: [plan, build]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Generate .env for the stack
+        env:
+          FULL_STACK: ${{ needs.plan.outputs.full_stack }}
+        run: |
+          # A GHCR nem fogad nagybetűs névteret, a repository_owner viszont az lehet.
+          registry="$(echo '${{ env.REGISTRY }}/${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
+          {
+            echo "IMAGE_REGISTRY=$registry"
+            echo "IMAGE_TAG=latest"
+            # Üres COMPOSE_PROFILES esetén csak a worker indul. A `full` profil
+            # kapcsolja be a web + api szolgáltatásokat.
+            if [ "$FULL_STACK" = "true" ]; then
+              echo "COMPOSE_PROFILES=full"
+            else
+              echo "COMPOSE_PROFILES="
+            fi
+            echo "SITE_ADDRESS=${{ vars.SITE_ADDRESS || ':80' }}"
+            echo "TZ=${{ vars.TZ || 'Europe/Budapest' }}"
+            echo "VITE_TUYA_API_BASE_URL=${{ vars.VITE_TUYA_API_BASE_URL || 'https://openapi.tuyaeu.com' }}"
+            echo "VITE_TUYA_DEVICE_ID=${{ secrets.VITE_TUYA_DEVICE_ID }}"
+            echo "TUYA_CLIENT_ID=${{ secrets.TUYA_CLIENT_ID }}"
+            echo "TUYA_SECRET=${{ secrets.TUYA_SECRET }}"
+            echo "TUYA_MSG_REGION=${{ vars.TUYA_MSG_REGION || 'EU' }}"
+            echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}"
+            echo "SUPABASE_SECRET_KEY=${{ secrets.SUPABASE_SECRET_KEY }}"
+            echo "WORKER_STALE_AFTER_MS=${{ vars.WORKER_STALE_AFTER_MS || '0' }}"
+          } > .env
+
+      - name: Copy stack files to Raspberry Pi
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.RASPBERRY_PI_HOST }}
           username: ${{ secrets.RASPBERRY_PI_USERNAME }}
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
-          # A pnpm-lock.yaml is megy, hogy a worker deps a repóval azonos, rögzített
-          # verziókkal települjenek a Pi-n (korábban minden deploy friss feloldást csinált).
-          source: "pnpm-lock.yaml,worker/src,worker/package.json,worker/tsconfig.json,worker/.env"
-          target: "/var/www/portfolio-worker"
+          source: "docker-compose.yml,.env"
+          target: "/var/www/portfolio"
           overwrite: true
 
-      - name: Install dependencies and restart Worker
+      - name: Pull images and restart stack
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GHCR_USER: ${{ github.actor }}
         with:
           host: ${{ secrets.RASPBERRY_PI_HOST }}
           username: ${{ secrets.RASPBERRY_PI_USERNAME }}
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
+          envs: GHCR_TOKEN,GHCR_USER
           script: |
-            cd /var/www/portfolio-worker/worker
-            # --ignore-workspace + --lockfile-dir: csak a worker függőségei települjenek,
-            # de a repó közös lockfile-jából. Sima `--filter` itt nem elég: megosztott
-            # lockfile mellett a pnpm a workspace root deps-ét is telepítené
-            # (pnpm/pnpm#7208), azaz a teljes frontendet a Pi-re.
-            pnpm install --ignore-workspace --frozen-lockfile --lockfile-dir=..
-            # A pm2 nem shellen át indít, a corepack/npm pnpm shimje pedig nem
-            # feltétlenül van a pm2 daemon PATH-jában, ezért abszolút út kell.
-            pm2 describe tuya-worker > /dev/null || pm2 start "$(command -v pnpm)" --name "tuya-worker" -- start
-            pm2 restart tuya-worker
-            pm2 save
+            set -e
+            cd /var/www/portfolio
+            # A GITHUB_TOKEN a job futásának idejére érvényes, és privát GHCR
+            # csomagokhoz is elég. Ha publikussá teszed a package-eket, ez a
+            # login elhagyható (és a kézi `docker compose pull` is működik).
+            echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
+            # A COMPOSE_PROFILES a .env-ből jön, tehát a pull/up magától a
+            # megfelelő szolgáltatáshalmazra vonatkozik.
+            docker compose pull
+            docker compose up -d
+            docker logout ghcr.io
+            # Az SD-kártya véges: a lecserélt image-ek takarítása nem opcionális.
+            docker image prune -f
+            docker compose ps

@@ -1,0 +1,94 @@
+# Portfolio stack — ez a fájl megy ki a Raspberry Pi-re.
+#
+# ALAPÉRTELMEZÉS: csak a `worker` indul. A webapp és az API a Vercelen fut, a Pi
+# feladata a hosszan futó Tuya -> Supabase worker.
+#
+#   docker compose up -d                  # csak a worker
+#   docker compose --profile full up -d   # web + api + worker a Pi-n is
+#
+# A `web` és `api` ezért a `full` profilban van. Profil nélkül a `pull` és az `up`
+# is átugorja őket, tehát a Pi feleslegesen nem tölt le ~400 MB image-et.
+#
+# A Pi soha nem buildel: a GitHub Actions tolja fel a multi-arch image-eket a
+# GHCR-be, itt csak `docker compose pull && docker compose up -d` fut.
+#
+# Lokális teszteléshez a docker-compose.override.yml automatikusan betöltődik,
+# és forrásból buildeli ugyanezeket a szolgáltatásokat.
+#
+# Env-változók: a compose a projektgyökér `.env` fájljából olvas (interpolációhoz
+# és a konténerekbe injektáláshoz is). Minta: .env.docker.example
+
+name: portfolio
+
+x-logging: &default-logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  web:
+    # Csak a `full` profillal indul: alapesetben a frontendet a Vercel szolgálja ki.
+    profiles: [full]
+    image: ${IMAGE_REGISTRY:-ghcr.io/answerrr}/portfolio-web:${IMAGE_TAG:-latest}
+    pull_policy: always
+    restart: unless-stopped
+    environment:
+      # :80 -> sima HTTP; domain -> automatikus Let's Encrypt TLS
+      SITE_ADDRESS: ${SITE_ADDRESS:-:80}
+      TZ: ${TZ:-Europe/Budapest}
+    ports:
+      - "${HTTP_PORT:-80}:80"
+      - "${HTTPS_PORT:-443}:443"
+    volumes:
+      # A tanúsítványoknak muszáj túlélniük a deployokat, különben minden
+      # újraindítás új certet kér és belefut a Let's Encrypt rate limitbe.
+      - caddy_data:/data
+      - caddy_config:/config
+    depends_on:
+      # Szándékosan service_started és nem service_healthy: ha az api valamiért
+      # nem jön fel, a statikus oldal akkor is szolgáljon ki.
+      api:
+        condition: service_started
+    networks: [portfolio]
+    logging: *default-logging
+
+  api:
+    # Csak a `full` profillal indul: alapesetben az api/** handlerek Vercel
+    # Functionként futnak. Ugyanaz a kód, két deploy target.
+    profiles: [full]
+    image: ${IMAGE_REGISTRY:-ghcr.io/answerrr}/portfolio-api:${IMAGE_TAG:-latest}
+    pull_policy: always
+    restart: unless-stopped
+    env_file: [.env]
+    environment:
+      TZ: ${TZ:-Europe/Budapest}
+    # Nincs publikált port: az api kizárólag a belső hálón, a Caddyn keresztül
+    # érhető el.
+    expose:
+      - "3001"
+    networks: [portfolio]
+    logging: *default-logging
+
+  worker:
+    image: ${IMAGE_REGISTRY:-ghcr.io/answerrr}/portfolio-worker:${IMAGE_TAG:-latest}
+    pull_policy: always
+    restart: unless-stopped
+    env_file: [.env]
+    environment:
+      TZ: ${TZ:-Europe/Budapest}
+      TUYA_MSG_REGION: ${TUYA_MSG_REGION:-EU}
+      # > 0 esetén a health endpoint 503-at ad, ha ennyi ideje nem jött Tuya
+      # üzenet, és a Docker újraindítja a konténert. Alapból kikapcsolva: az
+      # üzenetek gyakorisága eszközfüggő.
+      WORKER_STALE_AFTER_MS: ${WORKER_STALE_AFTER_MS:-0}
+    networks: [portfolio]
+    logging: *default-logging
+
+networks:
+  portfolio:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:
