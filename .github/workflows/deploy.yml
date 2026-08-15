@@ -138,6 +138,47 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      # Fail fast, érthető üzenettel: e nélkül a hiba egy nyers
+      # "docker: command not found" a deploy script közepén.
+      - name: Check Docker on the Raspberry Pi
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.RASPBERRY_PI_HOST }}
+          username: ${{ secrets.RASPBERRY_PI_USERNAME }}
+          key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
+          script: |
+            # Az ssh-action nem login shellt indít, így a PATH szűkebb lehet a
+            # megszokottnál (ugyanaz a csapda, mint korábban a pm2 + pnpm shim).
+            export PATH="$PATH:/usr/bin:/usr/local/bin"
+            echo "arch: $(uname -m)"
+
+            if ! command -v docker >/dev/null 2>&1; then
+              echo "HIBA: a Docker nincs telepitve a Pi-n (vagy nincs a nem-interaktiv SSH PATH-ban)."
+              echo "Egyszeri telepites a Pi-n:"
+              echo "  curl -fsSL https://get.docker.com | sh"
+              echo "  sudo usermod -aG docker $USER"
+              echo "  sudo systemctl enable --now docker"
+              echo "  # majd lepj ki es vissza SSH-val, hogy a csoport ervenyre jusson"
+              exit 1
+            fi
+
+            if ! docker compose version >/dev/null 2>&1; then
+              echo "HIBA: a Docker Compose v2 plugin hianyzik."
+              echo "Egyszeri telepites a Pi-n: sudo apt-get install -y docker-compose-plugin"
+              exit 1
+            fi
+
+            if ! docker info >/dev/null 2>&1; then
+              echo "HIBA: nem elerheto a Docker daemon."
+              echo "Ellenorizd, hogy a '$USER' benne van a docker csoportban es fut a service:"
+              echo "  sudo usermod -aG docker $USER && sudo systemctl enable --now docker"
+              echo "  # majd lepj ki es vissza SSH-val"
+              exit 1
+            fi
+
+            echo "docker:  $(docker --version)"
+            echo "compose: $(docker compose version --short)"
+
       - name: Generate .env for the stack
         env:
           FULL_STACK: ${{ needs.plan.outputs.full_stack }}
@@ -188,6 +229,7 @@ jobs:
           envs: GHCR_TOKEN,GHCR_USER
           script: |
             set -e
+            export PATH="$PATH:/usr/bin:/usr/local/bin"
             cd /var/www/portfolio
             # A GITHUB_TOKEN a job futásának idejére érvényes, és privát GHCR
             # csomagokhoz is elég. Ha publikussá teszed a package-eket, ez a

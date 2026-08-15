@@ -185,6 +185,26 @@ When the full stack runs, `SITE_ADDRESS` is the single TLS switch:
 Caddy's certificates live in the `caddy_data` volume; do not delete it or every
 restart will request a fresh certificate and hit Let's Encrypt rate limits.
 
+### One-time setup on the Raspberry Pi
+
+The previous deployment ran the worker under pm2 and never needed Docker, so install
+it once:
+
+```bash
+curl -fsSL https://get.docker.com | sh    # installs engine + compose plugin
+sudo usermod -aG docker $USER
+sudo systemctl enable --now docker
+# log out and back in, then verify:
+docker compose version
+```
+
+The deploy workflow runs a preflight check first, so if any of this is missing the
+job stops with an explicit message instead of a bare `docker: command not found`.
+
+The preflight also prints `uname -m`. It should say `aarch64` — the images are built
+for `linux/arm64`. If it says `armv7l`, the Pi is running a 32-bit OS and
+`platforms:` in the workflow needs `linux/arm/v7` added.
+
 ### One-time migration from the pm2 worker
 
 The previous setup ran the worker under pm2 in `/var/www/portfolio-worker`. Both
