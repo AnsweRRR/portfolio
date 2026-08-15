@@ -24,5 +24,9 @@ dist-ssr
 *.sw?
 
 .env
+
+# A projekt pnpm-et használ (lásd a packageManager mezőt és a preinstall guardot).
+# A pnpm-lock.yaml commitolva van; egy véletlen `npm install` termékét ne kövessük.
 package-lock.json
+
 .vercel

@@ -44,17 +44,24 @@ cp worker/.env.example worker/.env
 
 #### 2. Install Dependencies & Run
 
+This is a [pnpm](https://pnpm.io/) workspace (frontend + Vercel API in the root package,
+websocket worker in `worker/`). npm and yarn are rejected by a `preinstall` guard.
+
+If you don't have pnpm, Node 22+ ships Corepack:
 ```bash
-npm install              # Install all dependencies
-npm --prefix worker install  # Install websocket worker dependencies
+corepack enable                # or: npm i -g pnpm
+```
+
+```bash
+pnpm install             # Installs both the root package and the worker
 
 # Option 1: Run frontend + Vercel API + websocket worker together
-npm run dev:all          # Vercel API (3001) + worker + Vite app (5173)
+pnpm dev:all             # Vercel API (3001) + worker + Vite app (5173)
 
 # Option 2: Run separately
-npm run dev:api          # Start local Vercel serverless API on port 3001
-npm run worker:dev       # Start websocket worker (in separate terminal)
-npm run dev              # Start Vite frontend on port 5173 (in separate terminal)
+pnpm dev:api             # Start local Vercel serverless API on port 3001
+pnpm worker:dev          # Start websocket worker (in separate terminal)
+pnpm dev                 # Start Vite frontend on port 5173 (in separate terminal)
 ```
 
 Open [http://localhost:5173](http://localhost:5173) in your browser.
@@ -93,11 +100,17 @@ git push origin main
 
 Deploy the `worker` folder to a long-running Node host (Railway, Render, Fly.io, VPS, Docker), not to Vercel Functions:
 
+Ship `pnpm-lock.yaml` alongside the `worker/` folder, then install the worker's
+dependencies alone — from the shared lockfile, without pulling in the frontend:
+
 ```bash
 cd worker
-npm install
-npm run start
+pnpm install --ignore-workspace --frozen-lockfile --lockfile-dir=..
+pnpm start
 ```
+
+(`pnpm install --filter` is not enough here: with a shared lockfile pnpm also installs
+the workspace root's dependencies — see [pnpm#7208](https://github.com/pnpm/pnpm/issues/7208).)
 
 Required worker env vars:
 - `SUPABASE_URL`

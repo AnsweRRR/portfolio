@@ -12,16 +12,21 @@ jobs:
     
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
+
+      # Ennek a setup-node ELŐTT kell futnia, különben a `cache: 'pnpm'` nem találja
+      # a store elérési útját. Verzió nincs megadva: a package.json packageManager mezőjéből olvassa.
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '22'
-          cache: 'npm'
+          cache: 'pnpm'
 
       - name: Install dependencies
-        run: npm ci
+        run: pnpm install --frozen-lockfile
 
       - name: Build
         env:
@@ -30,7 +35,7 @@ jobs:
           VITE_EMAILJS_PUBLIC_KEY: ${{ secrets.VITE_EMAILJS_PUBLIC_KEY }}
           VITE_RECAPTCHA_SITE_KEY: ${{ secrets.VITE_RECAPTCHA_SITE_KEY }}
           VITE_RECAPTCHA_SECRET_KEY: ${{ secrets.VITE_RECAPTCHA_SECRET_KEY }}
-        run: npm run build
+        run: pnpm run build
         
       # This is not needed since it is hosted on Vercel currently
       # - name: Deploy frontend to Raspberry Pi
@@ -58,7 +63,9 @@ jobs:
           host: ${{ secrets.RASPBERRY_PI_HOST }}
           username: ${{ secrets.RASPBERRY_PI_USERNAME }}
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
-          source: "worker/src,worker/package.json,worker/tsconfig.json,worker/.env"
+          # A pnpm-lock.yaml is megy, hogy a worker deps a repóval azonos, rögzített
+          # verziókkal települjenek a Pi-n (korábban minden deploy friss feloldást csinált).
+          source: "pnpm-lock.yaml,worker/src,worker/package.json,worker/tsconfig.json,worker/.env"
           target: "/var/www/portfolio-worker"
           overwrite: true
 
@@ -70,7 +77,13 @@ jobs:
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
           script: |
             cd /var/www/portfolio-worker/worker
-            npm install
-            pm2 describe tuya-worker > /dev/null || pm2 start npm --name "tuya-worker" -- start
+            # --ignore-workspace + --lockfile-dir: csak a worker függőségei települjenek,
+            # de a repó közös lockfile-jából. Sima `--filter` itt nem elég: megosztott
+            # lockfile mellett a pnpm a workspace root deps-ét is telepítené
+            # (pnpm/pnpm#7208), azaz a teljes frontendet a Pi-re.
+            pnpm install --ignore-workspace --frozen-lockfile --lockfile-dir=..
+            # A pm2 nem shellen át indít, a corepack/npm pnpm shimje pedig nem
+            # feltétlenül van a pm2 daemon PATH-jában, ezért abszolút út kell.
+            pm2 describe tuya-worker > /dev/null || pm2 start "$(command -v pnpm)" --name "tuya-worker" -- start
             pm2 restart tuya-worker
             pm2 save
