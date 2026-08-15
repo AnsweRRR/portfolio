@@ -182,13 +182,34 @@ jobs:
               fi
               ls -l /var/run/docker.sock 2>&1 || echo "socket:      /var/run/docker.sock nem letezik"
               echo "--- teendo ---"
-              echo "Ha a csoportok kozott nincs 'docker':  sudo usermod -aG docker $(id -un)"
-              echo "Ha a service nem 'active':             sudo systemctl enable --now docker"
+              if ! id -nG | tr ' ' '\n' | grep -qx docker; then
+                # A socket root:docker tulajdonu, 660-as jogokkal, tehat csoporttagsag nelkul
+                # a CLI nem eri el a daemont akkor sem, ha a service fut.
+                echo "=> A(z) '$(id -un)' NINCS benne a 'docker' csoportban. Ez az ok."
+                echo "   sudo usermod -aG docker $(id -un)"
+                echo "   A CI-hez nem kell kilepni: az ssh-action minden futaskor uj session-t nyit."
+              elif command -v systemctl >/dev/null 2>&1 && [ "$(systemctl is-active docker 2>&1)" != "active" ]; then
+                echo "=> A docker service nem fut. Ez az ok."
+                echo "   sudo systemctl enable --now docker"
+              else
+                echo "=> A csoporttagsag es a service is rendben van, a fenti hibauzenet adja a nyomot."
+              fi
               exit 1
             fi
 
             echo "docker:  $(docker --version)"
             echo "compose: $(docker compose version --short)"
+
+            # A regi pm2-s worker ugyanabba a Supabase tablaba ir, mint a kontener.
+            # Ha mindketto fut, minden Tuya adatpont ketszer kerul be, amit utolag
+            # nehez kitakaritani - ezert ez erdemel egy hangos figyelmeztetest.
+            if command -v pm2 >/dev/null 2>&1 && pm2 describe tuya-worker >/dev/null 2>&1; then
+              echo ""
+              echo "FIGYELEM: a regi pm2-s 'tuya-worker' meg fut a Pi-n."
+              echo "A kontenerrel egyutt DUPLIKALT sorokat ir a Supabase-be."
+              echo "Allitsd le, mielott a kontener elindul:  pm2 delete tuya-worker && pm2 save"
+              echo ""
+            fi
 
       - name: Generate .env for the stack
         env:
