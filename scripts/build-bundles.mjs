@@ -1,15 +1,15 @@
 /**
- * Az `api` és `worker` szolgáltatás self-contained bundle-jét állítja elő esbuilddel.
+ * Produces a self-contained bundle of the `api` and `worker` services with esbuild.
  *
- * Miért bundle: a runtime image-be így egyetlen .cjs fájl kerül — nincs benne
- * node_modules, pnpm és tsx sem. Ezzel eltűnik a Pi-n eddig szükséges
- * `pnpm install --ignore-workspace --lockfile-dir=..` workaround (pnpm/pnpm#7208),
- * és a worker `tsx`-devDependency csapdája is (a `start` script runtime-ban hívta
- * azt, ami csak devDependency volt).
+ * Why bundle: this gets a single .cjs file into the runtime image — no
+ * node_modules, pnpm, or tsx in it. This removes the previously needed
+ * `pnpm install --ignore-workspace --lockfile-dir=..` workaround on the Pi (pnpm/pnpm#7208),
+ * as well as the worker's `tsx`-devDependency trap (the `start` script called it
+ * at runtime, even though it was only a devDependency).
  *
- * Használat:
- *   node scripts/build-bundles.mjs              # mindkettő
- *   node scripts/build-bundles.mjs --only=api   # csak az egyik
+ * Usage:
+ *   node scripts/build-bundles.mjs              # both
+ *   node scripts/build-bundles.mjs --only=api   # just one
  */
 import { build } from 'esbuild';
 
@@ -40,12 +40,12 @@ for (const target of selected) {
     bundle: true,
     platform: 'node',
     target: 'node22',
-    // CJS szándékosan: a `ws` try/catch-ben hívja a `require('bufferutil')`-t.
-    // CJS-nél a hiányzó external csendben elnyelődik, ESM-nél a top-level import
-    // már betöltéskor hibát dobna.
+    // CJS deliberately: `ws` calls `require('bufferutil')` in a try/catch.
+    // With CJS, the missing external is silently swallowed; with ESM, the top-level import
+    // would throw at load time already.
     format: 'cjs',
-    // Opcionális natív gyorsítók a `ws`-hez. Nem telepítjük őket, a `ws` elvan
-    // nélkülük — de a bundlernek tudnia kell, hogy ne próbálja feloldani.
+    // Optional native accelerators for `ws`. We don't install them; `ws` works fine
+    // without them — but the bundler needs to know not to try to resolve them.
     external: ['bufferutil', 'utf-8-validate'],
     sourcemap: true,
     minify: false,

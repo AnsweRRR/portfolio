@@ -1,5 +1,5 @@
-# A Vercel deploynak csak a frontend + az api/ handlerek kellenek. A Docker/Pi
-# oldali dolgok feleslegesen növelnék a deploy méretét és a build időt.
+# The Vercel deploy only needs the frontend + the api/ handlers. The Docker/Pi
+# side of things would needlessly bloat the deploy size and build time.
 server
 worker
 scripts

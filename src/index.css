@@ -1,10 +1,10 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
 @import "tailwindcss" source(none);
 
-/* a v3-as config content-mezőjének megfelelője (csak a src alatti forrásfájlok) */
+/* equivalent of the v3 config's content field (only source files under src) */
 @source "./**/*.{js,jsx,ts,tsx}";
 
-/* a v3-as darkMode: "class" megfelelője (a .dark a <html> elemen ül) */
+/* equivalent of the v3 darkMode: "class" (.dark sits on the <html> element) */
 @custom-variant dark (&:where(.dark, .dark *));
 
 @theme inline {
@@ -25,7 +25,7 @@
   background-image: url("/images/Plexus.png");
 }
 
-/* a v4 preflight eltéréseit hozzuk vissza a v3-as megjelenésre */
+/* bring back v4 preflight's deviations to match the v3 appearance */
 @layer base {
   *,
   ::after,
@@ -63,11 +63,11 @@ html.dark {
   --brand-white-100: #f3f3f3;
 }
 
-/* FONTOS: ezeknek a @layer base-ben kell lenniük. A v4 az utility-ket valódi
-   @layer utilities-be teszi, és a rétegen kívüli CSS minden rétegzettet felülír
-   (a specificitástól függetlenül) — rétegen kívül ez a `*` reset kiütné az
-   összes p-* / m-* / font-* utility-t. v3-ban a `*` 0 specificitása miatt
-   veszített a class-okkal szemben; a @layer base ezt a viselkedést hozza vissza. */
+/* IMPORTANT: these must be in @layer base. v4 puts utilities into a real
+   @layer utilities, and unlayered CSS overrides everything layered
+   (regardless of specificity) — outside a layer, this `*` reset would wipe out
+   all p-* / m-* / font-* utilities. In v3, `*`'s 0 specificity meant it
+   lost to classes; @layer base brings back that behavior. */
 @layer base {
   * {
     margin: 0;

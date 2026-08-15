@@ -1,11 +1,11 @@
 /**
- * Vékony adapter, ami a Vercel Function handlereket (`api/**`) natív Node HTTP
- * szerveren futtathatóvá teszi. Az `api/` fájlok így egyetlen sort sem változnak:
- * ugyanaz a kód fut a Vercelen és a Docker konténerben is.
+ * Thin adapter that makes the Vercel Function handlers (`api/**`) runnable on a
+ * native Node HTTP server. This way the `api/` files don't change a single line:
+ * the same code runs on Vercel and in the Docker container.
  *
- * Csak annyit implementál a Vercel felületből, amennyit a handlerek ténylegesen
- * használnak (query, body, cookies, status/json/send/redirect) — nem célja a
- * teljes `@vercel/node` runtime lemásolása.
+ * It only implements as much of the Vercel surface as the handlers actually
+ * use (query, body, cookies, status/json/send/redirect) — it's not meant to
+ * replicate the full `@vercel/node` runtime.
  */
 import type { IncomingMessage, ServerResponse } from 'node:http';
 import type { VercelRequest, VercelResponse } from '@vercel/node';
@@ -21,7 +21,7 @@ export type NodeHandler = (
   url: URL,
 ) => Promise<void>;
 
-/** 1 MB — a jelenlegi handlerek body-t sem olvasnak, ez csak egy józan felső korlát. */
+/** 1 MB — the current handlers don't even read the body; this is just a sane upper bound. */
 const MAX_BODY_BYTES = 1024 * 1024;
 
 export class HttpError extends Error {
@@ -35,8 +35,8 @@ export class HttpError extends Error {
 }
 
 /**
- * A Vercel `req.query` ismételt kulcs esetén tömböt ad vissza, egyébként stringet.
- * Ezen múlik pl. az `api/tuya/status.ts` `req.query.refresh === 'true'` ellenőrzése.
+ * Vercel's `req.query` returns an array for a repeated key, otherwise a string.
+ * `api/tuya/status.ts`'s `req.query.refresh === 'true'` check relies on this, for example.
  */
 function parseQuery(url: URL): Record<string, string | string[]> {
   const query: Record<string, string | string[]> = {};
@@ -63,7 +63,7 @@ function parseCookies(header: string | undefined): Record<string, string> {
     try {
       cookies[name] = decodeURIComponent(part.slice(eq + 1).trim());
     } catch {
-      // Hibás percent-encoding: a nyers érték hasznosabb, mint egy 500-as hiba.
+      // Malformed percent-encoding: the raw value is more useful than a 500 error.
       cookies[name] = part.slice(eq + 1).trim();
     }
   }
@@ -166,7 +166,7 @@ function decorateResponse(res: ServerResponse): VercelResponse {
   return vres;
 }
 
-/** Vercel handlerből natív Node HTTP handler. */
+/** Native Node HTTP handler from a Vercel handler. */
 export function toNodeHandler(handler: VercelHandler): NodeHandler {
   return async (req, res, url) => {
     const vreq = req as unknown as VercelRequest;

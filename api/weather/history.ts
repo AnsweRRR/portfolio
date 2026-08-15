@@ -15,7 +15,7 @@ function getSupabaseClient() {
 const WEATHER_HISTORY_MS = 24 * 60 * 60 * 1000;
 
 function datapointTimeToMs(t: number): number {
-  // A DB-ben lehet Unix másodperc vagy milliszekundum is; próbáljuk automatikusan normalizálni.
+  // The DB may store Unix seconds or milliseconds; try to normalize automatically.
   return t > 100_000_000_000 ? t : t * 1000;
 }
 
@@ -26,7 +26,7 @@ export default async (req: VercelRequest, res: VercelResponse): Promise<void> =>
     hasSupabaseKey: Boolean(process.env.SUPABASE_SECRET_KEY),
   });
 
-  // CORS headers (a tuya endpoint mintájára).
+  // CORS headers (following the tuya endpoint's pattern).
   res.setHeader('Access-Control-Allow-Credentials', 'true');
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');

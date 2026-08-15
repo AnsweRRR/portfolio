@@ -28,10 +28,10 @@ const CV: React.FC<CVProps> = ({ isModal }) => {
           className="text-center"
         >
           <h2 id="cv-title" className={isModal ? "text-xl font-bold text-gray-800 dark:text-white mb-4" : "text-4xl font-bold text-gray-800 dark:text-white mb-4"}>
-            {t('cv.title', 'CV / Önéletrajz')}
+            {t('cv.title', 'CV / Resume')}
           </h2>
           <p className={isModal ? "text-gray-700 dark:text-gray-300 text-base max-w-2xl mx-auto" : "text-gray-700 dark:text-gray-300 text-lg max-w-2xl mx-auto"}>
-            {t('cv.description', 'Interaktív 3D önéletrajz - forgasd meg a tablettet a jobb megtekintéshez!')}
+            {t('cv.description', 'Interactive 3D résumé - Zoom in or rotate the board for a better view!')}
           </p>
         </motion.div>
 

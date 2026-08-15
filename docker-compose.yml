@@ -1,22 +1,22 @@
-# Portfolio stack — ez a fájl megy ki a Raspberry Pi-re.
+# Portfolio stack — this is the file that ships to the Raspberry Pi.
 #
-# ALAPÉRTELMEZÉS: csak a `worker` indul. A webapp és az API a Vercelen fut, a Pi
-# feladata a hosszan futó Tuya -> Supabase worker.
+# DEFAULT: only `worker` starts. The webapp and API run on Vercel; the Pi's
+# job is the long-running Tuya -> Supabase worker.
 #
-#   docker compose up -d                  # csak a worker
-#   docker compose --profile full up -d   # web + api + worker a Pi-n is
+#   docker compose up -d                  # worker only
+#   docker compose --profile full up -d   # web + api + worker on the Pi too
 #
-# A `web` és `api` ezért a `full` profilban van. Profil nélkül a `pull` és az `up`
-# is átugorja őket, tehát a Pi feleslegesen nem tölt le ~400 MB image-et.
+# That's why `web` and `api` are in the `full` profile. Without a profile,
+# `pull` and `up` skip them too, so the Pi doesn't needlessly download ~400 MB of images.
 #
-# A Pi soha nem buildel: a GitHub Actions tolja fel a multi-arch image-eket a
-# GHCR-be, itt csak `docker compose pull && docker compose up -d` fut.
+# The Pi never builds: GitHub Actions pushes the multi-arch images to
+# GHCR, and only `docker compose pull && docker compose up -d` runs here.
 #
-# Lokális teszteléshez a docker-compose.override.yml automatikusan betöltődik,
-# és forrásból buildeli ugyanezeket a szolgáltatásokat.
+# For local testing, docker-compose.override.yml is loaded automatically
+# and builds these same services from source.
 #
-# Env-változók: a compose a projektgyökér `.env` fájljából olvas (interpolációhoz
-# és a konténerekbe injektáláshoz is). Minta: .env.docker.example
+# Env vars: compose reads from the project root's `.env` file (both for interpolation
+# and for injecting into the containers). Template: .env.docker.example
 
 name: portfolio
 
@@ -28,34 +28,34 @@ x-logging: &default-logging
 
 services:
   web:
-    # Csak a `full` profillal indul: alapesetben a frontendet a Vercel szolgálja ki.
+    # Only starts with the `full` profile: by default Vercel serves the frontend.
     profiles: [full]
     image: ${IMAGE_REGISTRY:-ghcr.io/answerrr}/portfolio-web:${IMAGE_TAG:-latest}
     pull_policy: always
     restart: unless-stopped
     environment:
-      # :80 -> sima HTTP; domain -> automatikus Let's Encrypt TLS
+      # :80 -> plain HTTP; domain -> automatic Let's Encrypt TLS
       SITE_ADDRESS: ${SITE_ADDRESS:-:80}
       TZ: ${TZ:-Europe/Budapest}
     ports:
       - "${HTTP_PORT:-80}:80"
       - "${HTTPS_PORT:-443}:443"
     volumes:
-      # A tanúsítványoknak muszáj túlélniük a deployokat, különben minden
-      # újraindítás új certet kér és belefut a Let's Encrypt rate limitbe.
+      # Certificates must survive deploys, otherwise every restart requests a
+      # new cert and hits the Let's Encrypt rate limit.
       - caddy_data:/data
       - caddy_config:/config
     depends_on:
-      # Szándékosan service_started és nem service_healthy: ha az api valamiért
-      # nem jön fel, a statikus oldal akkor is szolgáljon ki.
+      # Deliberately service_started, not service_healthy: if the api is down for
+      # some reason, the static page should still be served.
       api:
         condition: service_started
     networks: [portfolio]
     logging: *default-logging
 
   api:
-    # Csak a `full` profillal indul: alapesetben az api/** handlerek Vercel
-    # Functionként futnak. Ugyanaz a kód, két deploy target.
+    # Only starts with the `full` profile: by default the api/** handlers run
+    # as Vercel Functions. Same code, two deploy targets.
     profiles: [full]
     image: ${IMAGE_REGISTRY:-ghcr.io/answerrr}/portfolio-api:${IMAGE_TAG:-latest}
     pull_policy: always
@@ -63,8 +63,7 @@ services:
     env_file: [.env]
     environment:
       TZ: ${TZ:-Europe/Budapest}
-    # Nincs publikált port: az api kizárólag a belső hálón, a Caddyn keresztül
-    # érhető el.
+    # No published port: the api is only reachable on the internal network, through Caddy.
     expose:
       - "3001"
     networks: [portfolio]
@@ -78,9 +77,9 @@ services:
     environment:
       TZ: ${TZ:-Europe/Budapest}
       TUYA_MSG_REGION: ${TUYA_MSG_REGION:-EU}
-      # > 0 esetén a health endpoint 503-at ad, ha ennyi ideje nem jött Tuya
-      # üzenet, és a Docker újraindítja a konténert. Alapból kikapcsolva: az
-      # üzenetek gyakorisága eszközfüggő.
+      # If > 0, the health endpoint returns 503 once this many ms have passed
+      # without a Tuya message, and Docker restarts the container. Off by default:
+      # message frequency is device-dependent.
       WORKER_STALE_AFTER_MS: ${WORKER_STALE_AFTER_MS:-0}
     networks: [portfolio]
     logging: *default-logging

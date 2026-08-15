@@ -1,11 +1,11 @@
 name: Deploy to Raspberry Pi
 
-# ALAPÉRTELMEZÉS (push master-re): csak a `worker` image épül és indul a Pi-n.
-# A webapp és az API a Vercelen fut, azt a Vercel saját pipeline-ja deployolja
-# ugyanerre a commitra.
+# DEFAULT (push to master): only the `worker` image is built and started on the Pi.
+# The webapp and API run on Vercel, deployed by Vercel's own pipeline for the
+# same commit.
 #
-# A teljes stack (web + api + worker) a Pi-n kézzel indítható:
-#   Actions -> Deploy to Raspberry Pi -> Run workflow -> "full_stack" bepipálva.
+# The full stack (web + api + worker) can be started on the Pi manually:
+#   Actions -> Deploy to Raspberry Pi -> Run workflow -> check "full_stack".
 
 on:
   push:
@@ -14,20 +14,20 @@ on:
   workflow_dispatch:
     inputs:
       full_stack:
-        description: "A web + api image-eket is építsük, és a Pi-n is induljanak (nem csak a worker)"
+        description: "Also build the web + api images, and start them on the Pi (not just the worker)"
         type: boolean
         default: false
 
 env:
   REGISTRY: ghcr.io
-  # A GHCR csak kisbetűs image-neveket enged; a metadata-action automatikusan
-  # kisbetűsíti a `${{ github.repository_owner }}`-t.
+  # GHCR only allows lowercase image names; the metadata-action automatically
+  # lowercases `${{ github.repository_owner }}`.
   IMAGE_PREFIX: ${{ github.repository_owner }}/portfolio
 
 jobs:
   # ---------------------------------------------------------------------------
-  # Eldönti, mely image-eket kell építeni. Így a build job egyetlen definíció
-  # marad, ahelyett hogy szolgáltatásonként duplikálnánk.
+  # Decides which images need to be built. This way the build job stays a single
+  # definition, instead of duplicating it per service.
   # ---------------------------------------------------------------------------
   plan:
     name: Plan build
@@ -40,7 +40,7 @@ jobs:
       - name: Pick services to build
         id: pick
         run: |
-          # `inputs.full_stack` push eseménynél üres, tehát a worker-only ág fut.
+          # `inputs.full_stack` is empty on a push event, so the worker-only branch runs.
           if [ "${{ inputs.full_stack }}" = "true" ]; then
             echo 'services=["worker","api","web"]' >> "$GITHUB_OUTPUT"
             echo 'full_stack=true' >> "$GITHUB_OUTPUT"
@@ -50,7 +50,7 @@ jobs:
           fi
 
   # ---------------------------------------------------------------------------
-  # Multi-arch image build + push a GHCR-be.
+  # Multi-arch image build + push to GHCR.
   # ---------------------------------------------------------------------------
   build:
     name: Build ${{ matrix.service }} image
@@ -90,12 +90,12 @@ jobs:
             type=raw,value=latest
             type=sha,format=short
 
-      # Csak a `web` target fogyaszt build-argot: a Vite build-időben inline-olja
-      # a VITE_* értékeket. A `secrets` context nem érhető el a `strategy`-ben,
-      # ezért kerül ide lépésbe és nem a matrixba.
+      # Only the `web` target consumes build args: Vite inlines the VITE_*
+      # values at build time. The `secrets` context isn't available in `strategy`,
+      # so this lives in its own step instead of the matrix.
       #
-      # A VITE_RECAPTCHA_SECRET_KEY szándékosan hiányzik: a kódban sehol nem
-      # hivatkozott, titokként pedig semmi keresnivalója egy kliens bundle-ben.
+      # VITE_RECAPTCHA_SECRET_KEY is deliberately missing: it isn't referenced
+      # anywhere in the code, and a secret has no business being in a client bundle.
       - name: Compose web build args
         if: matrix.service == 'web'
         run: |
@@ -113,10 +113,10 @@ jobs:
         with:
           context: .
           target: ${{ matrix.service }}
-          # A build stage-ek --platform=$BUILDPLATFORM-mal futnak, így a nehéz
-          # munka egyszer megy natívan amd64-en, és csak a vékony runtime réteg
-          # épül architektúránként. Ha a Pi-n 32 bites OS fut, ide kell még a
-          # linux/arm/v7 is.
+          # The build stages run with --platform=$BUILDPLATFORM, so the heavy
+          # work runs natively on amd64 once, and only the thin runtime layer
+          # is built per architecture. If the Pi runs a 32-bit OS, linux/arm/v7
+          # needs to be added here too.
           platforms: linux/amd64,linux/arm64
           push: true
           tags: ${{ steps.meta.outputs.tags }}
@@ -126,8 +126,8 @@ jobs:
           build-args: ${{ env.BUILD_ARGS }}
 
   # ---------------------------------------------------------------------------
-  # A Pi soha nem buildel: csak a compose fájlt és a .env-et kapja meg, majd
-  # lehúzza az új image-eket.
+  # The Pi never builds: it only receives the compose file and the .env, then
+  # pulls the new images.
   # ---------------------------------------------------------------------------
   deploy:
     name: Deploy to Raspberry Pi
@@ -138,8 +138,8 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # Fail fast, érthető üzenettel: e nélkül a hiba egy nyers
-      # "docker: command not found" a deploy script közepén.
+      # Fail fast, with a clear message: without this, the error is a bare
+      # "docker: command not found" in the middle of the deploy script.
       - name: Check Docker on the Raspberry Pi
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -147,52 +147,52 @@ jobs:
           username: ${{ secrets.RASPBERRY_PI_USERNAME }}
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
           script: |
-            # Az ssh-action nem login shellt indít, így a PATH szűkebb lehet a
-            # megszokottnál (ugyanaz a csapda, mint korábban a pm2 + pnpm shim).
+            # The ssh-action doesn't start a login shell, so PATH may be narrower
+            # than usual (same trap as the pm2 + pnpm shim before it).
             export PATH="$PATH:/usr/bin:/usr/local/bin"
             echo "arch: $(uname -m)"
 
             if ! command -v docker >/dev/null 2>&1; then
-              echo "HIBA: a Docker nincs telepitve a Pi-n (vagy nincs a nem-interaktiv SSH PATH-ban)."
-              echo "Egyszeri telepites a Pi-n:"
+              echo "ERROR: Docker is not installed on the Pi (or it's not on the non-interactive SSH PATH)."
+              echo "One-time install on the Pi:"
               echo "  curl -fsSL https://get.docker.com | sh"
               echo "  sudo usermod -aG docker $USER"
               echo "  sudo systemctl enable --now docker"
-              echo "  # majd lepj ki es vissza SSH-val, hogy a csoport ervenyre jusson"
+              echo "  # then log out and back in via SSH so the group takes effect"
               exit 1
             fi
 
             if ! docker compose version >/dev/null 2>&1; then
-              echo "HIBA: a Docker Compose v2 plugin hianyzik."
-              echo "Egyszeri telepites a Pi-n: sudo apt-get install -y docker-compose-plugin"
+              echo "ERROR: the Docker Compose v2 plugin is missing."
+              echo "One-time install on the Pi: sudo apt-get install -y docker-compose-plugin"
               exit 1
             fi
 
-            # A ket lehetseges ok (hianyzo docker csoport vs. nem futo service)
-            # teljesen mas javitast igenyel, ezert kiirjuk a valos hibat is.
+            # The two possible causes (missing docker group vs. service not running)
+            # need completely different fixes, so we print the actual error too.
             if ! docker_err="$(docker info 2>&1 >/dev/null)"; then
-              echo "HIBA: nem elerheto a Docker daemon."
+              echo "ERROR: the Docker daemon is not reachable."
               echo "--- docker info ---"
               echo "$docker_err"
-              echo "--- diagnosztika ---"
-              echo "felhasznalo: $(id -un)"
-              echo "csoportok:   $(id -nG)"
+              echo "--- diagnostics ---"
+              echo "user:    $(id -un)"
+              echo "groups:  $(id -nG)"
               if command -v systemctl >/dev/null 2>&1; then
-                echo "service:     $(systemctl is-active docker 2>&1) / $(systemctl is-enabled docker 2>&1)"
+                echo "service: $(systemctl is-active docker 2>&1) / $(systemctl is-enabled docker 2>&1)"
               fi
-              ls -l /var/run/docker.sock 2>&1 || echo "socket:      /var/run/docker.sock nem letezik"
-              echo "--- teendo ---"
+              ls -l /var/run/docker.sock 2>&1 || echo "socket:  /var/run/docker.sock does not exist"
+              echo "--- what to do ---"
               if ! id -nG | tr ' ' '\n' | grep -qx docker; then
-                # A socket root:docker tulajdonu, 660-as jogokkal, tehat csoporttagsag nelkul
-                # a CLI nem eri el a daemont akkor sem, ha a service fut.
-                echo "=> A(z) '$(id -un)' NINCS benne a 'docker' csoportban. Ez az ok."
+                # The socket is owned by root:docker with 660 permissions, so without
+                # group membership the CLI can't reach the daemon even if the service is running.
+                echo "=> '$(id -un)' is NOT in the 'docker' group. That's the cause."
                 echo "   sudo usermod -aG docker $(id -un)"
-                echo "   A CI-hez nem kell kilepni: az ssh-action minden futaskor uj session-t nyit."
+                echo "   No need to log out for CI: the ssh-action opens a fresh session every run."
               elif command -v systemctl >/dev/null 2>&1 && [ "$(systemctl is-active docker 2>&1)" != "active" ]; then
-                echo "=> A docker service nem fut. Ez az ok."
+                echo "=> The docker service is not running. That's the cause."
                 echo "   sudo systemctl enable --now docker"
               else
-                echo "=> A csoporttagsag es a service is rendben van, a fenti hibauzenet adja a nyomot."
+                echo "=> Group membership and the service both look fine; the error above is the lead."
               fi
               exit 1
             fi
@@ -200,14 +200,14 @@ jobs:
             echo "docker:  $(docker --version)"
             echo "compose: $(docker compose version --short)"
 
-            # A regi pm2-s worker ugyanabba a Supabase tablaba ir, mint a kontener.
-            # Ha mindketto fut, minden Tuya adatpont ketszer kerul be, amit utolag
-            # nehez kitakaritani - ezert ez erdemel egy hangos figyelmeztetest.
+            # The old pm2-based worker writes into the same Supabase table as the container.
+            # If both run, every Tuya datapoint gets inserted twice, which is hard to
+            # clean up afterwards - so this deserves a loud warning.
             if command -v pm2 >/dev/null 2>&1 && pm2 describe tuya-worker >/dev/null 2>&1; then
               echo ""
-              echo "FIGYELEM: a regi pm2-s 'tuya-worker' meg fut a Pi-n."
-              echo "A kontenerrel egyutt DUPLIKALT sorokat ir a Supabase-be."
-              echo "Allitsd le, mielott a kontener elindul:  pm2 delete tuya-worker && pm2 save"
+              echo "WARNING: the old pm2-based 'tuya-worker' is still running on the Pi."
+              echo "It will write DUPLICATE rows to Supabase alongside the container."
+              echo "Stop it before the container starts:  pm2 delete tuya-worker && pm2 save"
               echo ""
             fi
 
@@ -215,13 +215,13 @@ jobs:
         env:
           FULL_STACK: ${{ needs.plan.outputs.full_stack }}
         run: |
-          # A GHCR nem fogad nagybetűs névteret, a repository_owner viszont az lehet.
+          # GHCR doesn't accept an uppercase namespace, but repository_owner can be one.
           registry="$(echo '${{ env.REGISTRY }}/${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')"
           {
             echo "IMAGE_REGISTRY=$registry"
             echo "IMAGE_TAG=latest"
-            # Üres COMPOSE_PROFILES esetén csak a worker indul. A `full` profil
-            # kapcsolja be a web + api szolgáltatásokat.
+            # With COMPOSE_PROFILES empty, only the worker starts. The `full` profile
+            # enables the web + api services.
             if [ "$FULL_STACK" = "true" ]; then
               echo "COMPOSE_PROFILES=full"
             else
@@ -263,15 +263,15 @@ jobs:
             set -e
             export PATH="$PATH:/usr/bin:/usr/local/bin"
             cd /var/www/portfolio
-            # A GITHUB_TOKEN a job futásának idejére érvényes, és privát GHCR
-            # csomagokhoz is elég. Ha publikussá teszed a package-eket, ez a
-            # login elhagyható (és a kézi `docker compose pull` is működik).
+            # GITHUB_TOKEN is valid for the duration of the job run, and it's
+            # enough for private GHCR packages too. If you make the packages public,
+            # this login can be dropped (and a manual `docker compose pull` also works).
             echo "$GHCR_TOKEN" | docker login ghcr.io -u "$GHCR_USER" --password-stdin
-            # A COMPOSE_PROFILES a .env-ből jön, tehát a pull/up magától a
-            # megfelelő szolgáltatáshalmazra vonatkozik.
+            # COMPOSE_PROFILES comes from .env, so pull/up automatically applies to
+            # the right set of services.
             docker compose pull
             docker compose up -d
             docker logout ghcr.io
-            # Az SD-kártya véges: a lecserélt image-ek takarítása nem opcionális.
+            # The SD card has finite space: cleaning up replaced images isn't optional.
             docker image prune -f
             docker compose ps

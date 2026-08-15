@@ -1,10 +1,10 @@
 /**
- * Minimális health endpoint a workerhez.
+ * Minimal health endpoint for the worker.
  *
- * A worker se HTTP szervert, se portot nem nyit, így konténerben előállhat a
- * "fut, de valójában halott" állapot (a Tuya WS reconnect elfogyott, a process
- * viszont él). Ez a szerver adja a compose healthcheck jelét, amire a Docker
- * újra tudja indítani a beragadt konténert.
+ * The worker opens neither an HTTP server nor a port, so a container can end up in a
+ * "running, but actually dead" state (the Tuya WS reconnect attempts ran out, but the
+ * process is still alive). This server provides the compose healthcheck signal that lets
+ * Docker restart the stuck container.
  */
 import http from 'node:http';
 
@@ -12,10 +12,10 @@ const PORT = Number(process.env.WORKER_HEALTH_PORT ?? 3002);
 const HOST = process.env.WORKER_HEALTH_HOST ?? '0.0.0.0';
 
 /**
- * Ha > 0, a health endpoint 503-at ad, amikor ennyi ideje nem érkezett Tuya
- * üzenet. Alapból KI van kapcsolva: az üzenetek gyakorisága eszközfüggő, és egy
- * rosszul belőtt küszöb egy tökéletesen egészséges workert indítana újra.
- * A WebSocket kapcsolat állapota (`connected`) a megbízható liveness-jel.
+ * If > 0, the health endpoint returns 503 once this many ms have passed without a
+ * Tuya message. OFF by default: message frequency is device-dependent, and a
+ * badly chosen threshold would restart a perfectly healthy worker.
+ * The WebSocket connection state (`connected`) is the reliable liveness signal.
  */
 const STALE_AFTER_MS = Number(process.env.WORKER_STALE_AFTER_MS ?? 0);
 
@@ -67,7 +67,7 @@ export function markError(error: unknown): void {
 function isStale(): boolean {
   if (STALE_AFTER_MS <= 0) return false;
 
-  // Amíg egyetlen üzenet sem jött, a worker indulási idejéhez mérünk.
+  // Until a first message arrives, we measure against the worker's start time.
   const reference = state.lastMessageAt ?? state.startedAt;
   return Date.now() - reference > STALE_AFTER_MS;
 }

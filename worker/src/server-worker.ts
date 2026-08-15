@@ -11,15 +11,15 @@ import {
   startHealthServer,
 } from "./health.js";
 
-// quiet: konténerben nincs .env fájl (az env-változók kívülről jönnek), a dotenv
-// indulási bannere csak zajt tenne a logba.
+// quiet: no .env file in the container (the env vars come from outside), so the
+// dotenv startup banner would just be noise in the log.
 dotenv.config({ quiet: true });
 
 function requireEnv(name: string): string {
   const value = process.env[name];
   if (!value) {
-    // Konténerben a hiányzó env-változó a leggyakoribb indulási hiba — jobb
-    // egyértelmű üzenettel elhasalni, mint a Supabase kliens homályos hibájával.
+    // A missing env var is the most common startup failure in a container — better
+    // to fail with a clear message than with an obscure error from the Supabase client.
     console.error(`[worker] Missing required environment variable: ${name}`);
     process.exit(1);
   }
@@ -131,8 +131,8 @@ function start() {
 
   client.start();
 
-  // A `docker compose down`/`restart` SIGTERM-et küld; e nélkül 10 másodperc
-  // múlva SIGKILL jön.
+  // `docker compose down`/`restart` sends SIGTERM; without this, SIGKILL
+  // follows 10 seconds later.
   const shutdown = (signal: string) => {
     console.log(`[worker] ${signal} received, shutting down`);
     healthServer.close(() => process.exit(0));

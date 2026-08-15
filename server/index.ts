@@ -1,9 +1,9 @@
 /**
- * Node HTTP host az `api/**` Vercel Function handlerekhez.
+ * Node HTTP host for the `api/**` Vercel Function handlers.
  *
- * Ugyanaz a szerver fut lokálisan (`pnpm dev:api`) és a Docker `api` konténerben,
- * így a `vercel dev` (Vercel CLI + linkelt projekt + hálózat) függés megszűnik,
- * miközben a Vercel deploy változatlanul az `api/` fájlokat használja.
+ * The same server runs locally (`pnpm dev:api`) and in the Docker `api` container,
+ * so the `vercel dev` dependency (Vercel CLI + linked project + network) goes away,
+ * while the Vercel deploy still uses the `api/` files unchanged.
  */
 import http from 'node:http';
 import { HttpError, toNodeHandler, type NodeHandler } from './vercel-adapter';
@@ -13,10 +13,10 @@ const HOST = process.env.HOST ?? '0.0.0.0';
 const SHUTDOWN_TIMEOUT_MS = 10_000;
 
 /**
- * A `.env`-et azelőtt kell betölteni, hogy az api handlerek modulszinten
- * kiolvassák a `process.env`-et (pl. `api/tuya/status.ts` a BASE_URL-t).
- * Ezért a handlerek dinamikus importtal jönnek be — statikus import esetén a
- * modul-kiértékelés sorrendje ezt csendben megtörné.
+ * `.env` must be loaded before the api handlers read `process.env` at module
+ * scope (e.g. `api/tuya/status.ts` reading BASE_URL).
+ * That's why the handlers are brought in via dynamic import — with a static import,
+ * module-evaluation order would silently break this.
  */
 function loadEnvFile(): void {
   if (process.env.NODE_ENV === 'production') return;
@@ -24,7 +24,7 @@ function loadEnvFile(): void {
   try {
     process.loadEnvFile();
   } catch {
-    // Nincs .env fájl — az env-változók kívülről jönnek.
+    // No .env file — the env vars come from outside.
   }
 }
 
@@ -105,8 +105,8 @@ async function main(): Promise<void> {
     }
   });
 
-  // Graceful shutdown: e nélkül a `docker compose down` 10 másodperc után
-  // SIGKILL-lel lövi ki a konténert.
+  // Graceful shutdown: without this, `docker compose down` kills the container
+  // with SIGKILL after 10 seconds.
   const shutdown = (signal: string) => {
     console.log(`[server] ${signal} received, shutting down`);
     const timer = setTimeout(() => process.exit(1), SHUTDOWN_TIMEOUT_MS);

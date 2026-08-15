@@ -1,8 +1,8 @@
 packages:
   - 'worker'
 
-# A pnpm 10 alapból blokkolja a függőségek install-scriptjeit. Az esbuild (vite + tsx)
-# postinstallja ellenőrzi/kicsomagolja a platform-specifikus binárist, e nélkül a build
-# és a worker indítása is elhasalhat. Új warning esetén: `pnpm approve-builds`.
+# pnpm 10 blocks dependency install scripts by default. esbuild's (vite + tsx)
+# postinstall verifies/unpacks the platform-specific binary — without it the build
+# and worker startup can fail. On a new warning: `pnpm approve-builds`.
 onlyBuiltDependencies:
   - esbuild

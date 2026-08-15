@@ -16,8 +16,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  // Az `api/` mappát eddig semmi nem típusellenőrizte (a tsconfig.app.json csak
-  // a `src`-t nézi, a Vercel pedig külön fordítja) — innentől a `typecheck:server`
-  // lefedi a szervert és a handlereket is.
+  // The `api/` folder wasn't type-checked by anything before (tsconfig.app.json only
+  // looks at `src`, and Vercel compiles it separately) — from here on `typecheck:server`
+  // covers the server and its handlers too.
   "include": ["**/*.ts", "../api/**/*.ts"]
 }

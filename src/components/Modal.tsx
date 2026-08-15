@@ -68,7 +68,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             <button
               className="absolute top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-4xl font-bold shadow-lg hover:bg-primary hover:text-white focus:outline-hidden focus:ring-4 focus:ring-primary/40 transition-all duration-200 group"
               onClick={onClose}
-              aria-label="Bezárás"
+              aria-label="Close"
             >
               <span className="leading-none group-hover:text-red-500 transition-colors duration-200">&times;</span>
             </button>

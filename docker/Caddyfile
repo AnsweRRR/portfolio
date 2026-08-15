@@ -1,21 +1,21 @@
-# Caddy konfiguráció a `web` konténerhez: statikus SPA kiszolgálás, /api proxy
-# az `api` konténerre, és — domain esetén — automatikus Let's Encrypt TLS.
+# Caddy config for the `web` container: static SPA serving, /api proxy
+# to the `api` container, and — with a domain — automatic Let's Encrypt TLS.
 #
-# A viselkedést egyetlen env-változó kapcsolja:
-#   SITE_ADDRESS=:80                  -> sima HTTP (LAN, lokális teszt)
-#   SITE_ADDRESS=portfolio.pelda.hu   -> automatikus HTTPS + HTTP->HTTPS redirect
+# A single env var switches the behavior:
+#   SITE_ADDRESS=:80                  -> plain HTTP (LAN, local test)
+#   SITE_ADDRESS=portfolio.example.com   -> automatic HTTPS + HTTP->HTTPS redirect
 #
-# Ha kellenek a Let's Encrypt lejárati értesítők, vedd fel ide a globális
-# `email valaki@pelda.hu` opciót (üresen hagyva Caddyfile parse hibát adna,
-# ezért nincs env-változóból kötve).
+# If you need Let's Encrypt expiry notifications, add the global
+# `email someone@example.com` option here (left empty since a Caddyfile parse
+# error would result otherwise, so it's not wired from an env var).
 
 {
 	admin off
 }
 
-# Belső healthcheck endpoint. Szándékosan külön site a fő site helyett: domain
-# esetén a fő site a 80-as porton HTTP->HTTPS átirányítást adna, amitől a
-# healthcheck hamis "unhealthy"-t jelezne.
+# Internal healthcheck endpoint. Deliberately a separate site instead of the main
+# one: with a domain, the main site would issue an HTTP->HTTPS redirect on port 80,
+# which would make the healthcheck falsely report "unhealthy".
 :8080 {
 	log {
 		output discard
@@ -31,12 +31,12 @@
 		reverse_proxy {$API_UPSTREAM:api:3001}
 	}
 
-	# A hash-elt Vite assetek SZÁNDÉKOSAN külön handle-ben, SPA fallback nélkül:
-	# egy nem létező /assets/... kérésre 404 a helyes válasz, nem 200 + index.html.
-	# A fallback ott azt okozná, hogy a böngésző HTML-t kapna .js helyett, és
-	# némán elszállna. Ez akkor válik élessé, ha ugyanazt a hostnevet két külön
-	# build szolgálja ki (Vercel + Pi): a chunk-hashek eltérhetnek, és egy
-	# átirányított kliens régi asset-URL-t kérhet.
+	# The hashed Vite assets are DELIBERATELY in their own handle, with no SPA fallback:
+	# a request for a nonexistent /assets/... should 404, not 200 + index.html.
+	# The fallback there would make the browser receive HTML instead of .js, and
+	# fail silently. This becomes an issue when the same hostname is served by two
+	# separate builds (Vercel + Pi): the chunk hashes can differ, and a redirected
+	# client can request a stale asset URL.
 	handle /assets/* {
 		root * /srv
 		header Cache-Control "public, max-age=31536000, immutable"
@@ -46,22 +46,22 @@
 	handle {
 		root * /srv
 
-		# `route` és nem sima direktívalista: a Caddy alapból a saját sorrendjében
-		# futtatja a direktívákat, ott pedig a `header` a `try_files` ELŐTT fut.
-		# Emiatt a `/index.html` matcher a `/` és a deep linkek esetén nem
-		# illeszkedne, és az entrypoint Cache-Control fejléc nélkül menne ki.
-		# A `route` megőrzi az itt leírt sorrendet, így az átírás UTÁNI útvonalra
-		# is tudunk illeszteni.
+		# `route`, not a plain directive list: Caddy runs directives in its own
+		# default order, where `header` runs BEFORE `try_files`.
+		# Because of that, the `/index.html` matcher wouldn't match `/` or the
+		# deep links, and the entrypoint would go out without a Cache-Control header.
+		# `route` preserves the order written here, so we can also match against
+		# the route AFTER the rewrite.
 		route {
-			# A service worker soha nem cache-elhető.
+			# The service worker must never be cached.
 			header /sw.js Cache-Control "no-cache"
 
-			# SPA history fallback — a react-router BrowserRouter deep linkjeihez
-			# (pl. /projects közvetlen megnyitása vagy F5).
+			# SPA history fallback — for react-router BrowserRouter deep links
+			# (e.g. opening /projects directly, or an F5 refresh).
 			try_files {path} /index.html
 
-			# Az átírás után futva ez a `/`-t és minden deep linket is lefed.
-			# E nélkül a felhasználók beragadnának egy régi build-be.
+			# Running after the rewrite, this covers `/` and every deep link too.
+			# Without it, users would get stuck on a stale build.
 			header /index.html Cache-Control "no-cache"
 
 			file_server
