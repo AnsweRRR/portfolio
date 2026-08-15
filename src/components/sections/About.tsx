@@ -9,8 +9,14 @@ import CodeBlockCSharp from '../CodeBlockCSharp';
 
 function useTypewriter(text: string, speed: number = 30) {
   const [displayed, setDisplayed] = useState('');
-  useEffect(() => {
+  const [prevText, setPrevText] = useState(text);
+
+  if (text !== prevText) {
+    setPrevText(text);
     setDisplayed('');
+  }
+
+  useEffect(() => {
     if (!text) return;
     let i = 0;
     const interval = setInterval(() => {

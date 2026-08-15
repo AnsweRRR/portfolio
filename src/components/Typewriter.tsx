@@ -40,9 +40,6 @@ const Typewriter: React.FC<TypewriterProps> = ({
 
   useEffect(() => {
     clearTimers();
-    setDisplayText('');
-    setShowCursor(true);
-    setIsDeleting(false);
 
     const texts = Array.isArray(text) ? text : [text];
     let currentIndex = 0;
@@ -74,7 +71,12 @@ const Typewriter: React.FC<TypewriterProps> = ({
       }
     };
 
-    timeoutRef.current = setTimeout(typeLoop, delay);
+    timeoutRef.current = setTimeout(() => {
+      setDisplayText('');
+      setShowCursor(true);
+      setIsDeleting(false);
+      typeLoop();
+    }, delay);
 
     return () => {
       clearTimers();
@@ -84,21 +86,26 @@ const Typewriter: React.FC<TypewriterProps> = ({
   useEffect(() => {
     const texts = Array.isArray(text) ? text : [text];
     const currentText = texts[currentTextIndex];
+    let cursorTimeout: ReturnType<typeof setTimeout> | null = null;
+
     if (!isDeleting && displayText === currentText) {
       intervalRef.current = setInterval(() => {
         setShowCursor(prev => !prev);
       }, 500);
     } else {
-      setShowCursor(true);
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
       }
+      cursorTimeout = setTimeout(() => setShowCursor(true), 0);
     }
     return () => {
       if (intervalRef.current) {
         clearInterval(intervalRef.current);
         intervalRef.current = null;
+      }
+      if (cursorTimeout) {
+        clearTimeout(cursorTimeout);
       }
     };
   }, [isDeleting, displayText, text, currentTextIndex]);
