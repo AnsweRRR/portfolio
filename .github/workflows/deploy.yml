@@ -168,11 +168,22 @@ jobs:
               exit 1
             fi
 
-            if ! docker info >/dev/null 2>&1; then
+            # A ket lehetseges ok (hianyzo docker csoport vs. nem futo service)
+            # teljesen mas javitast igenyel, ezert kiirjuk a valos hibat is.
+            if ! docker_err="$(docker info 2>&1 >/dev/null)"; then
               echo "HIBA: nem elerheto a Docker daemon."
-              echo "Ellenorizd, hogy a '$USER' benne van a docker csoportban es fut a service:"
-              echo "  sudo usermod -aG docker $USER && sudo systemctl enable --now docker"
-              echo "  # majd lepj ki es vissza SSH-val"
+              echo "--- docker info ---"
+              echo "$docker_err"
+              echo "--- diagnosztika ---"
+              echo "felhasznalo: $(id -un)"
+              echo "csoportok:   $(id -nG)"
+              if command -v systemctl >/dev/null 2>&1; then
+                echo "service:     $(systemctl is-active docker 2>&1) / $(systemctl is-enabled docker 2>&1)"
+              fi
+              ls -l /var/run/docker.sock 2>&1 || echo "socket:      /var/run/docker.sock nem letezik"
+              echo "--- teendo ---"
+              echo "Ha a csoportok kozott nincs 'docker':  sudo usermod -aG docker $(id -un)"
+              echo "Ha a service nem 'active':             sudo systemctl enable --now docker"
               exit 1
             fi
 
