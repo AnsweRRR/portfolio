@@ -43,7 +43,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
           transition={{ duration: 0.2 }}
         >
           <motion.div
-            className="absolute inset-0 bg-black bg-opacity-60 backdrop-blur-sm"
+            className="absolute inset-0 bg-black/60 backdrop-blur-sm"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
@@ -66,7 +66,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
             }}
           >
             <button
-              className="absolute top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-4xl font-bold shadow-lg hover:bg-primary hover:text-white focus:outline-none focus:ring-4 focus:ring-primary/40 transition-all duration-200 group"
+              className="absolute top-4 right-4 w-12 h-12 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-800 text-gray-700 dark:text-gray-200 text-4xl font-bold shadow-lg hover:bg-primary hover:text-white focus:outline-hidden focus:ring-4 focus:ring-primary/40 transition-all duration-200 group"
               onClick={onClose}
               aria-label="Bezárás"
             >
@@ -77,7 +77,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
               <a
                 href="/pdf/cv_pt_en.pdf"
                 download
-                className="w-36 sm:w-48 md:w-60 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#915EFF] text-white font-semibold shadow hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-colors duration-150"
+                className="w-36 sm:w-48 md:w-60 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#915EFF] text-white font-semibold shadow-sm hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-colors duration-150"
               >
                 <FiDownload className="mr-2 h-4 w-4 sm:h-6 sm:w-6 text-white" />
                 <span className="truncate text-sm sm:text-base">{t('cv.download_en')}</span>
@@ -85,7 +85,7 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, children }) => {
               <a
                 href="/pdf/cv_pt_hu.pdf"
                 download
-                className="w-36 sm:w-48 md:w-60 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#915EFF] text-white font-semibold shadow hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-colors duration-150"
+                className="w-36 sm:w-48 md:w-60 flex items-center justify-center gap-2 px-4 py-2 rounded-lg bg-[#915EFF] text-white font-semibold shadow-sm hover:bg-purple-600 hover:shadow-lg hover:scale-105 transition-colors duration-150"
               >
                 <FiDownload className="mr-2 h-4 w-4 sm:h-6 sm:w-6 text-white" />
                 <span className="truncate text-sm sm:text-base">{t('cv.download_hu')}</span>

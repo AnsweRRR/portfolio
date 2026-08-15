@@ -1,43 +1,91 @@
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap");
+@import "tailwindcss" source(none);
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* a v3-as config content-mezőjének megfelelője (csak a src alatti forrásfájlok) */
+@source "./**/*.{js,jsx,ts,tsx}";
+
+/* a v3-as darkMode: "class" megfelelője (a .dark a <html> elemen ül) */
+@custom-variant dark (&:where(.dark, .dark *));
+
+@theme inline {
+  --color-primary: var(--brand-primary);
+  --color-secondary: var(--brand-secondary);
+  --color-tertiary: var(--brand-tertiary);
+  --color-black-100: var(--brand-black-100);
+  --color-black-200: var(--brand-black-200);
+  --color-white-100: var(--brand-white-100);
+
+  --shadow-card: 0px 35px 120px -15px #211e35;
+  --shadow-card-light: 0px 35px 120px -15px rgba(0, 0, 0, 0.1);
+
+  --breakpoint-xs: 450px;
+}
+
+@utility bg-hero-pattern {
+  background-image: url("/images/Plexus.png");
+}
+
+/* a v4 preflight eltéréseit hozzuk vissza a v3-as megjelenésre */
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentColor);
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  ::placeholder {
+    color: var(--color-gray-400);
+  }
+}
 
 :root {
-  --color-primary: #ffffff;
-  --color-secondary: #4b5563;
-  --color-tertiary: #f3f4f6;
-  --color-black-100: #f9fafb;
-  --color-black-200: #f3f4f6;
-  --color-white-100: #1f2937;
+  --brand-primary: #ffffff;
+  --brand-secondary: #4b5563;
+  --brand-tertiary: #f3f4f6;
+  --brand-black-100: #f9fafb;
+  --brand-black-200: #f3f4f6;
+  --brand-white-100: #1f2937;
 }
 
 html.dark {
-  --color-primary: #050816;
-  --color-secondary: #aaa6c3;
-  --color-tertiary: #151030;
-  --color-black-100: #100d25;
-  --color-black-200: #090325;
-  --color-white-100: #f3f3f3;
+  --brand-primary: #050816;
+  --brand-secondary: #aaa6c3;
+  --brand-tertiary: #151030;
+  --brand-black-100: #100d25;
+  --brand-black-200: #090325;
+  --brand-white-100: #f3f3f3;
 }
 
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
-  scroll-behavior: smooth;
-}
+/* FONTOS: ezeknek a @layer base-ben kell lenniük. A v4 az utility-ket valódi
+   @layer utilities-be teszi, és a rétegen kívüli CSS minden rétegzettet felülír
+   (a specificitástól függetlenül) — rétegen kívül ez a `*` reset kiütné az
+   összes p-* / m-* / font-* utility-t. v3-ban a `*` 0 specificitása miatt
+   veszített a class-okkal szemben; a @layer base ezt a viselkedést hozza vissza. */
+@layer base {
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "Poppins", sans-serif;
+    scroll-behavior: smooth;
+  }
 
-html,
-body {
-  min-height: 100vh;
-}
+  html,
+  body {
+    min-height: 100vh;
+  }
 
-html,
-body {
-  @apply bg-primary;
+  html,
+  body {
+    @apply bg-primary;
+  }
 }
 
 #root {

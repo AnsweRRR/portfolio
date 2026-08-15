@@ -50,13 +50,13 @@ const ErrorPage = () => {
         <div className="flex gap-4">
           <button
             onClick={testOfflineMode}
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            className="px-4 py-2 bg-blue-500 text-white rounded-sm hover:bg-blue-600 transition-colors"
           >
             Test Offline Mode
           </button>
           <button
             onClick={testServerError}
-            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
+            className="px-4 py-2 bg-red-500 text-white rounded-sm hover:bg-red-600 transition-colors"
           >
             Test Server Error
           </button>

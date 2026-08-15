@@ -111,7 +111,7 @@ const Contact = () => {
                     id="user_name"
                     required
                     disabled={formStatus === 'sending'}
-                    className="mt-1 w-full p-3 bg-gray-100 dark:bg-[#3a2f60] text-gray-800 dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-[#915EFF] disabled:opacity-60 dark:disabled:opacity-50"
+                    className="mt-1 w-full p-3 bg-gray-100 dark:bg-[#3a2f60] text-gray-800 dark:text-white rounded-lg outline-hidden focus:ring-2 focus:ring-[#915EFF] disabled:opacity-60 dark:disabled:opacity-50"
                   />
                 </div>
                 <div>
@@ -122,7 +122,7 @@ const Contact = () => {
                     id="user_email"
                     required
                     disabled={formStatus === 'sending'}
-                    className="mt-1 w-full p-3 bg-gray-100 dark:bg-[#3a2f60] text-gray-800 dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-[#915EFF] disabled:opacity-60 dark:disabled:opacity-50"
+                    className="mt-1 w-full p-3 bg-gray-100 dark:bg-[#3a2f60] text-gray-800 dark:text-white rounded-lg outline-hidden focus:ring-2 focus:ring-[#915EFF] disabled:opacity-60 dark:disabled:opacity-50"
                   />
                 </div>
                 <div>
@@ -133,7 +133,7 @@ const Contact = () => {
                     rows={5}
                     required
                     disabled={formStatus === 'sending'}
-                    className="mt-1 w-full p-3 bg-gray-100 dark:bg-[#3a2f60] text-gray-800 dark:text-white rounded-lg outline-none focus:ring-2 focus:ring-[#915EFF] disabled:opacity-60 dark:disabled:opacity-50"
+                    className="mt-1 w-full p-3 bg-gray-100 dark:bg-[#3a2f60] text-gray-800 dark:text-white rounded-lg outline-hidden focus:ring-2 focus:ring-[#915EFF] disabled:opacity-60 dark:disabled:opacity-50"
                   />
                 </div>
                 <div className="flex justify-center">
