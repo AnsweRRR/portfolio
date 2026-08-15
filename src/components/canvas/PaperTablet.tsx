@@ -32,7 +32,7 @@ const PaperTabletCanvas = () => {
   return (
     <Canvas
       frameloop="demand"
-      shadows
+      shadows="percentage"
       dpr={[1, 2]}
       camera={{ position: [15, 3, 5], fov: 25 }}
       gl={{ preserveDrawingBuffer: true }}
