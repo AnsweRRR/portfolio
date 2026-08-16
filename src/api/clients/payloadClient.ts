@@ -16,6 +16,17 @@ export const payloadClient = {
     if (!response.ok) throw new Error(`Payload API Error: ${response.statusText}`);
     return response.json();
   },
+
+  // Hits the CMS's plain Next.js health route (not a Payload REST endpoint) —
+  // used to decide whether the blog should surface in the UI at all.
+  checkHealth: async (): Promise<boolean> => {
+    try {
+      const response = await fetch(`${PAYLOAD_API_URL}/health`);
+      return response.ok;
+    } catch {
+      return false;
+    }
+  },
 };
 
 export const blogApi = {

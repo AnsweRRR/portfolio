@@ -4,9 +4,11 @@ import StarsCanvas from "../components/canvas/Stars";
 import { About, BlogSection, Contact, Experience, Footer, Hero, Tech, Work, Feedbacks } from "../components/sections";
 import ScrollToTop from "../components/ScrollToTop";
 import WeatherWidget from "../components/WeatherWidget";
+import { useBlogAvailability } from "../hooks/useBlogAvailability";
 
 const HomePage = () => {
   const location = useLocation();
+  const blogAvailability = useBlogAvailability();
 
   useEffect(() => {
     if (!location.hash) return;
@@ -23,7 +25,7 @@ const HomePage = () => {
       <Experience />
       <Tech />
       <Work />
-      <BlogSection />
+      {blogAvailability === "available" && <BlogSection />}
       <div className='relative z-0'>
         <Feedbacks />
         <Contact />

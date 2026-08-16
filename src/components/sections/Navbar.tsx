@@ -5,6 +5,7 @@ import { navLinks } from "../../api/navlink";
 import { styles } from "../../styles";
 import { FiSun, FiMoon } from "react-icons/fi";
 import { useTheme } from "../../hooks/useTheme";
+import { useBlogAvailability } from "../../hooks/useBlogAvailability";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
@@ -18,6 +19,8 @@ const Navbar = () => {
   const toggleButtonRef = useRef<HTMLButtonElement>(null);
   const location = useLocation();
   const isHome = location.pathname === "/";
+  const blogAvailability = useBlogAvailability();
+  const visibleNavLinks = navLinks.filter((nav) => nav.id !== "blog" || blogAvailability === "available");
 
   const changeLanguage = (lng: string) => {
     i18n.changeLanguage(lng);
@@ -141,7 +144,7 @@ const Navbar = () => {
         </Link>
 
         <ul className='list-none hidden lg:flex flex-row gap-10 items-center'>
-          {navLinks.map((nav) => {
+          {visibleNavLinks.map((nav) => {
             const to = navTarget(nav);
             return (
               <li
@@ -210,7 +213,7 @@ const Navbar = () => {
             } absolute top-16 right-0 w-[200px] bg-white/95 dark:bg-[rgba(5,8,22,0.97)] backdrop-blur-sm rounded-xl shadow-lg transition-all duration-300 ease-in-out z-20`}
           >
             <ul className="list-none flex flex-col gap-4 p-4">
-              {navLinks.map((nav) => {
+              {visibleNavLinks.map((nav) => {
                 const to = navTarget(nav);
                 return (
                   <li

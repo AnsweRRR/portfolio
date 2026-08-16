@@ -18,6 +18,7 @@ services:
         VITE_EMAILJS_PUBLIC_KEY: ${VITE_EMAILJS_PUBLIC_KEY:-}
         VITE_RECAPTCHA_SITE_KEY: ${VITE_RECAPTCHA_SITE_KEY:-}
         VITE_SHOW_SKILL_PROGRESS: ${VITE_SHOW_SKILL_PROGRESS:-}
+        VITE_SHOW_BLOG: ${VITE_SHOW_BLOG:-}
     pull_policy: build
     # Ports come from docker-compose.yml; if port 80 is taken on your machine,
     # put HTTP_PORT=8080 in your .env.

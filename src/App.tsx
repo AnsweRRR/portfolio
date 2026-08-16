@@ -5,6 +5,7 @@ import { ThemeProvider } from "./context/ThemeContext";
 import HomePage from "./pages/HomePage";
 import BlogListPage from "./pages/BlogListPage";
 import BlogPostPage from "./pages/BlogPostPage";
+import BlogRoute from "./components/BlogRoute";
 import './i18n/i18n';
 
 const queryClient = new QueryClient();
@@ -17,8 +18,8 @@ function App() {
           <Navbar />
           <Routes>
             <Route path='/' element={<HomePage />} />
-            <Route path='/blog' element={<BlogListPage />} />
-            <Route path='/blog/:slug' element={<BlogPostPage />} />
+            <Route path='/blog' element={<BlogRoute><BlogListPage /></BlogRoute>} />
+            <Route path='/blog/:slug' element={<BlogRoute><BlogPostPage /></BlogRoute>} />
           </Routes>
         </BrowserRouter>
       </ThemeProvider>
