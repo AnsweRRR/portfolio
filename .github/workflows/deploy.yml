@@ -302,21 +302,22 @@ jobs:
             echo "CLOUDFLARE_TUNNEL_TOKEN=${{ secrets.CLOUDFLARE_TUNNEL_TOKEN }}"
           } > .env
 
-      # A run before Caddyfile.cms was shipped left an empty directory at this path
-      # (Docker auto-creates a missing bind-mount source as a directory), which would
-      # otherwise make the scp step below fail trying to write a file over it. Docker
-      # created it as root, so the SSH user can't rm it directly (no sudo assumed) —
-      # deleting it from inside a throwaway container sidesteps that.
-      - name: Clear stray Caddyfile.cms directory
+      # A run before Caddyfile.cms was shipped auto-created its whole parent chain —
+      # both docker/ and docker/Caddyfile.cms — as root (Docker's behavior for a missing
+      # bind-mount source), which blocks the scp step below from writing into it (the SSH
+      # user isn't root and there's no sudo to fall back on). Only Caddyfile.cms lives in
+      # that folder, so it's safe to wipe the whole directory and let scp recreate it as
+      # the SSH user. Deleting it from inside a throwaway container sidesteps the same
+      # root-ownership problem.
+      - name: Clear stray docker/ directory
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.RASPBERRY_PI_HOST }}
           username: ${{ secrets.RASPBERRY_PI_USERNAME }}
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
           script: |
-            path="/var/www/portfolio/docker/Caddyfile.cms"
-            if [ -d "$path" ]; then
-              docker run --rm -v /var/www/portfolio/docker:/target alpine rm -rf /target/Caddyfile.cms
+            if [ -e /var/www/portfolio/docker ]; then
+              docker run --rm -v /var/www/portfolio:/target alpine rm -rf /target/docker
             fi
 
       - name: Copy stack files to Raspberry Pi
