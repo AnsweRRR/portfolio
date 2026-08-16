@@ -1,10 +1,15 @@
 # Portfolio stack — this is the file that ships to the Raspberry Pi.
 #
-# DEFAULT: only `worker` starts. The webapp and API run on Vercel; the Pi's
-# job is the long-running Tuya -> Supabase worker.
+# DEFAULT: `worker`, `cms`, `cms-proxy`, and `cloudflared` start. The webapp
+# and API run on Vercel; the Pi's job is the long-running Tuya -> Supabase
+# worker plus the self-hosted Payload CMS (blog) — Vercel can't host Payload,
+# it needs a persistent server + DB connection, not a serverless function.
+# `cloudflared` exposes cms-proxy to the internet via a Cloudflare Tunnel
+# (the Pi has no public IPv4 to port-forward to), so no host port needs to be
+# opened on the router for the CMS to be reachable.
 #
-#   docker compose up -d                  # worker only
-#   docker compose --profile full up -d   # web + api + worker on the Pi too
+#   docker compose up -d                  # worker + cms + cms-proxy + cloudflared
+#   docker compose --profile full up -d   # web + api on the Pi too
 #
 # That's why `web` and `api` are in the `full` profile. Without a profile,
 # `pull` and `up` skip them too, so the Pi doesn't needlessly download ~400 MB of images.
@@ -84,6 +89,66 @@ services:
     networks: [portfolio]
     logging: *default-logging
 
+  cms:
+    # Always on, like `worker` — the blog CMS must be reachable regardless of
+    # whether the unrelated `full` (web+api) profile is active. Vercel can't
+    # host this: Payload needs a persistent server + DB connection, not a function.
+    image: ${IMAGE_REGISTRY:-ghcr.io/answerrr}/portfolio-cms:${IMAGE_TAG:-latest}
+    pull_policy: always
+    restart: unless-stopped
+    env_file: [.env]
+    environment:
+      TZ: ${TZ:-Europe/Budapest}
+      PORT: "3002"
+    # No published port: only reachable through cms-proxy, same convention as `api`.
+    expose:
+      - "3002"
+    networks: [portfolio]
+    logging: *default-logging
+
+  cms-proxy:
+    # Stock Caddy image + a mounted Caddyfile — no custom build/image needed,
+    # unlike `web` (which bundles static assets into its own image).
+    image: caddy:2-alpine
+    pull_policy: always
+    restart: unless-stopped
+    environment:
+      CMS_ADDRESS: ${CMS_ADDRESS:-:8081}
+      TZ: ${TZ:-Europe/Budapest}
+    ports:
+      - "${CMS_HTTP_PORT:-8081}:80"
+      - "${CMS_HTTPS_PORT:-8444}:443"
+    volumes:
+      - ./docker/Caddyfile.cms:/etc/caddy/Caddyfile:ro
+      # Separate from web's caddy_data/caddy_config: both Caddy instances can run
+      # concurrently under the `full` profile, and sharing ACME storage would corrupt it.
+      - cms_caddy_data:/data
+      - cms_caddy_config:/config
+    depends_on:
+      cms:
+        condition: service_started
+    networks: [portfolio]
+    logging: *default-logging
+
+  cloudflared:
+    # The Pi is behind CGNAT (no public IPv4 to point a DNS A record at), so
+    # instead of port-forwarding 80/443 on the router, a Cloudflare Tunnel makes
+    # an outbound-only connection to Cloudflare's edge, which terminates public
+    # TLS and reaches cms-proxy over this same internal docker network — no
+    # inbound port ever needs to be opened. DNS + certs are managed entirely
+    # from the Cloudflare Zero Trust dashboard, not from this compose file.
+    image: cloudflare/cloudflared:latest
+    pull_policy: always
+    restart: unless-stopped
+    command: tunnel --no-autoupdate run
+    environment:
+      TUNNEL_TOKEN: ${CLOUDFLARE_TUNNEL_TOKEN}
+    depends_on:
+      cms-proxy:
+        condition: service_started
+    networks: [portfolio]
+    logging: *default-logging
+
 networks:
   portfolio:
     driver: bridge
@@ -91,3 +156,5 @@ networks:
 volumes:
   caddy_data:
   caddy_config:
+  cms_caddy_data:
+  cms_caddy_config:

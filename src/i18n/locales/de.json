@@ -7,6 +7,7 @@
     "testimonials": "Erfahrungsberichte",
     "work": "Projekte",
     "cv": "CV",
+    "blog": "Blog",
     "contact": "Kontakt"
   },
   "hero": {
@@ -93,6 +94,17 @@
     "description": "Interaktiver 3D-Lebenslauf - Zoomen oder drehen Sie die Klemmbrett für eine bessere Ansicht!",
     "download_hu": "Ungarischen",
     "download_en": "Englischen"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Gedanken und Beiträge",
+    "readMore": "Weiterlesen",
+    "publishedOn": "Veröffentlicht am {{date}}",
+    "empty": "Noch keine Beiträge — schau bald wieder vorbei.",
+    "loadError": "Beiträge konnten gerade nicht geladen werden.",
+    "backToBlog": "Zurück zum Blog",
+    "categories": "Kategorien",
+    "allCategories": "Alle"
   },
   "weather": {
     "homeTooltip": "Raumsensor (betrieben von Tuya)",

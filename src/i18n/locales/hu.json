@@ -7,6 +7,7 @@
     "testimonials": "Ajánlások",
     "work": "Munkák",
     "cv": "CV",
+    "blog": "Blog",
     "contact": "Kapcsolat"
   },
   "hero": {
@@ -94,6 +95,17 @@
     "description": "Interaktív 3D önéletrajz - nagyítsd/forgasd meg a táblát a jobb megtekintéshez!",
     "download_hu": "Magyar",
     "download_en": "Angol"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Gondolatok és bejegyzések",
+    "readMore": "Tovább olvasom",
+    "publishedOn": "Közzétéve: {{date}}",
+    "empty": "Még nincsenek bejegyzések — nézz vissza hamarosan.",
+    "loadError": "Most nem sikerült betölteni a bejegyzéseket.",
+    "backToBlog": "Vissza a bloghoz",
+    "categories": "Kategóriák",
+    "allCategories": "Összes"
   },
   "weather": {
     "homeTooltip": "Szobaszenzor (Tuya által)",

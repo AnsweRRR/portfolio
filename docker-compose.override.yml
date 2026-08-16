@@ -36,3 +36,12 @@ services:
       context: .
       target: worker
     pull_policy: build
+
+  cms:
+    build:
+      context: .
+      dockerfile: cms/Dockerfile
+    pull_policy: build
+    # Handy to reach directly when developing locally (curl localhost:3002/api/health).
+    ports:
+      - "${CMS_DIRECT_PORT:-3002}:3002"

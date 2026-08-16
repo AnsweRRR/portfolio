@@ -1,0 +1,37 @@
+{
+  "name": "portfolio-cms",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "next dev --port 3002",
+    "build": "next build",
+    "start": "next start --port 3002",
+    "lint": "next lint",
+    "generate:types": "payload generate:types",
+    "generate:importmap": "payload generate:importmap",
+    "migrate": "tsx ./scripts/migrate.ts",
+    "payload": "payload"
+  },
+  "dependencies": {
+    "@payloadcms/db-postgres": "^3.88.0",
+    "@payloadcms/next": "^3.88.0",
+    "@payloadcms/richtext-lexical": "^3.88.0",
+    "@payloadcms/storage-s3": "^3.88.0",
+    "@swc/helpers": "0.5.23",
+    "graphql": "^16.14.2",
+    "next": "^16.3.1",
+    "payload": "^3.88.0",
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8",
+    "sharp": "^0.35.3"
+  },
+  "devDependencies": {
+    "@types/node": "^26.2.0",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "dotenv": "17.4.2",
+    "tsx": "^4.23.12",
+    "typescript": "^5.9.3"
+  }
+}

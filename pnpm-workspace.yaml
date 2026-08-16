@@ -1,8 +1,12 @@
 packages:
   - 'worker'
+  - 'cms'
 
 # pnpm 10 blocks dependency install scripts by default. esbuild's (vite + tsx)
 # postinstall verifies/unpacks the platform-specific binary — without it the build
-# and worker startup can fail. On a new warning: `pnpm approve-builds`.
+# and worker startup can fail. sharp (cms's image-resize dependency, via Payload's
+# upload/media handling) has the same kind of native-binary postinstall.
+# On a new warning: `pnpm approve-builds`.
 onlyBuiltDependencies:
   - esbuild
+  - sharp

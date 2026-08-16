@@ -1,10 +1,10 @@
-import { BrowserRouter } from "react-router-dom";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import StarsCanvas from "./components/canvas/Stars";
-import { Navbar, About, Contact, Experience, Footer, Hero, Tech, Work, Feedbacks } from "./components/sections";
-import ScrollToTop from "./components/ScrollToTop";
-import WeatherWidget from "./components/WeatherWidget";
+import { Navbar } from "./components/sections";
 import { ThemeProvider } from "./context/ThemeContext";
+import HomePage from "./pages/HomePage";
+import BlogListPage from "./pages/BlogListPage";
+import BlogPostPage from "./pages/BlogPostPage";
 import './i18n/i18n';
 
 function App() {
@@ -14,25 +14,12 @@ function App() {
     <QueryClientProvider client={queryClient}>
       <ThemeProvider>
         <BrowserRouter>
-          <div className='relative z-0 bg-primary'>
-            <div className='bg-hero-pattern bg-cover bg-no-repeat bg-center'>
-              <Navbar />
-              {/* <MacOSMenuBar /> */}
-              <Hero />
-            </div>
-            <About />
-            <Experience />
-            <Tech />
-            <Work />
-            <div className='relative z-0'>
-              <Feedbacks />
-              <Contact />
-              <StarsCanvas />
-              <Footer />
-            </div>
-            <ScrollToTop />
-            <WeatherWidget />
-          </div>
+          <Navbar />
+          <Routes>
+            <Route path='/' element={<HomePage />} />
+            <Route path='/blog' element={<BlogListPage />} />
+            <Route path='/blog/:slug' element={<BlogPostPage />} />
+          </Routes>
         </BrowserRouter>
       </ThemeProvider>
     </QueryClientProvider>
