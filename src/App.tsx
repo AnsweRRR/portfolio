@@ -7,10 +7,6 @@ import BlogListPage from "./pages/BlogListPage";
 import BlogPostPage from "./pages/BlogPostPage";
 import './i18n/i18n';
 
-// Module-level, not created inside App() — a client recreated on every render
-// would drop all cached queries and force every useQuery back into a loading
-// state, which is exactly what intermittently made the blog section look like
-// it "didn't load" (any re-render of App, e.g. via Vite HMR, reset it).
 const queryClient = new QueryClient();
 
 function App() {
