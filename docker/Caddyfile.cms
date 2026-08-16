@@ -1,0 +1,31 @@
+# Caddy config for the `cms-proxy` container: reverse-proxies to the Payload
+# CMS (Next.js) container and, with a domain, provides automatic Let's Encrypt
+# TLS — same single-env-var pattern as the `web` container's Caddyfile.
+#
+#   CMS_ADDRESS=:8081                 -> plain HTTP (LAN, local test)
+#   CMS_ADDRESS=cms.example.com       -> automatic HTTPS + HTTP->HTTPS redirect
+#
+# Unlike `web`, there's no static SPA to serve here: Next.js serves its own
+# static assets directly, so this is pure reverse-proxy, no /assets handling.
+
+{
+	admin off
+}
+
+# Separate from `web`'s internal :8080 — different container, own network
+# namespace, so there's no port collision even though the number matches.
+:8080 {
+	log {
+		output discard
+	}
+	respond /healthz "ok" 200
+	respond 404
+}
+
+{$CMS_ADDRESS} {
+	encode zstd gzip
+
+	handle {
+		reverse_proxy {$CMS_UPSTREAM:cms:3002}
+	}
+}

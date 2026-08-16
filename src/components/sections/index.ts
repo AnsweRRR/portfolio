@@ -1,4 +1,5 @@
 import About from "./About";
+import BlogSection from "./BlogSection";
 import Contact from "./Contact";
 import CV from "./CV";
 import Experience from "./Experience";
@@ -11,6 +12,7 @@ import Feedbacks from "./Feedbacks";
 
 export {
   About,
+  BlogSection,
   Contact,
   CV,
   Experience,

@@ -18,6 +18,7 @@ services:
         VITE_EMAILJS_PUBLIC_KEY: ${VITE_EMAILJS_PUBLIC_KEY:-}
         VITE_RECAPTCHA_SITE_KEY: ${VITE_RECAPTCHA_SITE_KEY:-}
         VITE_SHOW_SKILL_PROGRESS: ${VITE_SHOW_SKILL_PROGRESS:-}
+        VITE_SHOW_BLOG: ${VITE_SHOW_BLOG:-}
     pull_policy: build
     # Ports come from docker-compose.yml; if port 80 is taken on your machine,
     # put HTTP_PORT=8080 in your .env.
@@ -36,3 +37,12 @@ services:
       context: .
       target: worker
     pull_policy: build
+
+  cms:
+    build:
+      context: .
+      dockerfile: cms/Dockerfile
+    pull_policy: build
+    # Handy to reach directly when developing locally (curl localhost:3002/api/health).
+    ports:
+      - "${CMS_DIRECT_PORT:-3002}:3002"

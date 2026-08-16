@@ -1,10 +1,13 @@
 name: Deploy to Raspberry Pi
 
-# DEFAULT (push to master): only the `worker` image is built and started on the Pi.
-# The webapp and API run on Vercel, deployed by Vercel's own pipeline for the
-# same commit.
+# DEFAULT (push to master): the `worker` and `cms` (Payload blog backend) images
+# are built and started on the Pi, plus the stock `cms-proxy` Caddy image, which
+# is only ever pulled, never built. The webapp and API run on Vercel, deployed
+# by Vercel's own pipeline for the same commit. Payload can't run on Vercel
+# (needs a persistent server + DB connection), so it always deploys to the Pi
+# regardless of the full_stack toggle below.
 #
-# The full stack (web + api + worker) can be started on the Pi manually:
+# The full stack (web + api + worker + cms) can be started on the Pi manually:
 #   Actions -> Deploy to Raspberry Pi -> Run workflow -> check "full_stack".
 
 on:
@@ -40,12 +43,13 @@ jobs:
       - name: Pick services to build
         id: pick
         run: |
-          # `inputs.full_stack` is empty on a push event, so the worker-only branch runs.
+          # `inputs.full_stack` is empty on a push event, so the default branch runs.
+          # `cms` always builds — it deploys to the Pi regardless of full_stack.
           if [ "${{ inputs.full_stack }}" = "true" ]; then
-            echo 'services=["worker","api","web"]' >> "$GITHUB_OUTPUT"
+            echo 'services=["worker","cms","api","web"]' >> "$GITHUB_OUTPUT"
             echo 'full_stack=true' >> "$GITHUB_OUTPUT"
           else
-            echo 'services=["worker"]' >> "$GITHUB_OUTPUT"
+            echo 'services=["worker","cms"]' >> "$GITHUB_OUTPUT"
             echo 'full_stack=false' >> "$GITHUB_OUTPUT"
           fi
 
@@ -108,10 +112,23 @@ jobs:
             echo 'EOF'
           } >> "$GITHUB_ENV"
 
+      # `cms` builds from its own Dockerfile (Next.js standalone output, no
+      # arm64 cross-compile shortcut — see cms/Dockerfile for why); every
+      # other service still builds from the root multi-target Dockerfile.
+      - name: Resolve Dockerfile for this service
+        id: dockerfile
+        run: |
+          if [ "${{ matrix.service }}" = "cms" ]; then
+            echo "path=cms/Dockerfile" >> "$GITHUB_OUTPUT"
+          else
+            echo "path=Dockerfile" >> "$GITHUB_OUTPUT"
+          fi
+
       - name: Build and push
         uses: docker/build-push-action@v6
         with:
           context: .
+          file: ${{ steps.dockerfile.outputs.path }}
           target: ${{ matrix.service }}
           # The build stages run with --platform=$BUILDPLATFORM, so the heavy
           # work runs natively on amd64 once, and only the thin runtime layer
@@ -126,13 +143,46 @@ jobs:
           build-args: ${{ env.BUILD_ARGS }}
 
   # ---------------------------------------------------------------------------
+  # Payload manages its own Postgres schema via migrations. `docker compose up`
+  # alone won't apply them, so this runs them from the runner (which has network
+  # access to Supabase) before the Pi's containers restart with the new image.
+  # Runs unconditionally on every deploy — Payload's migration runner tracks
+  # already-applied migrations, so a no-op run is harmless.
+  # ---------------------------------------------------------------------------
+  migrate:
+    name: Run Payload migrations
+    runs-on: ubuntu-latest
+    needs: plan
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Enable pnpm
+        run: corepack enable
+
+      - name: Install cms dependencies
+        run: pnpm install --frozen-lockfile --filter portfolio-cms...
+
+      - name: Run migrations
+        env:
+          DATABASE_URI: ${{ secrets.PAYLOAD_DATABASE_URI }}
+          PAYLOAD_DB_SCHEMA: ${{ vars.PAYLOAD_DB_SCHEMA || 'payload' }}
+          PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
+        run: pnpm run cms:migrate
+
+  # ---------------------------------------------------------------------------
   # The Pi never builds: it only receives the compose file and the .env, then
   # pulls the new images.
   # ---------------------------------------------------------------------------
   deploy:
     name: Deploy to Raspberry Pi
     runs-on: ubuntu-latest
-    needs: [plan, build]
+    needs: [plan, build, migrate]
 
     steps:
       - name: Checkout code
@@ -220,8 +270,8 @@ jobs:
           {
             echo "IMAGE_REGISTRY=$registry"
             echo "IMAGE_TAG=latest"
-            # With COMPOSE_PROFILES empty, only the worker starts. The `full` profile
-            # enables the web + api services.
+            # With COMPOSE_PROFILES empty, worker + cms + cms-proxy start. The `full`
+            # profile additionally enables the web + api services.
             if [ "$FULL_STACK" = "true" ]; then
               echo "COMPOSE_PROFILES=full"
             else
@@ -237,6 +287,19 @@ jobs:
             echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}"
             echo "SUPABASE_SECRET_KEY=${{ secrets.SUPABASE_SECRET_KEY }}"
             echo "WORKER_STALE_AFTER_MS=${{ vars.WORKER_STALE_AFTER_MS || '0' }}"
+            echo "CMS_ADDRESS=${{ vars.CMS_ADDRESS || ':8081' }}"
+            echo "CMS_HTTP_PORT=${{ vars.CMS_HTTP_PORT || '8081' }}"
+            echo "CMS_HTTPS_PORT=${{ vars.CMS_HTTPS_PORT || '8444' }}"
+            echo "DATABASE_URI=${{ secrets.PAYLOAD_DATABASE_URI }}"
+            echo "PAYLOAD_DB_SCHEMA=${{ vars.PAYLOAD_DB_SCHEMA || 'payload' }}"
+            echo "PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}"
+            echo "PAYLOAD_PUBLIC_SERVER_URL=${{ vars.PAYLOAD_PUBLIC_SERVER_URL }}"
+            echo "S3_BUCKET=${{ vars.S3_BUCKET || 'blog-media' }}"
+            echo "S3_ENDPOINT=${{ secrets.SUPABASE_S3_ENDPOINT }}"
+            echo "S3_REGION=${{ vars.S3_REGION || 'auto' }}"
+            echo "S3_ACCESS_KEY_ID=${{ secrets.SUPABASE_S3_ACCESS_KEY_ID }}"
+            echo "S3_SECRET_ACCESS_KEY=${{ secrets.SUPABASE_S3_SECRET_ACCESS_KEY }}"
+            echo "CLOUDFLARE_TUNNEL_TOKEN=${{ secrets.CLOUDFLARE_TUNNEL_TOKEN }}"
           } > .env
 
       - name: Copy stack files to Raspberry Pi

@@ -108,6 +108,12 @@ export const skills = [
     image: "/images/skills/figma.svg",
   },
   {
+    name: "Shopify",
+    level: 60,
+    tags: ["E-commerce", "Liquid", "Theme Development"],
+    image: "/images/skills/shopify.svg",
+  },
+  {
     name: "Docker",
     level: 60,
     tags: ["Containers", "Docker Compose", "Images"],

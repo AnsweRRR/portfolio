@@ -111,16 +111,21 @@ All three parts are containerized, but they are not all deployed to the same pla
 
 - **Vercel** serves the frontend and the `api/**` functions (deployed by Vercel's own
   pipeline on push).
-- **Raspberry Pi** runs only the `worker` container — the long-lived Tuya → Supabase
-  subscriber, which has no place on serverless.
+- **Raspberry Pi** runs the `worker` container (the long-lived Tuya → Supabase
+  subscriber, which has no place on serverless) and `cms`/`cms-proxy`/`cloudflared`
+  (the self-hosted Payload CMS powering the blog, its own Caddy ingress, and a
+  Cloudflare Tunnel exposing it publicly — the Pi has no public IPv4, so there's
+  no port-forward. Payload also has no place on serverless, since it needs a
+  persistent server and a DB connection pool).
 
 The `web` and `api` containers exist and are fully working, but they sit behind a
 compose profile so the Pi does not run them by default. That keeps the option of
-self-hosting everything one flag away, without it being the normal path.
+self-hosting everything one flag away, without it being the normal path. `cms`/
+`cms-proxy`/`cloudflared` are NOT behind that profile — the blog backend runs regardless.
 
 ```bash
-docker compose up -d                  # worker only (the default, and what CI does)
-docker compose --profile full up -d   # web + api + worker on the Pi as well
+docker compose up -d                  # worker + cms + cms-proxy + cloudflared (the default, and what CI does)
+docker compose --profile full up -d   # web + api on the Pi as well
 ```
 
 The `api/**` handlers are shared verbatim between both deploy targets, so running
@@ -139,6 +144,20 @@ One multi-target `Dockerfile` produces three images:
 The `api` and `worker` images are esbuild bundles: **no `node_modules`, no pnpm,
 no `tsx` at runtime**. That keeps them small on an SD card and removes the whole
 shared-lockfile install dance that used to be needed on the Pi.
+
+A separate `cms/Dockerfile` produces a 4th image:
+
+| Target | Base | Contents |
+|--------|------|----------|
+| `cms`  | `node:22-slim` | Payload CMS admin + REST API, a Next.js app built with `output: 'standalone'` |
+
+`cms` isn't esbuild-bundled like `api`/`worker`: Payload's Admin UI is a Next.js
+app, and `sharp` (image processing for uploads) needs native `arm64` binaries,
+so this build can't use the root Dockerfile's `--platform=$BUILDPLATFORM`
+cross-compile shortcut either — expect slower CI builds for this image than
+the other three. `node:22-slim` (glibc), not alpine, for the same `sharp`
+reliability reason. `cms-proxy` (its Caddy ingress) is the stock
+`caddy:2-alpine` image — nothing to build for it.
 
 Build stages run with `--platform=$BUILDPLATFORM`, so the heavy work (pnpm install,
 `tsc -b && vite build`, esbuild) happens natively on the amd64 CI runner and only
@@ -164,16 +183,17 @@ Set `HTTP_PORT=8080` in `.env` if port 80 is taken.
 
 ### Deploying
 
-Pushing to `master` builds the `worker` image and restarts it on the Pi. The Pi never
-builds: CI pushes multi-arch images to GHCR, copies `docker-compose.yml` and a
-generated `.env` to `/var/www/portfolio`, and runs `docker compose pull && up -d`.
+Pushing to `master` builds the `worker` and `cms` images, runs Payload's Postgres
+migrations, and restarts both (plus `cms-proxy`) on the Pi. The Pi never builds: CI
+pushes multi-arch images to GHCR, copies `docker-compose.yml` and a generated `.env`
+to `/var/www/portfolio`, and runs `docker compose pull && up -d`.
 
 To also host the frontend and API on the Pi, run the workflow manually:
 **Actions → Deploy to Raspberry Pi → Run workflow**, with `full_stack` checked. That
-builds all three images and writes `COMPOSE_PROFILES=full` into the Pi's `.env`, so
-subsequent deploys keep the full stack running. Clearing that line reverts to
-worker-only (stop the extra containers once with
-`docker compose --profile full down` first — a worker-only deploy leaves already
+builds `web`/`api` too (on top of `worker`/`cms`) and writes `COMPOSE_PROFILES=full`
+into the Pi's `.env`, so subsequent deploys keep the full stack running. Clearing
+that line reverts to the default (stop the extra containers once with
+`docker compose --profile full down` first — a default deploy leaves already
 running services alone rather than tearing them down behind your back).
 
 When the full stack runs, `SITE_ADDRESS` is the single TLS switch:
@@ -217,9 +237,20 @@ pm2 delete tuya-worker && pm2 save
 
 ### Required GitHub secrets and variables
 
-Needed for the default worker-only deploy: `RASPBERRY_PI_HOST`,
+Needed for the default deploy (worker + cms): `RASPBERRY_PI_HOST`,
 `RASPBERRY_PI_USERNAME`, `RASPBERRY_PI_SSH_KEY`, `SUPABASE_URL`,
 `SUPABASE_SECRET_KEY`, `TUYA_CLIENT_ID`, `TUYA_SECRET`.
+
+Also needed for the CMS (Payload), on every deploy: `PAYLOAD_DATABASE_URI` (a
+raw `postgres://` connection string into the **same** Supabase Postgres
+instance the worker already uses — a different credential from
+`SUPABASE_URL`/`SUPABASE_SECRET_KEY`, which are the JS-client REST credentials
+used by the Tuya worker; Payload manages its own tables in a dedicated
+`payload` schema, so there's no collision), `PAYLOAD_SECRET`,
+`SUPABASE_S3_ENDPOINT`, `SUPABASE_S3_ACCESS_KEY_ID`,
+`SUPABASE_S3_SECRET_ACCESS_KEY` (Supabase Storage's S3-compatible credentials,
+for blog media uploads — a new bucket in that same Supabase project, not a
+new project), and `CLOUDFLARE_TUNNEL_TOKEN` (see below).
 
 Only needed for a `full_stack` run: `VITE_TUYA_DEVICE_ID`,
 `VITE_EMAILJS_SERVICE_ID`, `VITE_EMAILJS_TEMPLATE_ID`, `VITE_EMAILJS_PUBLIC_KEY`,
@@ -227,7 +258,28 @@ Only needed for a `full_stack` run: `VITE_TUYA_DEVICE_ID`,
 
 Repository variables (all optional, with defaults): `SITE_ADDRESS` (`:80`), `TZ`
 (`Europe/Budapest`), `VITE_TUYA_API_BASE_URL` (`https://openapi.tuyaeu.com`),
-`TUYA_MSG_REGION` (`EU`), `WORKER_STALE_AFTER_MS` (`0`).
+`TUYA_MSG_REGION` (`EU`), `WORKER_STALE_AFTER_MS` (`0`), `CMS_ADDRESS`
+(`:8081` — leave as-is, see below), `CMS_HTTP_PORT` (`8081`),
+`CMS_HTTPS_PORT` (`8444`), `PAYLOAD_DB_SCHEMA` (`payload`),
+`PAYLOAD_PUBLIC_SERVER_URL`, `S3_BUCKET` (`blog-media`), `S3_REGION` (`auto`).
+
+#### Exposing the CMS: Cloudflare Tunnel, not a port-forward
+
+The Pi is behind CGNAT (no public IPv4), so `cms-proxy` is never exposed
+directly — `CMS_ADDRESS` stays at its plain-HTTP default (`:8081`) and no
+router port-forwarding is needed at all. Instead, the `cloudflared` container
+(also always-on, alongside `worker`/`cms`/`cms-proxy`) opens an outbound-only
+connection to Cloudflare's edge, which terminates public TLS and reaches
+`cms-proxy` over the same internal Docker network.
+
+Set this up once in the [Cloudflare Zero Trust dashboard](https://one.dash.cloudflare.com/)
+→ **Networks → Tunnels → Create a tunnel** (choose the Docker connector):
+1. Copy the connector token it gives you → this is the `CLOUDFLARE_TUNNEL_TOKEN` secret.
+2. In the tunnel's **Public Hostname** tab, add `cms` + your domain, service
+   type HTTP, URL `cms-proxy:80`.
+3. Cloudflare automatically creates and manages the DNS record — nothing to
+   add in a DNS dashboard, and no A/AAAA record needed since there's no public
+   IP to point one at.
 
 The workflow logs the Pi into GHCR with the job's `GITHUB_TOKEN`, which is enough
 for private packages. Making the packages public also lets you run
@@ -236,6 +288,7 @@ for private packages. Making the packages public also lets you run
 ### Health endpoints
 
 - `api` → `GET /healthz`
+- `cms` → `GET /api/health`
 - `worker` → `GET :3002/healthz`, reporting WebSocket connection state, message and
   insert counters. It returns 503 while disconnected, so Docker restarts a worker
   that has exhausted its reconnect attempts. Message-staleness detection is opt-in
@@ -253,6 +306,11 @@ for private packages. Making the packages public also lets you run
 **Production (default):**
 - Frontend + API: Vercel — `https://pogranyitamas.com`, `/api/*`
 - Websocket worker: `worker` container on the Raspberry Pi
+- Blog CMS: `cms` (Payload/Next.js) container on the Raspberry Pi, reverse-proxied
+  by `cms-proxy` (Caddy) and exposed at `https://cms.pogranyitamas.com` via a
+  Cloudflare Tunnel (`cloudflared`) — the Pi has no public IPv4, so there's no
+  port-forward; Cloudflare's edge terminates TLS and tunnels in over an
+  outbound-only connection
 
 **Production (optional full self-hosting, `COMPOSE_PROFILES=full`):**
 - `web` (Caddy) serves the SPA and proxies `/api/*` to `api:3001`

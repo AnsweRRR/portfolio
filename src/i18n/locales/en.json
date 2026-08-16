@@ -7,6 +7,7 @@
     "testimonials": "Testimonials",
     "work": "Work",
     "cv": "CV",
+    "blog": "Blog",
     "contact": "Contact"
   },
   "hero": {
@@ -93,6 +94,18 @@
     "description": "Interactive 3D résumé - Zoom in or rotate the board for a better view!",
     "download_hu": "Hungarian",
     "download_en": "English"
+  },
+  "blog": {
+    "title": "Blog",
+    "subtitle": "Thoughts and write-ups",
+    "readMore": "Read more",
+    "showMore": "Show more",
+    "publishedOn": "Published on {{date}}",
+    "empty": "No posts yet — check back soon.",
+    "loadError": "Couldn't load posts right now.",
+    "backToBlog": "Back to blog",
+    "categories": "Categories",
+    "allCategories": "All"
   },
   "weather": {
     "homeTooltip": "Room sensor (powered by Tuya)",
