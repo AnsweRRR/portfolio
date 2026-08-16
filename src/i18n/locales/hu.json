@@ -100,6 +100,7 @@
     "title": "Blog",
     "subtitle": "Gondolatok és bejegyzések",
     "readMore": "Tovább olvasom",
+    "showMore": "További bejegyzések",
     "publishedOn": "Közzétéve: {{date}}",
     "empty": "Még nincsenek bejegyzések — nézz vissza hamarosan.",
     "loadError": "Most nem sikerült betölteni a bejegyzéseket.",

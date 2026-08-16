@@ -99,6 +99,7 @@
     "title": "Blog",
     "subtitle": "Gedanken und Beiträge",
     "readMore": "Weiterlesen",
+    "showMore": "Weitere Beiträge",
     "publishedOn": "Veröffentlicht am {{date}}",
     "empty": "Noch keine Beiträge — schau bald wieder vorbei.",
     "loadError": "Beiträge konnten gerade nicht geladen werden.",

@@ -19,8 +19,13 @@ export const payloadClient = {
 };
 
 export const blogApi = {
-  listPosts: (locale: string, params?: { category?: string; page?: number }) => {
-    const query = new URLSearchParams({ depth: '1', page: String(params?.page ?? 1) });
+  listPosts: (locale: string, params?: { category?: string; page?: number; limit?: number }) => {
+    const query = new URLSearchParams({
+      depth: '1',
+      page: String(params?.page ?? 1),
+      sort: '-publishedDate',
+    });
+    if (params?.limit) query.set('limit', String(params.limit));
     if (params?.category) query.set('where[categories][in]', params.category);
     return payloadClient.get(`/posts?${query.toString()}`, locale) as Promise<PayloadListResponse<BlogPost>>;
   },

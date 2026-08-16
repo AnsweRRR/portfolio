@@ -99,6 +99,7 @@
     "title": "Blog",
     "subtitle": "Thoughts and write-ups",
     "readMore": "Read more",
+    "showMore": "Show more",
     "publishedOn": "Published on {{date}}",
     "empty": "No posts yet — check back soon.",
     "loadError": "Couldn't load posts right now.",

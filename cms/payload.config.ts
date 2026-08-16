@@ -13,6 +13,7 @@ const frontendOrigins = [
   'https://www.pogranyitamas.com',
   // Local Vite dev server, so `pnpm dev:all` can hit this CMS during development.
   'http://localhost:5173',
+  'http://localhost:5174',
   'http://localhost',
 ];
 

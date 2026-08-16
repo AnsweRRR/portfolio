@@ -97,6 +97,10 @@ html.dark {
   margin-top: -80px;
   padding-bottom: 80px;
   display: block;
+  /* Purely a scroll-anchor target (never needs to be clicked) — without this,
+     its negative margin makes it overlap into the bottom ~80px of the
+     preceding section, blocking clicks on anything near the anchor pixels. */
+  pointer-events: none;
 }
 
 .black-gradient {
