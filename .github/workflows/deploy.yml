@@ -322,6 +322,11 @@ jobs:
           username: ${{ secrets.RASPBERRY_PI_USERNAME }}
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
           envs: GHCR_TOKEN,GHCR_USER
+          # The default 10m command_timeout isn't enough for a cold pull of the new
+          # `cms` image (Next.js standalone + node_modules) onto the Pi's SD card —
+          # first pull after this image starts existing extracted painfully slowly
+          # and got killed by the default timeout. Later pulls only fetch diffs.
+          command_timeout: 40m
           script: |
             set -e
             export PATH="$PATH:/usr/bin:/usr/local/bin"
