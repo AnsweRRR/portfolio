@@ -1,5 +1,5 @@
 import { useTranslation } from "react-i18next";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { FiArrowRight } from "react-icons/fi";
@@ -16,6 +16,7 @@ const BlogSection = () => {
   const { data, isLoading, isError } = useQuery({
     queryKey: ['posts', 'home-preview', i18n.language],
     queryFn: () => blogApi.listPosts(i18n.language, { limit: HOME_PREVIEW_POST_COUNT }),
+    placeholderData: keepPreviousData,
   });
 
   const posts = data?.docs ?? [];
@@ -37,6 +38,8 @@ const BlogSection = () => {
         <>
           <motion.div
             variants={fadeIn("up", "tween", 0.1, 1)}
+            initial="hidden"
+            animate="show"
             className="grid gap-8 sm:grid-cols-2 mt-12"
           >
             {posts.map((post, index) => (
@@ -44,7 +47,12 @@ const BlogSection = () => {
             ))}
           </motion.div>
 
-          <motion.div variants={fadeIn("up", "tween", 0.2, 1)} className="flex justify-center mt-10">
+          <motion.div
+            variants={fadeIn("up", "tween", 0.2, 1)}
+            initial="hidden"
+            animate="show"
+            className="flex justify-center mt-10"
+          >
             <Link
               to="/blog"
               className="inline-flex items-center gap-2 bg-[#915EFF] text-white text-sm py-2 px-6 rounded-lg hover:bg-purple-600 transition-colors duration-150"
