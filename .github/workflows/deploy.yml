@@ -302,13 +302,31 @@ jobs:
             echo "CLOUDFLARE_TUNNEL_TOKEN=${{ secrets.CLOUDFLARE_TUNNEL_TOKEN }}"
           } > .env
 
+      # A run before Caddyfile.cms was shipped left an empty directory at this path
+      # (Docker auto-creates a missing bind-mount source as a directory), which would
+      # otherwise make the scp step below fail trying to write a file over it.
+      - name: Clear stray Caddyfile.cms directory
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.RASPBERRY_PI_HOST }}
+          username: ${{ secrets.RASPBERRY_PI_USERNAME }}
+          key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
+          script: |
+            path="/var/www/portfolio/docker/Caddyfile.cms"
+            if [ -d "$path" ]; then
+              rmdir "$path" 2>/dev/null || rm -rf "$path"
+            fi
+
       - name: Copy stack files to Raspberry Pi
         uses: appleboy/scp-action@v0.1.7
         with:
           host: ${{ secrets.RASPBERRY_PI_HOST }}
           username: ${{ secrets.RASPBERRY_PI_USERNAME }}
           key: ${{ secrets.RASPBERRY_PI_SSH_KEY }}
-          source: "docker-compose.yml,.env"
+          # cms-proxy bind-mounts ./docker/Caddyfile.cms (see docker-compose.yml) — without
+          # shipping it, Docker auto-creates the missing host path as an empty directory and
+          # the container fails to start ("mount a directory onto a file").
+          source: "docker-compose.yml,.env,docker/Caddyfile.cms"
           target: "/var/www/portfolio"
           overwrite: true
 
