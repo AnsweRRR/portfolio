@@ -287,7 +287,7 @@ jobs:
             echo "SUPABASE_URL=${{ secrets.SUPABASE_URL }}"
             echo "SUPABASE_SECRET_KEY=${{ secrets.SUPABASE_SECRET_KEY }}"
             echo "WORKER_STALE_AFTER_MS=${{ vars.WORKER_STALE_AFTER_MS || '0' }}"
-            echo "CMS_ADDRESS=${{ vars.CMS_ADDRESS || ':8081' }}"
+            echo "CMS_ADDRESS=${{ vars.CMS_ADDRESS || ':80' }}"
             echo "CMS_HTTP_PORT=${{ vars.CMS_HTTP_PORT || '8081' }}"
             echo "CMS_HTTPS_PORT=${{ vars.CMS_HTTPS_PORT || '8444' }}"
             echo "DATABASE_URI=${{ secrets.DATABASE_URI }}"

@@ -113,7 +113,10 @@ services:
     pull_policy: always
     restart: unless-stopped
     environment:
-      CMS_ADDRESS: ${CMS_ADDRESS:-:8081}
+      # Container-internal bind address — must match the right-hand side of the
+      # port mapping below (80), not the host-facing CMS_HTTP_PORT. Same pattern
+      # as `web`'s SITE_ADDRESS/HTTP_PORT pair.
+      CMS_ADDRESS: ${CMS_ADDRESS:-:80}
       TZ: ${TZ:-Europe/Budapest}
     ports:
       - "${CMS_HTTP_PORT:-8081}:80"
