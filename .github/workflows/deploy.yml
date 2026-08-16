@@ -170,7 +170,7 @@ jobs:
 
       - name: Run migrations
         env:
-          DATABASE_URI: ${{ secrets.PAYLOAD_DATABASE_URI }}
+          DATABASE_URI: ${{ secrets.DATABASE_URI }}
           PAYLOAD_DB_SCHEMA: ${{ vars.PAYLOAD_DB_SCHEMA || 'payload' }}
           PAYLOAD_SECRET: ${{ secrets.PAYLOAD_SECRET }}
         run: pnpm run cms:migrate
@@ -290,7 +290,7 @@ jobs:
             echo "CMS_ADDRESS=${{ vars.CMS_ADDRESS || ':8081' }}"
             echo "CMS_HTTP_PORT=${{ vars.CMS_HTTP_PORT || '8081' }}"
             echo "CMS_HTTPS_PORT=${{ vars.CMS_HTTPS_PORT || '8444' }}"
-            echo "DATABASE_URI=${{ secrets.PAYLOAD_DATABASE_URI }}"
+            echo "DATABASE_URI=${{ secrets.DATABASE_URI }}"
             echo "PAYLOAD_DB_SCHEMA=${{ vars.PAYLOAD_DB_SCHEMA || 'payload' }}"
             echo "PAYLOAD_SECRET=${{ secrets.PAYLOAD_SECRET }}"
             echo "PAYLOAD_PUBLIC_SERVER_URL=${{ vars.PAYLOAD_PUBLIC_SERVER_URL }}"

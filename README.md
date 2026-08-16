@@ -241,7 +241,7 @@ Needed for the default deploy (worker + cms): `RASPBERRY_PI_HOST`,
 `RASPBERRY_PI_USERNAME`, `RASPBERRY_PI_SSH_KEY`, `SUPABASE_URL`,
 `SUPABASE_SECRET_KEY`, `TUYA_CLIENT_ID`, `TUYA_SECRET`.
 
-Also needed for the CMS (Payload), on every deploy: `PAYLOAD_DATABASE_URI` (a
+Also needed for the CMS (Payload), on every deploy: `DATABASE_URI` (a
 raw `postgres://` connection string into the **same** Supabase Postgres
 instance the worker already uses — a different credential from
 `SUPABASE_URL`/`SUPABASE_SECRET_KEY`, which are the JS-client REST credentials
