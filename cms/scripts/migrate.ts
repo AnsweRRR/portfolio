@@ -26,6 +26,24 @@ const run = async () => {
     raw: `CREATE SCHEMA IF NOT EXISTS "${schemaName}"`,
   });
 
+  // Payload's own migrate() finds a `payload-migrations` row with batch -1 (left behind
+  // by dev-mode schema push) and stops to ask an interactive "data loss will occur, proceed?"
+  // confirmation. That prompt hangs forever in CI (no TTY), and even answering yes wouldn't
+  // help long-term: Payload only filters the row out in memory, it never deletes it, so the
+  // next run would hit the exact same prompt again. Deleting it here — guarded so a brand-new
+  // database without the table yet is a no-op — keeps migrate() unattended and idempotent.
+  await payload.db.execute({
+    drizzle: payload.db.drizzle,
+    raw: `
+      DO $$
+      BEGIN
+        IF to_regclass('"${schemaName}"."payload_migrations"') IS NOT NULL THEN
+          DELETE FROM "${schemaName}"."payload_migrations" WHERE batch = -1;
+        END IF;
+      END $$;
+    `,
+  });
+
   await payload.db.migrate();
   process.exit(0);
 };
