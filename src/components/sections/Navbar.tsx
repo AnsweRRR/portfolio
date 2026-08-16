@@ -136,14 +136,14 @@ const Navbar = () => {
             window.scrollTo(0, 0);
           }}
         >
-          <p className='text-white-100 text-[18px] font-bold cursor-pointer flex items-center hover:text-[#915EFF] dark:hover:text-[#b89cff] transition-colors duration-200'>
+          <p className='text-white-100 text-[18px] font-bold cursor-pointer flex items-center whitespace-nowrap hover:text-[#915EFF] dark:hover:text-[#b89cff] transition-colors duration-200'>
             <img src="/favicon/favicon-32x32.png" alt="Logo" className="w-6 h-6 mr-2" />
             {t('hero.name')} &nbsp;
             <span className='sm:block hidden'> | {t('hero.title')}</span>
           </p>
         </Link>
 
-        <ul className='list-none hidden lg:flex flex-row gap-10 items-center'>
+        <ul className='list-none hidden 2xl:flex flex-row gap-6 items-center'>
           {visibleNavLinks.map((nav) => {
             const to = navTarget(nav);
             return (
@@ -151,7 +151,7 @@ const Navbar = () => {
                 key={nav.id}
                 className={`${
                   active === nav.title ? "text-white-100" : "text-secondary"
-                } hover:text-white-100 text-[18px] font-medium cursor-pointer`}
+                } hover:text-white-100 text-[18px] font-medium cursor-pointer whitespace-nowrap`}
                 onClick={() => setActive(nav.title)}
               >
                 {to ? (
@@ -195,7 +195,7 @@ const Navbar = () => {
           </li>
         </ul>
 
-        <div className='lg:hidden flex flex-1 justify-end items-center'>
+        <div className='2xl:hidden flex flex-1 justify-end items-center'>
           <button
             ref={toggleButtonRef}
             onClick={() => setToggle(!toggle)}
