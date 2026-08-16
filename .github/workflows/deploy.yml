@@ -304,7 +304,9 @@ jobs:
 
       # A run before Caddyfile.cms was shipped left an empty directory at this path
       # (Docker auto-creates a missing bind-mount source as a directory), which would
-      # otherwise make the scp step below fail trying to write a file over it.
+      # otherwise make the scp step below fail trying to write a file over it. Docker
+      # created it as root, so the SSH user can't rm it directly (no sudo assumed) —
+      # deleting it from inside a throwaway container sidesteps that.
       - name: Clear stray Caddyfile.cms directory
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -314,7 +316,7 @@ jobs:
           script: |
             path="/var/www/portfolio/docker/Caddyfile.cms"
             if [ -d "$path" ]; then
-              rmdir "$path" 2>/dev/null || rm -rf "$path"
+              docker run --rm -v /var/www/portfolio/docker:/target alpine rm -rf /target/Caddyfile.cms
             fi
 
       - name: Copy stack files to Raspberry Pi
