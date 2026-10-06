@@ -138,6 +138,12 @@ export const skills = [
     image: "/images/skills/claude.svg",
   },
   {
+    name: "n8n AI Workflows",
+    level: 60,
+    tags: ["Workflow Automation", "Integrations", "Webhooks", "Triggers"],
+    image: "/images/skills/n8n.svg",
+  },
+  {
     name: "Arduino",
     level: 50,
     tags: ["Microcontroller", "Sensors"],
