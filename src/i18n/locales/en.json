@@ -80,7 +80,7 @@
   },
   "projects": {
     "praxDent": {
-      "description": "PraxDent is a multi-tenant SaaS platform for dental practices, giving each practice its own subdomain and database. It has a .NET API, a Next.js web app and an Expo mobile app that share one Tamagui UI, in three languages, on Azure."
+      "description": "PraxDent is a multi-tenant SaaS platform for dental practices, giving each practice its own subdomain and database. It has a .NET API, a Next.js web app and an Expo mobile app that share one Tamagui UI, on Azure."
     },
     "shoutOut": {
       "description": "An app where you can give points to each other within a community, which can be redeemed for awesome rewards."

@@ -80,7 +80,7 @@
   },
   "projects": {
     "praxDent": {
-      "description": "PraxDent ist eine mandantenfähige SaaS-Plattform für Zahnarztpraxen, bei der jede Praxis eine eigene Subdomain und Datenbank erhält. Sie besteht aus einer .NET-API, einer Next.js-Web-App und einer Expo-Mobile-App mit gemeinsamer Tamagui-Oberfläche, dreisprachig, auf Azure."
+      "description": "PraxDent ist eine mandantenfähige SaaS-Plattform für Zahnarztpraxen, bei der jede Praxis eine eigene Subdomain und Datenbank erhält. Sie besteht aus einer .NET-API, einer Next.js-Web-App und einer Expo-Mobile-App mit gemeinsamer Tamagui-Oberfläche, auf Azure."
     },
     "shoutOut": {
       "description": "Eine App, in der ihr euch innerhalb einer Community gegenseitig Punkte geben könnt, die gegen tolle Belohnungen eingelöst werden können."
